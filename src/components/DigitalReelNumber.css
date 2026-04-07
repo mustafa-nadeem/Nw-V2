@@ -1,0 +1,71 @@
+.reel-number {
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.reel-static {
+  display: inline-block;
+}
+
+.reel-digit {
+  position: relative;
+  display: inline-block;
+  width: 0.63em;
+  height: 1em;
+  overflow: hidden;
+}
+
+.impact-card:hover .reel-number.is-started .reel-digit,
+.impact-card:hover .reel-number.is-started .reel-static {
+  animation: reel-wave 620ms ease-in-out calc(var(--wave-index) * 45ms) 1;
+}
+
+.reel-track {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+}
+
+.reel-number.is-started .reel-track {
+  transform: translateY(calc(var(--target) * -1em));
+  transition: transform 1.45s cubic-bezier(0.2, 0.75, 0.2, 1) var(--delay);
+}
+
+.reel-cell {
+  height: 1em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes reel-wave {
+  0% {
+    transform: translateY(0);
+  }
+
+  32% {
+    transform: translateY(-0.16em);
+  }
+
+  68% {
+    transform: translateY(0.05em);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .impact-card:hover .reel-number.is-started .reel-digit,
+  .impact-card:hover .reel-number.is-started .reel-static {
+    animation: none;
+  }
+
+  .reel-number.is-started .reel-track {
+    transform: translateY(calc(var(--target) * -1em));
+    transition: none;
+  }
+}
