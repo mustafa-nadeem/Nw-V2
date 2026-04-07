@@ -89,7 +89,7 @@ function WhyWaqfSection() {
             scrollTrigger: {
               id: triggerIdsRef.current.heading,
               trigger: headingEl,
-              start: 'top 93%',
+              start: 'top 95%',
               toggleActions: 'restart reverse restart reverse',
             },
           }
