@@ -1,23 +1,5 @@
 import './AboutPage.css';
-
-const journeyMilestones = [
-  {
-    date: 'March 2020',
-    text: 'Initiative by the Muslim community leaders began to establish a charity to revive the Waqf institution.',
-  },
-  {
-    date: 'December 2021',
-    text: 'Our charity status was awarded and we secured initial seed funding to formalise long-term plans.',
-  },
-  {
-    date: 'June 2022',
-    text: 'Program design and first funding pathways were piloted with a governance model focused on sustainability.',
-  },
-  {
-    date: 'June 2023',
-    text: 'The executive board refined strategy and launched operations under the National Waqf name.',
-  },
-];
+import AuroraTimeline from '../components/AuroraTimeline';
 
 const trustees = [
   {
@@ -143,22 +125,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="about-section about-journey" aria-labelledby="about-journey-title">
-        <div className="about-shell">
-          <h2 id="about-journey-title">Our journey so far</h2>
-          <div className="about-journey-grid">
-            {journeyMilestones.map((milestone) => (
-              <article className="about-journey-card" key={milestone.date}>
-                <div className="about-image-placeholder">Image</div>
-                <div className="about-journey-body">
-                  <h3>{milestone.date}</h3>
-                  <p>{milestone.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AuroraTimeline />
 
       <section className="about-section" aria-labelledby="about-trustees-title">
         <div className="about-shell about-shell-narrow">
