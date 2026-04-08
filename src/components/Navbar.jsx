@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import logoWhite from '../assets/logo/white.svg';
 import logoBlack from '../assets/logo/black.svg';
@@ -6,6 +7,8 @@ import logoBlack from '../assets/logo/black.svg';
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -13,10 +16,30 @@ function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname, location.hash]);
+
+  const navigateToHomeSection = (sectionId) => (event) => {
+    event.preventDefault();
+
+    if (location.pathname !== '/') {
+      navigate(`/#${sectionId}`);
+      return;
+    }
+
+    const target = document.getElementById(sectionId);
+
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.replaceState({}, '', `#${sectionId}`);
+    }
+  };
+
   return (
     <header className={`navbar-wrapper${scrolled ? ' scrolled' : ''}`}>
       <nav className={`navbar${open ? ' open' : ''}`}>
-        <a href="/" className="navbar-logo" aria-label="National Waqf home">
+        <Link to="/" className="navbar-logo" aria-label="National Waqf home">
           <img
             className="navbar-logo-img navbar-logo-white"
             src={logoWhite}
@@ -27,13 +50,13 @@ function Navbar() {
             src={logoBlack}
             alt="National Waqf"
           />
-        </a>
+        </Link>
 
         <div className="navbar-center">
-          <a href="#about" className="navbar-link">About Us</a>
-          <a href="#impact" className="navbar-link">Our Impact</a>
-          <a href="#learn" className="navbar-link">Learn More</a>
-          <a href="#connect" className="navbar-link">Connect With Us</a>
+          <Link to="/about" className="navbar-link">About Us</Link>
+          <a href="#impact" className="navbar-link" onClick={navigateToHomeSection('impact')}>Our Impact</a>
+          <a href="#learn" className="navbar-link" onClick={navigateToHomeSection('learn')}>Learn More</a>
+          <a href="#connect" className="navbar-link" onClick={navigateToHomeSection('connect')}>Connect With Us</a>
         </div>
 
         <div className="navbar-actions">
