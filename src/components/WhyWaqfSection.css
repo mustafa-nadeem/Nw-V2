@@ -1,13 +1,13 @@
 .why-waqf-scroll {
   position: relative;
-  background: #f2f3f5;
-  overflow-x: clip;
+  background: #FFF9F3;
+  overflow: hidden;
 }
 
 .why-waqf-header-block {
   width: min(calc(100% - 56px), 1160px);
   margin: 0 auto;
-  padding: 68px 0 42px;
+  padding: 140px 0 56px;
 }
 
 .why-waqf-header-block h2 {
@@ -25,14 +25,21 @@
 .why-waqf-stage {
   position: relative;
   height: 100vh;
+  overflow: hidden;
 }
 
 .why-waqf-panel {
   position: absolute;
   inset: 0;
   height: 100vh;
-  background: #f2f3f5;
+  overflow: hidden;
+  transition: background-color 0.5s ease;
 }
+
+.why-waqf-panel:nth-child(1) { background: #FFF9F3; }
+.why-waqf-panel:nth-child(2) { background: #FFF5EC; }
+.why-waqf-panel:nth-child(3) { background: #FFF1E5; }
+.why-waqf-panel:nth-child(4) { background: #FFEDDE; }
 
 .why-waqf-panel-overlay {
   position: absolute;
@@ -42,11 +49,11 @@
   z-index: 2;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.18) 0%,
-    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.04) 50%,
     rgba(0, 0, 0, 0) 100%
   );
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.4s ease-out;
 }
 
 .why-waqf-panel[data-overlap='true'] .why-waqf-panel-overlay {
@@ -58,33 +65,34 @@
   z-index: 3;
   display: grid;
   grid-template-columns: 45% 55%;
-  align-items: start;
-  gap: 42px;
+  align-items: center;
+  gap: 48px;
   width: 100%;
   height: 100%;
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 86px 120px 70px;
+  padding: 80px 80px 70px;
 }
 
 .why-waqf-panel-media {
   width: 100%;
-  height: min(70vh, 760px);
-  border-radius: 22px;
+  height: min(65vh, 680px);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 26px 58px rgba(16, 24, 34, 0.2);
 }
 
-.why-waqf-panel-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.why-waqf-panel:nth-child(1) .why-waqf-panel-media { background: #2B346C; }
+.why-waqf-panel:nth-child(2) .why-waqf-panel-media { background: #00ACA6; }
+.why-waqf-panel:nth-child(3) .why-waqf-panel-media { background: #FF8E54; }
+.why-waqf-panel:nth-child(4) .why-waqf-panel-media { background: #2B346C; }
+
+.why-waqf-panel-content {
+  max-width: 520px;
 }
 
 .why-waqf-panel-content h3 {
   margin: 0;
-  font-size: clamp(2rem, 2.6vw, 3.2rem);
+  font-size: clamp(1.8rem, 2.4vw, 2.8rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: #121722;
@@ -92,9 +100,9 @@
 
 .why-waqf-panel-content p {
   margin: 18px 0 0;
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   line-height: 1.7;
-  color: #2e3645;
+  color: #3a4050;
 }
 
 @media (min-width: 1024px) and (max-width: 1439px) {
@@ -104,10 +112,7 @@
   }
 
   .why-waqf-panel-inner {
-    padding-top: 76px;
-    padding-bottom: 56px;
-    padding-left: 96px;
-    padding-right: 96px;
+    padding: 76px 64px 56px;
   }
 }
 
@@ -119,15 +124,12 @@
   }
 
   .why-waqf-panel-inner {
-    padding-top: 62px;
-    padding-bottom: 44px;
-    padding-left: 56px;
-    padding-right: 56px;
+    padding: 62px 44px 44px;
     gap: 28px;
   }
 
   .why-waqf-panel-media {
-    height: min(62vh, 560px);
+    height: min(58vh, 520px);
   }
 
   .why-waqf-panel-content h3 {
@@ -149,6 +151,7 @@
 
   .why-waqf-stage {
     height: auto;
+    overflow: visible;
   }
 
   .why-waqf-panel {

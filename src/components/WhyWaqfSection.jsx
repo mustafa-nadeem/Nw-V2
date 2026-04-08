@@ -71,6 +71,8 @@ function WhyWaqfSection() {
       return undefined;
     }
 
+    const triggerIds = triggerIdsRef.current;
+
     const ctx = gsap.context(() => {
       const headingEl = sectionRef.current?.querySelector('.why-waqf-heading');
 
@@ -87,7 +89,7 @@ function WhyWaqfSection() {
             duration: 1.8,
             ease: 'power2.out',
             scrollTrigger: {
-              id: triggerIdsRef.current.heading,
+              id: triggerIds.heading,
               trigger: headingEl,
               start: 'top 95%',
               toggleActions: 'restart reverse restart reverse',
@@ -110,7 +112,7 @@ function WhyWaqfSection() {
         const timeline = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
-            id: triggerIdsRef.current.pin,
+            id: triggerIds.pin,
             trigger: stageRef.current,
             start: 'top top',
             pin: true,
@@ -153,7 +155,7 @@ function WhyWaqfSection() {
     });
 
     return () => {
-      const allowedIds = Object.values(triggerIdsRef.current);
+      const allowedIds = Object.values(triggerIds);
       ScrollTrigger.getAll().forEach((trigger) => {
         if (allowedIds.includes(trigger.vars?.id)) {
           trigger.kill();
@@ -171,7 +173,7 @@ function WhyWaqfSection() {
       aria-labelledby="why-waqf-scroll-title"
     >
       <div className="why-waqf-header-block">
-        <h2 id="why-waqf-scroll-title" className="why-waqf-heading">Why Waqf?</h2>
+        <h2 id="why-waqf-scroll-title" className="why-waqf-heading">Why <span style={{color: '#01ACA6'}}>Waqf?</span></h2>
       </div>
 
       <div ref={stageRef} className="why-waqf-stage">
@@ -180,9 +182,7 @@ function WhyWaqfSection() {
             <div className="why-waqf-panel-overlay" aria-hidden="true" />
 
             <div className="why-waqf-panel-inner">
-              <div className="why-waqf-panel-media">
-                <img src={slide.image} alt={slide.alt} loading="lazy" />
-              </div>
+              <div className="why-waqf-panel-media" aria-label={slide.alt} />
 
               <div className="why-waqf-panel-content">
                 <h3>{slide.title}</h3>

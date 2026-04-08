@@ -6,6 +6,7 @@ import './WhatIsWaqfStack.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_PER_CARD = 400;
+const HEADING_SCROLL = 500;
 
 const cards = [
   {
@@ -77,30 +78,41 @@ function WhatIsWaqfStack() {
     }
 
     const sectionEl = sectionRef.current;
-    const { pin: pinTriggerId, heading: headingTriggerId } = triggerIdsRef.current;
+    const triggerIds = triggerIdsRef.current;
+    const { pin: pinTriggerId, heading: headingTriggerId } = triggerIds;
 
     const ctx = gsap.context(() => {
       const cardEls = gsap.utils.toArray('.waqf-stack-card');
+      const copyEl = sectionEl.querySelector('.waqf-stack-copy');
       const headingEl = sectionEl.querySelector('.waqf-heading');
+      const cardsWrap = sectionEl.querySelector('.waqf-stack-cards');
       const headingWords = gsap.utils.toArray('.waqf-word');
+      const totalScroll = HEADING_SCROLL + cardEls.length * SCROLL_PER_CARD;
+
+      // Heading starts centered and large
+      gsap.set(copyEl, {
+        position: 'absolute',
+        top: '50%',
+        left: '0%',
+        xPercent: 0,
+        yPercent: -50,
+        width: '100%',
+        zIndex: 10,
+      });
+
+      gsap.set(headingEl, {
+        fontSize: 'clamp(3.5rem, 7vw, 7rem)',
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '0.32ch',
+      });
+
+      // Cards hidden off-screen
+      gsap.set(cardsWrap, { autoAlpha: 0 });
 
       gsap.set(headingWords, {
         autoAlpha: 0,
-        y: 20,
-      });
-
-      gsap.to(headingWords, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.75,
-        stagger: 0.16,
-        ease: 'power3.out',
-        scrollTrigger: {
-          id: headingTriggerId,
-          trigger: headingEl || sectionEl,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse',
-        },
+        y: 40,
       });
 
       gsap.set(cardEls, {
@@ -113,29 +125,70 @@ function WhatIsWaqfStack() {
         gsap.set(cardEl, { zIndex: index + 1 });
       });
 
+      // Word reveal scrubbed to scroll
+      const wordTimeline = gsap.timeline({
+        scrollTrigger: {
+          id: headingTriggerId,
+          trigger: sectionEl,
+          start: 'top 40%',
+          end: 'top 5%',
+          scrub: 1,
+        },
+      });
+
+      headingWords.forEach((word, i) => {
+        wordTimeline.to(word, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+        }, i * 0.6);
+      });
+
+      // Main pinned timeline
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           id: pinTriggerId,
           trigger: sectionEl,
           start: 'top top',
-          end: '+=' + cardEls.length * SCROLL_PER_CARD,
+          end: '+=' + totalScroll,
           pin: true,
           pinSpacing: true,
-          scrub: 0.8,
+          anticipatePin: 1,
+          scrub: 1.5,
           invalidateOnRefresh: true,
         },
       });
 
+      // Phase 1: heading shrinks and moves to left
+      timeline
+        .to(headingEl, {
+          fontSize: 'clamp(2.4rem, 4vw, 5rem)',
+          duration: 1,
+          ease: 'power2.inOut',
+        }, 0)
+        .to(copyEl, {
+          width: '45%',
+          zIndex: 1,
+          duration: 1,
+          ease: 'power2.inOut',
+        }, 0)
+        .to(cardsWrap, {
+          autoAlpha: 1,
+          duration: 0.3,
+        }, 0.7);
+
+      // Phase 2: cards fly in
       cardEls.forEach((cardEl) => {
         timeline.to(cardEl, { rotation: 0, y: 0, duration: 1 });
       });
     }, sectionEl);
 
     return () => {
-      const triggerIds = Object.values(triggerIdsRef.current);
+      const allowedIds = Object.values(triggerIds);
       ScrollTrigger.getAll().forEach((trigger) => {
-        if (triggerIds.includes(trigger.vars?.id)) {
+        if (allowedIds.includes(trigger.vars?.id)) {
           trigger.kill();
         }
       });
@@ -154,7 +207,7 @@ function WhatIsWaqfStack() {
           <h2 id="what-is-waqf-heading" className="waqf-heading" aria-label="What is Waqf?">
             <span className="waqf-word" aria-hidden="true">What</span>
             <span className="waqf-word" aria-hidden="true">is</span>
-            <span className="waqf-word" aria-hidden="true">Waqf?</span>
+            <span className="waqf-word" aria-hidden="true" style={{color: '#01ACA6'}}>Waqf?</span>
           </h2>
         </div>
 
@@ -167,8 +220,6 @@ function WhatIsWaqfStack() {
               aria-setsize={cards.length}
               aria-posinset={index + 1}
             >
-              <div className="waqf-stack-icon" aria-hidden="true">Icon</div>
-              <p className="waqf-stack-index">{String(index + 1).padStart(2, '0')}</p>
               <h3>{card.title}</h3>
 
               {card.intro ? <p className="waqf-stack-intro">{card.intro}</p> : null}
