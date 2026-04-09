@@ -17,6 +17,26 @@
 
 .waqf-stack-copy {
   max-width: 560px;
+  text-align: left;
+}
+
+.waqf-stack-description {
+  margin-top: 28px;
+  max-width: 56ch;
+  display: grid;
+  gap: 14px;
+}
+
+.waqf-stack-description p {
+  margin: 0;
+  color: #394250;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.waqf-stack-description p:first-child {
+  font-weight: 600;
+  color: #1b1f26;
 }
 
 .waqf-stack-copy h2 {
@@ -162,6 +182,16 @@
     font-size: clamp(3rem, 5.5vw, 5rem);
   }
 
+  .waqf-stack-description {
+    margin-top: 22px;
+    max-width: 50ch;
+  }
+
+  .waqf-stack-description p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
   .waqf-stack-cards {
     width: 400px;
     height: 480px;
@@ -191,12 +221,23 @@
 
   .waqf-stack-copy {
     max-width: none;
-    text-align: center;
+    text-align: left;
   }
 
   .waqf-stack-copy h2 {
-    margin-inline: auto;
+    margin-inline: 0;
     font-size: clamp(2.4rem, 10vw, 4rem);
+  }
+
+  .waqf-stack-description {
+    margin: 18px auto 0;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .waqf-stack-description p {
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .waqf-stack-cards {
