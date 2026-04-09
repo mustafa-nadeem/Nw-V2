@@ -10,7 +10,7 @@
   padding-left: 40px;
   font-size: 2.5rem;
   font-weight: 600;
-  color: #2B346C;
+  color: #1b1f26;
 }
 
 .aurora-timeline__wrapper {
@@ -47,10 +47,10 @@
 .aurora-timeline__giant-year {
   margin: 0;
   font-size: clamp(86px, 8.6vw, 138px);
-  color: #e1e5ec;
+  color: #00ACA6;
   line-height: 0.88;
   letter-spacing: -0.04em;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .aurora-timeline__progress-rail {
@@ -93,7 +93,7 @@
   width: 100%;
   height: var(--aurora-progress, 0%);
   border-radius: 999px;
-  background: #2e6af2;
+  background: #00ACA6;
   transition: height 0.16s linear;
 }
 
@@ -104,7 +104,7 @@
   height: 10px;
   border-radius: 999px;
   transform: translateX(-50%);
-  background: #2e6af2;
+  background: #00ACA6;
 }
 
 .aurora-timeline__progress-dot--start {
@@ -151,7 +151,7 @@
 }
 
 .aurora-timeline__year--active {
-  color: #2e6af2;
+  color: #00ACA6;
 }
 
 .aurora-timeline__image-placeholder {
@@ -163,7 +163,7 @@
 
 .aurora-timeline__title {
   margin: 0 0 10px;
-  color: #2B346C;
+  color: #1b1f26;
   font-size: 1.25rem;
   font-weight: 600;
 }
