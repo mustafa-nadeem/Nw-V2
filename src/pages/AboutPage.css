@@ -357,9 +357,10 @@
   border: none;
   border-radius: 18px;
   padding: 24px 36px;
-  text-align: left;
+  text-align: center;
   display: flex;
   align-items: center;
+  justify-content: center;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -412,7 +413,7 @@
 }
 
 .about-principle-card:hover .about-principle-content h3 {
-  transform: translateX(4px);
+  transform: translateY(-2px);
 }
 
 .about-principle-content p {
@@ -421,7 +422,6 @@
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.8);
   max-width: none;
-  text-align: left;
   transition: color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 

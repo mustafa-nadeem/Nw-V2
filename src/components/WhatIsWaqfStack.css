@@ -36,7 +36,7 @@
 
 .waqf-stack-description p:first-child {
   font-weight: 600;
-  color: #1b1f26;
+  color: #2B346C;
 }
 
 .waqf-stack-copy h2 {
@@ -45,7 +45,7 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: #141821;
+  color: #2B346C;
   white-space: nowrap;
 }
 
@@ -94,6 +94,12 @@
 .waqf-stack-card:nth-child(1) { background: #2B346C; }
 .waqf-stack-card:nth-child(2) { background: #00ACA6; }
 .waqf-stack-card:nth-child(3) { background: #FF8E54; }
+
+.waqf-stack-card:nth-child(2),
+.waqf-stack-card:nth-child(2) h3,
+.waqf-stack-card:nth-child(2) p {
+  color: #fff;
+}
 
 .waqf-stack-icon {
   width: 140px;

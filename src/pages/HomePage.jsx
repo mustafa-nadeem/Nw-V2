@@ -36,7 +36,7 @@ function HomePage() {
         <div className="container hero-grid">
           <div className="hero-content">
             <h1 id="hero-title">Building a better future through sustainable Waqf</h1>
-            <p className="hero-highlight">
+            <p>
               We are the authoritative body that collects, distributes and safeguards
               Waqf donations across the United Kingdom.
             </p>
