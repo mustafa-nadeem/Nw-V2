@@ -1,0 +1,353 @@
+.aurora-timeline-section {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 80px 0;
+}
+
+.aurora-timeline__section-title {
+  margin: 0 0 60px;
+  padding-left: 40px;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #1b1f26;
+}
+
+.aurora-timeline__wrapper {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+}
+
+.aurora-timeline__sticky-left {
+  position: sticky;
+  top: 100px;
+  width: 280px;
+  padding-left: 16px;
+  z-index: 10;
+  align-self: flex-start;
+}
+
+.aurora-timeline__sticky-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aurora-timeline__header-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  color: #8f97a4;
+  font-weight: 600;
+}
+
+.aurora-timeline__giant-year {
+  margin: 0;
+  font-size: clamp(86px, 8.6vw, 138px);
+  color: #e1e5ec;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.aurora-timeline__progress-rail {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.aurora-timeline__progress-start,
+.aurora-timeline__progress-end {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: #8f97a4;
+  font-weight: 600;
+}
+
+.aurora-timeline__progress-track {
+  position: relative;
+  width: 6px;
+  height: 240px;
+}
+
+.aurora-timeline__progress-track-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #c8cfdb 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.aurora-timeline__progress-track-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--aurora-progress, 0%);
+  border-radius: 999px;
+  background: #2e6af2;
+  transition: height 0.16s linear;
+}
+
+.aurora-timeline__progress-dot {
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  background: #2e6af2;
+}
+
+.aurora-timeline__progress-dot--start {
+  top: -3px;
+}
+
+.aurora-timeline__progress-dot--end {
+  bottom: -3px;
+}
+
+.aurora-timeline__content {
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 40px;
+}
+
+.aurora-timeline__columns {
+  width: min(100%, 992px);
+  display: grid;
+  grid-template-columns: minmax(260px, 480px) minmax(260px, 480px);
+  gap: 32px;
+}
+
+.aurora-timeline__column--left,
+.aurora-timeline__column--right {
+  min-width: 0;
+}
+
+.aurora-timeline__column--right {
+  padding-top: 280px;
+}
+
+.aurora-timeline__milestone {
+  margin-bottom: 80px;
+}
+
+.aurora-timeline__year {
+  margin: 0 0 16px;
+  color: #8a92a0;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.16s linear;
+}
+
+.aurora-timeline__year--active {
+  color: #2e6af2;
+}
+
+.aurora-timeline__image-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #dfe1e6;
+  margin-bottom: 16px;
+}
+
+.aurora-timeline__title {
+  margin: 0 0 10px;
+  color: #1b1f26;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.aurora-timeline__body {
+  margin: 0;
+  color: #394250;
+  line-height: 1.62;
+  font-size: 1rem;
+}
+
+@media (max-width: 1400px) {
+  .aurora-timeline__wrapper {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .aurora-timeline__sticky-left {
+    width: 240px;
+  }
+
+  .aurora-timeline__columns {
+    grid-template-columns: minmax(240px, 440px) minmax(240px, 440px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .aurora-timeline__wrapper {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  .aurora-timeline__sticky-left {
+    width: 200px;
+  }
+
+  .aurora-timeline__giant-year {
+    font-size: clamp(78px, 8.1vw, 120px);
+  }
+
+  .aurora-timeline__progress-track {
+    height: 180px;
+  }
+
+  .aurora-timeline__section-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .aurora-timeline__wrapper {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+
+  .aurora-timeline__sticky-left {
+    width: 160px;
+    top: 90px;
+  }
+
+  .aurora-timeline__giant-year {
+    font-size: clamp(66px, 7.5vw, 96px);
+  }
+
+  .aurora-timeline__progress-track {
+    height: 140px;
+  }
+
+  .aurora-timeline__column--right {
+    padding-top: 200px;
+  }
+
+  .aurora-timeline__milestone {
+    margin-bottom: 60px;
+  }
+
+  .aurora-timeline__section-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .aurora-timeline-section {
+    padding: 80px 0;
+  }
+
+  .aurora-timeline__section-title {
+    padding-left: 16px;
+    margin-bottom: 28px;
+    font-size: 1.8rem;
+  }
+
+  .aurora-timeline__wrapper {
+    display: block;
+  }
+
+  .aurora-timeline__sticky-left {
+    position: relative;
+    top: auto;
+    width: 100%;
+    padding: 0 16px;
+    margin-bottom: 26px;
+  }
+
+  .aurora-timeline__sticky-inner {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .aurora-timeline__giant-year {
+    font-size: 45px;
+    line-height: 1;
+  }
+
+  .aurora-timeline__progress-rail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .aurora-timeline__progress-track {
+    width: 80px;
+    height: 2px;
+  }
+
+  .aurora-timeline__progress-track-bg {
+    background: repeating-linear-gradient(
+      to right,
+      #c8cfdb 0 4px,
+      transparent 4px 8px
+    );
+  }
+
+  .aurora-timeline__progress-track-fill {
+    top: 0;
+    left: 0;
+    bottom: auto;
+    height: 100%;
+    width: var(--aurora-progress, 0%);
+    transition: width 0.16s linear;
+  }
+
+  .aurora-timeline__progress-dot {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .aurora-timeline__progress-dot--start {
+    left: 0;
+  }
+
+  .aurora-timeline__progress-dot--end {
+    left: 100%;
+  }
+
+  .aurora-timeline__content {
+    padding: 0 16px;
+  }
+
+  .aurora-timeline__columns {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .aurora-timeline__column--right {
+    padding-top: 0;
+  }
+
+  .aurora-timeline__title {
+    font-size: 1.16rem;
+  }
+
+  .aurora-timeline__body {
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-timeline__progress-track-fill {
+    transition: none;
+  }
+
+  .aurora-timeline__year {
+    transition: none;
+  }
+}
