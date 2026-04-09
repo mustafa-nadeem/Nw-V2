@@ -6,6 +6,7 @@ import './WhyWaqfSection.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_PACING = 1.28;
+const MOBILE_SCROLL_PACING = 1.05;
 
 const slides = [
   {
@@ -47,6 +48,7 @@ function WhyWaqfSection() {
   const stageRef = useRef(null);
   const triggerIdsRef = useRef({
     pin: 'why-waqf-stage-pin',
+    pinMobile: 'why-waqf-stage-pin-mobile',
     heading: 'why-waqf-heading-reveal',
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -150,6 +152,61 @@ function WhyWaqfSection() {
       }, sectionRef);
 
       return () => {
+        scopedCtx.revert();
+      };
+    });
+
+    mm.add('(max-width: 767px)', () => {
+      const scopedCtx = gsap.context(() => {
+        sectionRef.current?.classList.add('mobile-slide-enabled');
+        const panels = gsap.utils.toArray('.why-waqf-panel');
+
+        gsap.set(panels, {
+          yPercent: (index) => (index === 0 ? 0 : 100),
+        });
+
+        const timeline = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: triggerIds.pinMobile,
+            trigger: stageRef.current,
+            start: 'top top',
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.9,
+            end: () => '+=' + (panels.length - 1) * window.innerHeight * MOBILE_SCROLL_PACING,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const progress = self.progress * (panels.length - 1);
+
+              panels.forEach((panel) => {
+                panel.setAttribute('data-overlap', 'false');
+              });
+
+              for (let index = 0; index < panels.length - 1; index += 1) {
+                if (progress > index && progress < index + 1) {
+                  panels[index].setAttribute('data-overlap', 'true');
+                  break;
+                }
+              }
+            },
+          },
+        });
+
+        for (let index = 1; index < panels.length; index += 1) {
+          timeline.to(
+            panels[index],
+            {
+              yPercent: 0,
+              duration: 1,
+            },
+            index - 1
+          );
+        }
+      }, sectionRef);
+
+      return () => {
+        sectionRef.current?.classList.remove('mobile-slide-enabled');
         scopedCtx.revert();
       };
     });
