@@ -54,6 +54,7 @@ function WhatIsWaqfStack() {
     description: 'what-is-waqf-description-reveal-trigger',
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -73,8 +74,25 @@ function WhatIsWaqfStack() {
     return () => media.removeListener(update);
   }, []);
 
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobileLayout(media.matches);
+
+    update();
+
+    if (media.addEventListener) {
+      media.addEventListener('change', update);
+      return () => media.removeEventListener('change', update);
+    }
+
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
+
+  const useStaticLayout = prefersReducedMotion || isMobileLayout;
+
   useLayoutEffect(() => {
-    if (!sectionRef.current || prefersReducedMotion) {
+    if (!sectionRef.current || useStaticLayout) {
       return undefined;
     }
 
@@ -231,12 +249,12 @@ function WhatIsWaqfStack() {
       });
       ctx.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [useStaticLayout]);
 
   return (
     <section
       ref={sectionRef}
-      className={`section waqf-stack-section${prefersReducedMotion ? ' reduced-motion' : ''}`}
+      className={`section waqf-stack-section${useStaticLayout ? ' reduced-motion' : ''}`}
       aria-labelledby="what-is-waqf-heading"
     >
       <div className="container waqf-stack-layout">

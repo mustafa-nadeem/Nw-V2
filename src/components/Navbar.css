@@ -4,10 +4,13 @@
   top: 20px;
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 100vw;
   z-index: 1000;
   display: flex;
   justify-content: center;
   padding: 12px 24px;
+  overflow-x: clip;
   transition: top 0.6s cubic-bezier(0.4, 0, 0.2, 1),
               padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -19,6 +22,7 @@
   justify-content: space-between;
   width: 100%;
   max-width: 1440px;
+  min-width: 0;
   padding: 0;
   background: transparent;
   border-radius: 999px;
@@ -167,67 +171,163 @@
 /* ── Responsive ── */
 @media (max-width: 1080px) {
   .navbar-wrapper {
+    top: 12px;
     padding: 10px 16px;
+  }
+
+  .navbar-wrapper.scrolled {
+    top: 10px;
+  }
+
+  .navbar-logo-img {
+    height: 34px;
   }
 
   .navbar-link,
   .navbar-action-link,
   .navbar-btn {
-    padding: 8px 14px;
-    font-size: 0.82rem;
+    padding: 9px 16px;
+    font-size: 0.86rem;
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 980px) {
+  .navbar {
+    max-width: 100%;
+    padding: 8px 10px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(17, 23, 44, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .navbar-wrapper.scrolled .navbar {
+    background: rgba(243, 244, 248, 0.94);
+    border-color: rgba(43, 52, 108, 0.18);
+    padding: 8px 10px;
+  }
+
+  .navbar-logo-img {
+    height: 30px;
+  }
+
   .navbar-toggle {
-    display: block;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+
+  .navbar-wrapper.scrolled .navbar-toggle {
+    color: #2B346C;
+    border-color: rgba(43, 52, 108, 0.24);
+    background: rgba(43, 52, 108, 0.08);
   }
 
   .navbar-center,
   .navbar-actions {
     display: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+    gap: 10px;
   }
 
   .navbar.open .navbar-center,
   .navbar.open .navbar-actions {
-    display: flex;
+    display: grid;
   }
 
   .navbar.open {
     flex-wrap: wrap;
-    background: rgba(242, 242, 242, 0.95);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: var(--radius-sm);
-    padding: 12px 20px;
+    align-items: start;
+    border-radius: 18px;
+    padding: 10px;
+    background: rgba(14, 20, 40, 0.95);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .navbar-wrapper.scrolled .navbar.open {
+    background: rgba(243, 244, 248, 0.98);
+    border-color: rgba(43, 52, 108, 0.18);
   }
 
   .navbar.open .navbar-center {
     order: 3;
     width: 100%;
-    flex-direction: column;
-    border-radius: var(--radius-sm);
-    padding: 12px;
     margin-top: 10px;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 
   .navbar.open .navbar-actions {
     order: 4;
     width: 100%;
-    flex-direction: column;
-    margin-top: 10px;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    margin-top: 8px;
   }
 
   .navbar.open .navbar-link,
   .navbar.open .navbar-action-link,
   .navbar.open .navbar-btn {
     width: 100%;
+    text-align: left;
+    border-radius: 10px;
+    padding: 11px 12px;
+    color: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.92rem;
+  }
+
+  .navbar-wrapper.scrolled .navbar.open .navbar-link,
+  .navbar-wrapper.scrolled .navbar.open .navbar-action-link,
+  .navbar-wrapper.scrolled .navbar.open .navbar-btn {
+    color: #2B346C;
+    background: rgba(43, 52, 108, 0.06);
+    border-color: rgba(43, 52, 108, 0.16);
+  }
+
+  .navbar.open .navbar-btn--donate {
+    background: #01ACA6;
+    border-color: #01ACA6;
+    color: #fff;
     text-align: center;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-wrapper {
+    top: 8px;
+    padding: 8px 12px;
+  }
+
+  .navbar-wrapper.scrolled {
+    top: 8px;
+  }
+
+  .navbar {
+    padding: 7px 9px;
+  }
+
+  .navbar-logo-img {
+    height: 26px;
+  }
+
+  .navbar-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navbar-toggle svg {
+    width: 22px;
+    height: 22px;
   }
 }

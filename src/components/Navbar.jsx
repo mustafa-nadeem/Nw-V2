@@ -9,6 +9,7 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const closeMenu = () => setOpen(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -20,8 +21,28 @@ function Navbar() {
     setOpen(false);
   }, [location.pathname, location.hash]);
 
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    const isMobileViewport = window.matchMedia('(max-width: 980px)').matches;
+
+    if (!isMobileViewport) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   const navigateToHomeSection = (sectionId) => (event) => {
     event.preventDefault();
+    setOpen(false);
 
     if (location.pathname !== '/') {
       navigate(`/#${sectionId}`);
@@ -39,7 +60,7 @@ function Navbar() {
   return (
     <header className={`navbar-wrapper${scrolled ? ' scrolled' : ''}`}>
       <nav className={`navbar${open ? ' open' : ''}`}>
-        <Link to="/" className="navbar-logo" aria-label="National Waqf home">
+        <Link to="/" className="navbar-logo" aria-label="National Waqf home" onClick={closeMenu}>
           <img
             className="navbar-logo-img navbar-logo-white"
             src={logoWhite}
@@ -53,19 +74,20 @@ function Navbar() {
         </Link>
 
         <div className="navbar-center">
-          <Link to="/about" className="navbar-link">About Us</Link>
+          <Link to="/about" className="navbar-link" onClick={closeMenu}>About Us</Link>
           <a href="#impact" className="navbar-link" onClick={navigateToHomeSection('impact')}>Our Impact</a>
           <a href="#learn" className="navbar-link" onClick={navigateToHomeSection('learn')}>Learn More</a>
           <a href="#connect" className="navbar-link" onClick={navigateToHomeSection('connect')}>Connect With Us</a>
         </div>
 
         <div className="navbar-actions">
-          <a href="#grant" className="navbar-action-link">Apply</a>
-          <a href="#signin" className="navbar-action-link">Sign In</a>
-          <a href="#donate" className="navbar-btn navbar-btn--donate">Donate £5</a>
+          <a href="#grant" className="navbar-action-link" onClick={closeMenu}>Apply</a>
+          <a href="#signin" className="navbar-action-link" onClick={closeMenu}>Sign In</a>
+          <a href="#donate" className="navbar-btn navbar-btn--donate" onClick={closeMenu}>Donate £5</a>
         </div>
 
         <button
+          type="button"
           className="navbar-toggle"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"

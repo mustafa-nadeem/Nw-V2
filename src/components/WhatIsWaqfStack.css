@@ -247,13 +247,17 @@
   }
 
   .waqf-stack-cards {
-    width: min(100%, 340px);
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
     height: 420px;
-    margin-inline: auto;
+    margin-inline: 0;
+    justify-self: stretch;
   }
 
   .waqf-stack-card {
-    width: min(100%, 340px);
+    width: 100%;
+    max-width: 100%;
     height: 420px;
     padding: 22px;
     gap: 10px;
