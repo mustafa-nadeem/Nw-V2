@@ -51,6 +51,7 @@ function WhatIsWaqfStack() {
   const triggerIdsRef = useRef({
     pin: 'what-is-waqf-stack-pin-trigger',
     heading: 'what-is-waqf-heading-reveal-trigger',
+    description: 'what-is-waqf-description-reveal-trigger',
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -79,12 +80,17 @@ function WhatIsWaqfStack() {
 
     const sectionEl = sectionRef.current;
     const triggerIds = triggerIdsRef.current;
-    const { pin: pinTriggerId, heading: headingTriggerId } = triggerIds;
+    const {
+      pin: pinTriggerId,
+      heading: headingTriggerId,
+      description: descriptionTriggerId,
+    } = triggerIds;
 
     const ctx = gsap.context(() => {
       const cardEls = gsap.utils.toArray('.waqf-stack-card');
       const copyEl = sectionEl.querySelector('.waqf-stack-copy');
       const headingEl = sectionEl.querySelector('.waqf-heading');
+      const descriptionEl = sectionEl.querySelector('.waqf-stack-description');
       const cardsWrap = sectionEl.querySelector('.waqf-stack-cards');
       const headingWords = gsap.utils.toArray('.waqf-word');
       const totalScroll = HEADING_SCROLL + cardEls.length * SCROLL_PER_CARD;
@@ -103,12 +109,43 @@ function WhatIsWaqfStack() {
       gsap.set(headingEl, {
         fontSize: 'clamp(3.5rem, 7vw, 7rem)',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         gap: '0.32ch',
       });
 
       // Cards hidden off-screen
       gsap.set(cardsWrap, { autoAlpha: 0 });
+
+      // Description fades in after heading settles, before cards enter
+      gsap.set(descriptionEl, {
+        autoAlpha: 0,
+        y: 0,
+      });
+
+      let isDescriptionVisible = false;
+
+      ScrollTrigger.create({
+        id: descriptionTriggerId,
+        trigger: sectionEl,
+        start: 'top top',
+        end: '+=' + totalScroll,
+        onUpdate: (self) => {
+          const shouldShowDescription = self.progress >= 0.27;
+
+          if (shouldShowDescription === isDescriptionVisible) {
+            return;
+          }
+
+          isDescriptionVisible = shouldShowDescription;
+
+          gsap.to(descriptionEl, {
+            autoAlpha: shouldShowDescription ? 1 : 0,
+            duration: shouldShowDescription ? 0.9 : 0.25,
+            ease: shouldShowDescription ? 'power2.out' : 'power1.out',
+            overwrite: 'auto',
+          });
+        },
+      });
 
       gsap.set(headingWords, {
         autoAlpha: 0,
@@ -116,7 +153,7 @@ function WhatIsWaqfStack() {
       });
 
       gsap.set(cardEls, {
-        rotation: 15,
+        rotation: 0,
         y: '100vh',
         transformOrigin: '50% 50%',
       });
@@ -177,11 +214,11 @@ function WhatIsWaqfStack() {
         .to(cardsWrap, {
           autoAlpha: 1,
           duration: 0.3,
-        }, 0.7);
+        }, 1.08);
 
       // Phase 2: cards fly in
       cardEls.forEach((cardEl) => {
-        timeline.to(cardEl, { rotation: 0, y: 0, duration: 1 });
+        timeline.to(cardEl, { y: 0, duration: 1 });
       });
     }, sectionEl);
 
@@ -209,6 +246,23 @@ function WhatIsWaqfStack() {
             <span className="waqf-word" aria-hidden="true">is</span>
             <span className="waqf-word" aria-hidden="true" style={{color: '#01ACA6'}}>Waqf?</span>
           </h2>
+
+          <div className="waqf-stack-description" aria-label="What is Waqf description">
+            <p>
+              Waqf is a sustainable way of giving to build communities and society.
+            </p>
+            <p>
+              A Waqf (plural Awqaf) is an Islamic charitable endowment made by an
+              individual, organisation or institution. Assets such as land, buildings,
+              or financial investments can be donated permanently for religious,
+              educational or social benefit.
+            </p>
+            <p>
+              Once a Waqf is established, the donated assets cannot be sold,
+              transferred, or inherited, ensuring their long-term benefit to the
+              community and to society.
+            </p>
+          </div>
         </div>
 
         <div className="waqf-stack-cards" role="list" aria-label="What is Waqf key cards">
