@@ -134,6 +134,7 @@
   margin: 0;
   color: #ffffff;
   font-size: clamp(1.18rem, 1.32vw, 1.42rem);
+  font-weight: 600;
   line-height: 1.2;
 }
 

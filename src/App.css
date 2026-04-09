@@ -414,6 +414,7 @@ h3 {
 
 .impact-intro h2 {
   font-size: clamp(2.4rem, 4.2vw, 4rem);
+  font-weight: 600;
   line-height: 1.06;
   letter-spacing: -0.025em;
 }

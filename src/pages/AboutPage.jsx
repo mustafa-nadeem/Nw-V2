@@ -288,9 +288,6 @@ function AboutPage() {
                   <h3>{principle.title}</h3>
                   <p>{principle.text}</p>
                 </div>
-                <div className="about-principle-visual">
-                  <span>Image</span>
-                </div>
               </article>
             ))}
           </div>

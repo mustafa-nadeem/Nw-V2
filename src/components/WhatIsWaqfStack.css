@@ -22,6 +22,7 @@
 .waqf-stack-copy h2 {
   margin: 0;
   font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 600;
   line-height: 1;
   letter-spacing: -0.03em;
   color: #141821;
@@ -98,6 +99,7 @@
 .waqf-stack-card h3 {
   margin: 0;
   font-size: clamp(1.35rem, 2vw, 2rem);
+  font-weight: 600;
   line-height: 1.15;
   color: #fff;
 }
