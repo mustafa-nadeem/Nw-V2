@@ -1,41 +1,42 @@
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
+import ProfileGridSection from '../components/ProfileGridSection';
 
 const trustees = [
   {
-    name: 'Trustee Name',
-    bio: 'Short trustee biography placeholder text describing expertise, governance responsibilities, and community contribution.',
+    name: 'Placeholder Name 01',
+    role: 'Placeholder role',
   },
   {
-    name: 'Trustee Name',
-    bio: 'Short trustee biography placeholder text describing expertise, governance responsibilities, and community contribution.',
+    name: 'Placeholder Name 02',
+    role: 'Placeholder role',
   },
   {
-    name: 'Trustee Name',
-    bio: 'Short trustee biography placeholder text describing expertise, governance responsibilities, and community contribution.',
+    name: 'Placeholder Name 03',
+    role: 'Placeholder role',
   },
   {
-    name: 'Trustee Name',
-    bio: 'Short trustee biography placeholder text describing expertise, governance responsibilities, and community contribution.',
+    name: 'Placeholder Name 04',
+    role: 'Placeholder role',
   },
 ];
 
 const shariaBoard = [
   {
-    name: 'Sharia Board Member',
-    bio: 'Short sharia advisory biography placeholder text focused on jurisprudence, ethics, and endowment governance.',
+    name: 'Placeholder Name 01',
+    role: 'Placeholder role',
   },
   {
-    name: 'Sharia Board Member',
-    bio: 'Short sharia advisory biography placeholder text focused on jurisprudence, ethics, and endowment governance.',
+    name: 'Placeholder Name 02',
+    role: 'Placeholder role',
   },
   {
-    name: 'Sharia Board Member',
-    bio: 'Short sharia advisory biography placeholder text focused on jurisprudence, ethics, and endowment governance.',
+    name: 'Placeholder Name 03',
+    role: 'Placeholder role',
   },
   {
-    name: 'Sharia Board Member',
-    bio: 'Short sharia advisory biography placeholder text focused on jurisprudence, ethics, and endowment governance.',
+    name: 'Placeholder Name 04',
+    role: 'Placeholder role',
   },
 ];
 
@@ -127,39 +128,21 @@ function AboutPage() {
 
       <AuroraTimeline />
 
-      <section className="about-section" aria-labelledby="about-trustees-title">
-        <div className="about-shell about-shell-narrow">
-          <h2 id="about-trustees-title">Meet our trustees</h2>
-          <div className="about-profile-grid">
-            {trustees.map((member, index) => (
-              <article className="about-profile-card" key={`${member.name}-${index}`}>
-                <div className="about-image-placeholder">Image needed</div>
-                <div className="about-profile-content">
-                  <h3>{member.name}</h3>
-                  <p>{member.bio}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProfileGridSection
+        id="about-trustees"
+        title="Meet our trustees"
+        subtitle="Placeholder supporting line for trustees section."
+        variant="trustees"
+        profiles={trustees}
+      />
 
-      <section className="about-section" aria-labelledby="about-sharia-title">
-        <div className="about-shell about-shell-narrow">
-          <h2 id="about-sharia-title">Meet our Sharia board</h2>
-          <div className="about-profile-grid">
-            {shariaBoard.map((member, index) => (
-              <article className="about-profile-card" key={`${member.name}-${index}`}>
-                <div className="about-image-placeholder">Image needed</div>
-                <div className="about-profile-content">
-                  <h3>{member.name}</h3>
-                  <p>{member.bio}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProfileGridSection
+        id="about-shariah-board"
+        title="Meet our Sharia board"
+        subtitle="Placeholder supporting line for Sharia board section."
+        variant="sharia"
+        profiles={shariaBoard}
+      />
 
       <section className="about-section about-principles" aria-labelledby="about-principles-title">
         <div className="about-shell about-shell-narrow">

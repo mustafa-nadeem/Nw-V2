@@ -1,0 +1,207 @@
+.profile-grid-section {
+  width: 100%;
+  padding: 80px 0;
+}
+
+.profile-grid-section--trustees {
+  background: #2B346C;
+}
+
+.profile-grid-section--sharia {
+  background: #191c22;
+}
+
+.profile-grid-section__container {
+  width: min(100%, 1600px);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.profile-grid-section__intro {
+  margin-bottom: 48px;
+}
+
+.profile-grid-section__intro h2 {
+  margin: 0 0 12px;
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.profile-grid-section__intro p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.profile-grid-section__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.profile-grid-section__card {
+  position: relative;
+  container-type: inline-size;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  outline: none;
+}
+
+.profile-grid-section__image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  transform-origin: top left;
+  transition: transform 0.4s ease;
+  z-index: 1;
+}
+
+.profile-grid-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.profile-grid-section__bio-overlay {
+  position: absolute;
+  left: 0;
+  top: calc(73.333cqi + 6px);
+  width: 100%;
+  padding: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.profile-grid-section__bio {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.profile-grid-section__info-container {
+  position: relative;
+  z-index: 3;
+  padding: 14px 14px 16px;
+}
+
+.profile-grid-section__name {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.profile-grid-section__role {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.profile-grid-section__card:hover .profile-grid-section__image-container,
+.profile-grid-section__card:focus-visible .profile-grid-section__image-container {
+  transform: scale(0.55);
+}
+
+.profile-grid-section__card:hover .profile-grid-section__image,
+.profile-grid-section__card:focus-visible .profile-grid-section__image {
+  transform: scale(1.06);
+}
+
+.profile-grid-section__card:hover .profile-grid-section__bio,
+.profile-grid-section__card:focus-visible .profile-grid-section__bio {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.profile-grid-section__card:focus-visible {
+  box-shadow: none;
+}
+
+@media (max-width: 1200px) {
+  .profile-grid-section__container {
+    padding: 0 20px;
+  }
+
+  .profile-grid-section__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .profile-grid-section__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-grid-section {
+    padding: 60px 0;
+  }
+
+  .profile-grid-section__intro {
+    margin-bottom: 32px;
+  }
+
+  .profile-grid-section__intro h2 {
+    font-size: 1.6rem;
+  }
+
+  .profile-grid-section__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .profile-grid-section__bio-overlay {
+    top: calc(73.333cqi + 4px);
+    width: 100%;
+  }
+
+  .profile-grid-section__name {
+    font-size: 1rem;
+  }
+
+  .profile-grid-section__role,
+  .profile-grid-section__bio {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-grid-section__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .profile-grid-section__bio-overlay {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-grid-section__image-container,
+  .profile-grid-section__image,
+  .profile-grid-section__bio,
+  .profile-grid-section__bio-overlay {
+    transition: none;
+    transform: none;
+  }
+
+  .profile-grid-section__bio {
+    opacity: 0;
+  }
+}

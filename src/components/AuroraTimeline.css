@@ -47,7 +47,7 @@
 .aurora-timeline__giant-year {
   margin: 0;
   font-size: clamp(86px, 8.6vw, 138px);
-  color: #e1e5ec;
+  color: #00ACA6;
   line-height: 0.88;
   letter-spacing: -0.04em;
   font-weight: 700;
@@ -93,7 +93,7 @@
   width: 100%;
   height: var(--aurora-progress, 0%);
   border-radius: 999px;
-  background: #2e6af2;
+  background: #00ACA6;
   transition: height 0.16s linear;
 }
 
@@ -104,7 +104,7 @@
   height: 10px;
   border-radius: 999px;
   transform: translateX(-50%);
-  background: #2e6af2;
+  background: #00ACA6;
 }
 
 .aurora-timeline__progress-dot--start {
@@ -151,7 +151,7 @@
 }
 
 .aurora-timeline__year--active {
-  color: #2e6af2;
+  color: #00ACA6;
 }
 
 .aurora-timeline__image-placeholder {
