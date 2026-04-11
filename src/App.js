@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
+import ImpactPage from './pages/ImpactPage';
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/impact" element={<ImpactPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

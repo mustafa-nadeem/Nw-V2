@@ -75,7 +75,7 @@ function Navbar() {
 
         <div className="navbar-center">
           <Link to="/about" className="navbar-link" onClick={closeMenu}>About Us</Link>
-          <a href="#impact" className="navbar-link" onClick={navigateToHomeSection('impact')}>Our Impact</a>
+          <Link to="/impact" className="navbar-link" onClick={closeMenu}>Our Impact</Link>
           <a href="#learn" className="navbar-link" onClick={navigateToHomeSection('learn')}>Learn More</a>
           <a href="#connect" className="navbar-link" onClick={navigateToHomeSection('connect')}>Connect With Us</a>
         </div>
