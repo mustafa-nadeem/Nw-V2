@@ -57,54 +57,76 @@ function AuroraTimeline() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const onScroll = () => {
+    let frameId = null;
+
+    const updateTimelineState = () => {
+      frameId = null;
+
       if (!containerRef.current) {
         return;
       }
 
       const containerRect = containerRef.current.getBoundingClientRect();
-      const containerTop = containerRect.top;
-      const containerHeight = containerRect.height;
       const windowHeight = window.innerHeight;
+      const navbarElement = document.querySelector('.navbar-wrapper');
+      const navbarBottom = navbarElement ? navbarElement.getBoundingClientRect().bottom : 0;
+      const triggerPoint = Math.max(windowHeight * 0.38, navbarBottom + 16);
 
-      const denominator = containerHeight - windowHeight * 0.2;
-      const rawProgress = denominator <= 0
-        ? 0
-        : (windowHeight * 0.4 - containerTop) / denominator;
+      const denominator = Math.max(containerRect.height, 1);
+      const rawProgress = (triggerPoint - containerRect.top) / denominator;
       const scrollProgress = clamp(rawProgress, 0, 1);
 
       setProgress(scrollProgress);
 
-      const triggerPoint = window.innerHeight * 0.35;
-
       const visualOrder = milestoneRefs.current
         .map((node, index) => ({ node, index }))
         .filter(({ node }) => Boolean(node))
+        .map((item) => ({
+          ...item,
+          yearElement: item.node.querySelector('.aurora-timeline__year'),
+        }))
+        .filter(({ yearElement }) => Boolean(yearElement))
         .sort((a, b) => {
-          const aTop = a.node.querySelector('.aurora-timeline__year').getBoundingClientRect().top;
-          const bTop = b.node.querySelector('.aurora-timeline__year').getBoundingClientRect().top;
+          const aTop = a.yearElement.getBoundingClientRect().top;
+          const bTop = b.yearElement.getBoundingClientRect().top;
           return aTop - bTop;
         });
 
-      let reachedIndex = 0;
+      let reachedIndex = visualOrder.length > 0 ? visualOrder[0].index : 0;
 
       for (let i = 0; i < visualOrder.length; i += 1) {
         const item = visualOrder[i];
-        const yearElementTop = item.node.querySelector('.aurora-timeline__year').getBoundingClientRect().top;
+        const yearElementTop = item.yearElement.getBoundingClientRect().top;
 
         if (yearElementTop <= triggerPoint) {
           reachedIndex = item.index;
+        } else {
+          break;
         }
       }
 
-      setActiveIndex(reachedIndex);
+      setActiveIndex((previousIndex) => (previousIndex === reachedIndex ? previousIndex : reachedIndex));
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    const requestTimelineStateUpdate = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(updateTimelineState);
+    };
+
+    window.addEventListener('scroll', requestTimelineStateUpdate, { passive: true });
+    window.addEventListener('resize', requestTimelineStateUpdate);
+    requestTimelineStateUpdate();
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', requestTimelineStateUpdate);
+      window.removeEventListener('resize', requestTimelineStateUpdate);
+
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
     };
   }, []);
 

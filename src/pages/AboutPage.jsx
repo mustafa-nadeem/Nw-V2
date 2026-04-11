@@ -175,10 +175,7 @@ function AboutPage() {
             business contributions. These funds support operational costs and ensure the
             organisation remains effective while maintaining financial sustainability.
           </p>
-          <div className="about-funding-grid">
-            <div className="about-diagram-placeholder" aria-hidden="true" />
-            <aside className="about-note">Private operational and admin costs box</aside>
-          </div>
+          <div className="about-diagram-placeholder" aria-hidden="true" />
         </div>
       </section>
 

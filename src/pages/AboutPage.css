@@ -242,25 +242,6 @@
   .cycle-label-desc { font-size: 11px; }
 }
 
-.about-funding-grid {
-  margin-top: 36px;
-  display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: 26px;
-  align-items: center;
-}
-
-.about-note {
-  background: #ffa8ad;
-  border-radius: 10px;
-  padding: 28px 18px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.45;
-  color: #2b2226;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-}
-
 
 .about-journey-grid {
   margin-top: 44px;
@@ -534,15 +515,6 @@
 
   .about-section {
     padding: 64px 0;
-  }
-
-  .about-funding-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about-note {
-    width: min(100%, 320px);
-    margin: 0 auto;
   }
 
   .about-profile-grid {
