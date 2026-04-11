@@ -1,11 +1,41 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { geoMercator, geoPath } from 'd3-geo';
-import ukGeoJson from '../assets/geo/uk.geo.json';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import './ImpactPage.css';
 
-const MAP_WIDTH = 1200;
-const MAP_HEIGHT = 920;
-const MAP_PANEL_SAFE_AREA_RATIO = 0.26;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
+const ukOverview = {
+  center: [54.75, -2.75],
+  zoom: 6.05,
+};
+
+const ukViewBounds = [
+  [49.75, -8.9],
+  [59.35, 2.2],
+];
+
+const checkpointIcon = L.divIcon({
+  className: 'impact-checkpoint-marker',
+  html: '<span class="impact-checkpoint-core" aria-hidden="true"></span>',
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
+
+const checkpointIconActive = L.divIcon({
+  className: 'impact-checkpoint-marker impact-checkpoint-marker--active',
+  html: '<span class="impact-checkpoint-core" aria-hidden="true"></span>',
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
 
 const projects = [
   {
@@ -13,42 +43,42 @@ const projects = [
     city: 'Manchester',
     category: 'Youth Development',
     summary: 'Funding to expand access and leadership opportunities for young people.',
-    coordinates: [-2.2426, 53.4808],
+    position: [53.4808, -2.2426],
   },
   {
     name: 'Supporting Humanity',
     city: 'Birmingham',
     category: 'Community Support',
     summary: 'Support for practical welfare and community outreach delivery.',
-    coordinates: [-1.8904, 52.4862],
+    position: [52.4862, -1.8904],
   },
   {
     name: 'Sacred',
     city: 'London',
     category: 'Spiritual Programmes',
     summary: 'Support for guided programmes focused on faith and reflection.',
-    coordinates: [-0.1276, 51.5072],
+    position: [51.5072, -0.1276],
   },
   {
     name: 'Community Forum Policy',
     city: 'Leicester',
     category: 'Civic Engagement',
     summary: 'Investment in dialogue and policy participation for local communities.',
-    coordinates: [-1.1398, 52.6369],
+    position: [52.6369, -1.1398],
   },
   {
     name: 'Sapience Institute',
     city: 'Cardiff',
     category: 'Research',
     summary: 'Research-led initiatives supporting informed community development.',
-    coordinates: [-3.1791, 51.4816],
+    position: [51.4816, -3.1791],
   },
   {
     name: 'Spinney Hill Recovery',
     city: 'Glasgow',
     category: 'Health and Recovery',
     summary: 'Targeted support for addiction recovery and resilience services.',
-    coordinates: [-4.2518, 55.8642],
+    position: [55.8642, -4.2518],
   },
 ];
 
@@ -135,80 +165,49 @@ const causeAreas = [
   },
 ];
 
+function MapCameraController({ selectedProject, onZoomSettled }) {
+  const map = useMap();
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    if (selectedProject) {
+      map.flyTo(selectedProject.position, 8.85, {
+        animate: true,
+        duration: 1.25,
+      });
+
+      timerRef.current = window.setTimeout(() => {
+        onZoomSettled();
+      }, 860);
+    } else {
+      map.flyTo(ukOverview.center, ukOverview.zoom, {
+        animate: true,
+        duration: 1,
+      });
+    }
+
+    return () => {
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current);
+      }
+    };
+  }, [map, onZoomSettled, selectedProject]);
+
+  return null;
+}
+
 function ImpactPage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
-  const panelTimerRef = useRef(null);
 
-  const ukFeature = useMemo(() => {
-    if (!ukGeoJson?.features?.length) {
-      return null;
-    }
-
-    return ukGeoJson.features[0];
+  const onZoomSettled = useCallback(() => {
+    setIsProjectPanelOpen(true);
   }, []);
-
-  const projection = useMemo(() => {
-    if (!ukFeature) {
-      return null;
-    }
-
-    return geoMercator().fitExtent([[120, 68], [MAP_WIDTH - 120, MAP_HEIGHT - 80]], ukFeature);
-  }, [ukFeature]);
-
-  const mapPath = useMemo(() => {
-    if (!projection || !ukFeature) {
-      return '';
-    }
-
-    return geoPath(projection)(ukFeature) || '';
-  }, [projection, ukFeature]);
-
-  const projectPoints = useMemo(() => {
-    if (!projection) {
-      return [];
-    }
-
-    return projects
-      .map((project) => {
-        const projectedPoint = projection(project.coordinates);
-
-        if (!projectedPoint) {
-          return null;
-        }
-
-        return {
-          ...project,
-          x: projectedPoint[0],
-          y: projectedPoint[1],
-        };
-      })
-      .filter(Boolean);
-  }, [projection]);
-
-  const mapTransform = useMemo(() => {
-    const overviewTransform = { scale: 1, x: 0, y: 0 };
-
-    if (!selectedProject) {
-      return overviewTransform;
-    }
-
-    const targetPoint = projectPoints.find((point) => point.name === selectedProject.name);
-
-    if (!targetPoint) {
-      return overviewTransform;
-    }
-
-    const scale = 2.65;
-    const targetX = MAP_WIDTH * MAP_PANEL_SAFE_AREA_RATIO;
-    const targetY = MAP_HEIGHT * 0.5;
-
-    return {
-      scale,
-      x: targetX - targetPoint.x * scale,
-      y: targetY - targetPoint.y * scale,
-    };
-  }, [projectPoints, selectedProject]);
 
   const onSelectProject = useCallback((project) => {
     setIsProjectPanelOpen(false);
@@ -220,84 +219,47 @@ function ImpactPage() {
     setSelectedProject(null);
   }, []);
 
-  useEffect(() => {
-    if (panelTimerRef.current) {
-      window.clearTimeout(panelTimerRef.current);
-      panelTimerRef.current = null;
-    }
-
-    if (!selectedProject) {
-      return;
-    }
-
-    panelTimerRef.current = window.setTimeout(() => {
-      setIsProjectPanelOpen(true);
-    }, 700);
-
-    return () => {
-      if (panelTimerRef.current) {
-        window.clearTimeout(panelTimerRef.current);
-      }
-    };
-  }, [selectedProject]);
-
   return (
     <div className="impact-page" id="impact-page">
       <section className="impact-section impact-map" aria-labelledby="impact-map-title">
         <div className="impact-map-stage" role="region" aria-label="UK projects map">
-          <div className="impact-map-canvas" aria-hidden="true">
-            <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} className="impact-uk-map" role="img">
-              <g
-                className="impact-uk-map__viewport"
-                style={{
-                  transform: `translate(${mapTransform.x}px, ${mapTransform.y}px) scale(${mapTransform.scale})`,
+          <MapContainer
+            center={ukOverview.center}
+            zoom={ukOverview.zoom}
+            minZoom={6}
+            maxZoom={9.4}
+            scrollWheelZoom={false}
+            dragging={false}
+            doubleClickZoom={false}
+            boxZoom={false}
+            keyboard={false}
+            touchZoom={false}
+            zoomControl={false}
+            attributionControl={false}
+            maxBounds={ukViewBounds}
+            maxBoundsViscosity={1}
+            zoomSnap={0.05}
+            className="impact-map-canvas"
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              noWrap
+            />
+
+            <MapCameraController selectedProject={selectedProject} onZoomSettled={onZoomSettled} />
+
+            {projects.map((project) => (
+              <Marker
+                key={project.name}
+                position={project.position}
+                icon={selectedProject?.name === project.name ? checkpointIconActive : checkpointIcon}
+                eventHandlers={{
+                  click: () => onSelectProject(project),
                 }}
-              >
-                <path className="impact-uk-map__shape" d={mapPath} />
-
-                {projectPoints.map((project) => {
-                  const isActive = selectedProject?.name === project.name;
-
-                  return (
-                    <g key={project.name} transform={`translate(${project.x}, ${project.y})`}>
-                      <circle
-                        className={`impact-checkpoint-ring ${isActive ? 'impact-checkpoint-ring--active' : ''}`}
-                        cx="0"
-                        cy="0"
-                        r="11"
-                      />
-                      <circle
-                        className={`impact-checkpoint-dot ${isActive ? 'impact-checkpoint-dot--active' : ''}`}
-                        cx="0"
-                        cy="0"
-                        r="6"
-                      />
-                    </g>
-                  );
-                })}
-              </g>
-            </svg>
-          </div>
-
-          <div className="impact-map-hit-layer">
-            {projectPoints.map((project) => {
-              const isActive = selectedProject?.name === project.name;
-
-              return (
-                <button
-                  key={project.name}
-                  type="button"
-                  className={`impact-checkpoint-hit ${isActive ? 'impact-checkpoint-hit--active' : ''}`}
-                  style={{
-                    left: `${(project.x / MAP_WIDTH) * 100}%`,
-                    top: `${(project.y / MAP_HEIGHT) * 100}%`,
-                  }}
-                  onClick={() => onSelectProject(project)}
-                  aria-label={`View ${project.name} details`}
-                />
-              );
-            })}
-          </div>
+              />
+            ))}
+          </MapContainer>
 
           <div className="impact-map-overlay">
             <div className="impact-shell impact-shell-narrow">

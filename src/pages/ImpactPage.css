@@ -60,22 +60,10 @@
   z-index: 0;
 }
 
-.impact-uk-map {
+.impact-map-canvas.leaflet-container {
   width: 100%;
   height: 100%;
-  display: block;
-}
-
-.impact-uk-map__viewport {
-  transform-origin: 0 0;
-  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.impact-uk-map__shape {
-  fill: #00aca6;
-  stroke: #0d5961;
-  stroke-width: 2;
-  filter: drop-shadow(0 24px 40px rgba(0, 51, 57, 0.24));
+  filter: saturate(1.08) contrast(1.06);
 }
 
 .impact-map-stage::before {
@@ -84,8 +72,8 @@
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(circle at 12% 16%, rgba(248, 253, 255, 0.9), rgba(234, 247, 252, 0.2) 34%, transparent 64%),
-    linear-gradient(180deg, rgba(5, 35, 58, 0.06) 0%, rgba(5, 35, 58, 0.22) 100%);
+    radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.24) 34%, transparent 64%),
+    linear-gradient(180deg, rgba(12, 29, 48, 0.05) 0%, rgba(12, 29, 48, 0.18) 100%);
   pointer-events: none;
 }
 
@@ -178,41 +166,27 @@
   color: rgba(236, 244, 255, 0.86);
 }
 
-.impact-map-hit-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-}
-
-.impact-checkpoint-hit {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  border: 0;
+.impact-checkpoint-marker {
   background: transparent;
-  cursor: pointer;
+  border: 0;
 }
 
-.impact-checkpoint-ring {
-  fill: rgba(0, 172, 166, 0.24);
+.impact-checkpoint-core {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #00aca6;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 6px rgba(0, 172, 166, 0.2);
   animation: impactCheckpointPulse 2.7s ease-in-out infinite;
 }
 
-.impact-checkpoint-dot {
-  fill: #00aca6;
-  stroke: #ffffff;
-  stroke-width: 2;
-}
-
-.impact-checkpoint-hit--active + .impact-checkpoint-ring,
-.impact-checkpoint-ring--active {
-  fill: rgba(255, 142, 84, 0.34);
-}
-
-.impact-checkpoint-dot--active {
-  fill: #ff8e54;
+.impact-checkpoint-marker--active .impact-checkpoint-core {
+  background: #ff8e54;
+  box-shadow: 0 0 0 8px rgba(255, 142, 84, 0.35);
+  animation-duration: 1.2s;
 }
 
 @keyframes impactCheckpointPulse {
@@ -596,10 +570,6 @@
 
   .impact-map-overlay .impact-shell {
     margin-left: 0;
-  }
-
-  .impact-map-hit-layer {
-    z-index: 3;
   }
 
   .impact-project-panel {
