@@ -17,7 +17,9 @@
 }
 
 .impact-card:hover .reel-number.is-started .reel-digit,
-.impact-card:hover .reel-number.is-started .reel-static {
+.impact-card:hover .reel-number.is-started .reel-static,
+.impact-stat-card:hover .reel-number.is-started .reel-digit,
+.impact-stat-card:hover .reel-number.is-started .reel-static {
   animation: reel-wave 620ms ease-in-out calc(var(--wave-index) * 45ms) 1;
 }
 
@@ -60,7 +62,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .impact-card:hover .reel-number.is-started .reel-digit,
-  .impact-card:hover .reel-number.is-started .reel-static {
+  .impact-card:hover .reel-number.is-started .reel-static,
+  .impact-stat-card:hover .reel-number.is-started .reel-digit,
+  .impact-stat-card:hover .reel-number.is-started .reel-static {
     animation: none;
   }
 

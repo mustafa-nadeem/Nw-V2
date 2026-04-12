@@ -5,6 +5,7 @@ import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import DigitalReelNumber from '../components/DigitalReelNumber';
 import './ImpactPage.css';
 
 L.Icon.Default.mergeOptions({
@@ -14,8 +15,14 @@ L.Icon.Default.mergeOptions({
 });
 
 const ukOverview = {
-  center: [54.75, -2.75],
-  zoom: 6.05,
+  center: [50.5, -2.75],
+  zoom: 5.95,
+};
+
+const mapZoom = {
+  min: 5.2,
+  max: 9.4,
+  projectFocus: 8.2,
 };
 
 const ukViewBounds = [
@@ -84,20 +91,20 @@ const projects = [
 
 const fundedProjects = [
   {
-    title: 'Muslim Scout Scholarship',
-    text: 'Placeholder copy: support awarded to increase participation, mentoring, and practical leadership pathways for youth participants.',
+    title: 'Muslim Scout',
+    text: 'National Waqf\'s funding for two minibuses enabled MSF to transport young people to national events, enhancing their development while generating sustainable income for long-term impact.',
   },
   {
     title: 'Supporting Humanity',
-    text: 'Placeholder copy: grant support focused on frontline aid delivery, volunteer training, and sustainable service capacity.',
+    text: 'Our grant enabled a specialist recovery organisation to support vulnerable individuals affected by addiction, homelessness, and social exclusion. Through funded programmes, beneficiaries accessed structured recovery support, emotional guidance, and stable housing, helping them rebuild their lives. As a result, individuals have overcome substance dependency, avoided reoffending, and are now contributing positively to their communities.',
   },
   {
-    title: 'Sacred',
-    text: 'Placeholder copy: funding allocated to deepen spiritual literacy, wellbeing, and long-term faith development pathways.',
+    title: 'Sacred BMS',
+    text: 'With pass-through funding from National Waqf, Sacred BMS produced a landmark research report strengthening awareness and understanding of abuse within Scottish Muslim communities.',
   },
   {
     title: 'Community Forum Policy',
-    text: 'Placeholder copy: programme support to strengthen civic confidence, informed participation, and local representation.',
+    text: 'An independent think tank advancing evidence-based, community-led policy solutions to address structural inequalities affecting Muslim communities in the UK.',
   },
 ];
 
@@ -112,60 +119,83 @@ const supportedLogos = [
 
 const impactStats = [
   {
-    value: '£1 million',
+    value: '£1,000,000',
     text: 'More than 150 organisations requested over £1 million in funding, showing strong demand for impact-led investment.',
-    size: 'large',
+    layout: 'left-tall',
+    tone: 'donors',
   },
   {
-    value: '£270k',
+    value: '£270,000',
     text: 'Awarded in strategic grants to strengthen high-impact organisations and sustainable initiatives.',
-    size: 'wide',
+    layout: 'top-wide',
+    tone: 'raised',
   },
   {
     value: '16',
     text: 'Grants awarded to organisations delivering impactful long-term work across the UK.',
-    size: 'medium',
+    layout: 'bottom-left',
+    tone: 'focus',
   },
   {
     value: '6',
     text: 'Cause areas selected for strategic, long-term social outcomes.',
-    size: 'small',
+    layout: 'middle-tall',
+    tone: 'monthly',
   },
   {
     value: '10,000',
     text: 'Beneficiaries reached through funded projects across the UK.',
-    size: 'medium',
+    layout: 'bottom-right',
+    tone: 'direct-debit',
   },
 ];
 
 const causeAreas = [
   {
     title: 'Spiritual Preservation and Growth',
-    text: 'Placeholder copy for supporting faith-informed practice, literacy, and safe communal spaces for worship and reflection.',
+    subtitle: 'Supporting Muslims to confidently live Islam and spiritually grow',
+    text: '"O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow..." (Qur\'an, Al-Hashr 59:18)\n\nSpiritual preservation is the heart of a strong Muslim identity. The Prophet (peace be upon him) taught that the health of the heart shapes the entire person. When faith is nurtured, communities grow with resilience and direction.',
+    image: 'https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=1280&q=80',
   },
   {
-    title: 'Civic, Social and Legal Engagement',
-    text: 'Placeholder copy for initiatives that strengthen participation, legal literacy, and constructive civic leadership.',
+    title: 'Civic, Media and Legal Engagement',
+    subtitle: 'Positive development and protection of Muslims in public life',
+    text: '"O you who believe! Be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives." (Qur\'an 4:135)\n\nWe are commanded as believers to uphold justice in all circumstances. Civic engagement and legal empowerment are vital pathways through which communities can fulfil this duty, ensuring fairness, representation, and the protection of rights for all.',
+    image: 'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1280&q=80',
   },
   {
     title: 'Youth Empowerment and Leadership',
-    text: 'Placeholder copy for programmes developing youth confidence, responsibility, and long-term leadership skills.',
+    subtitle: 'Nurturing and equipping the youth to become future leaders',
+    text: 'The Prophet (peace be upon him) inspired many youth in his time. From Mus\'ab ibn Umair (RA) delivering Islam to Madinah in his early 20s, to Mu\'adh ibn Jabal (RA) being sent to Yemen as a young governor, our tradition teaches that youth must be given the opportunity to achieve their full potential.\n\nNational Waqf invests in initiatives that build real opportunities, and connect youth with purpose-driven action. We aim to help develop confident, capable changemakers who give back to society.',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1280&q=80',
   },
   {
-    title: 'Da wah and Religious Resilience',
-    text: 'Placeholder copy for outreach and educational pathways that support informed, grounded community identity.',
+    title: 'Da\'wah - Religious Awareness & Outreach',
+    subtitle: 'Supporting organisations to share Islamic values with wisdom and integrity',
+    text: '"Invite to the way of your Lord with wisdom and good advice..." (Qur\'an 16:125)\n\nSharing the values of Islam with clarity is a prophetic tradition. Islam\'s teachings offer guidance for the flourishing of society as a whole. Religious outreach, therefore, is about helping people better understand Islam\'s message and contribution to our shared lives.\n\nNational Waqf\'s approach to religious outreach values collaboration, supporting stronger connections between Muslim organisations, as well as across diverse faith communities.',
+    image: 'https://images.unsplash.com/photo-1496115965489-21be7e6e59a0?auto=format&fit=crop&w=1280&q=80',
   },
   {
     title: 'Educational Excellence and Development',
-    text: 'Placeholder copy for educational uplift, teacher development, and scalable quality-learning opportunities.',
+    subtitle: 'Equipping individuals with knowledge and holistic growth',
+    text: '"The seeking of knowledge is an obligation upon every Muslim." (Hadith - Ibn Majah)\n\nEducation is the foundation of community development. To secure a thriving future, we must invest in nurturing talent and innovation across all sectors.\n\nNational Waqf supports initiatives that close these gaps. By building an educational ecosystem that empowers young Muslims intellectually, spiritually, and professionally, we create a generation who positively contribute to wider society.',
+    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1280&q=80',
   },
   {
     title: 'Socio-economic Empowerment',
-    text: 'Placeholder copy for economic wellbeing, family resilience, and access pathways that improve stability and mobility.',
+    subtitle: 'Investing in the dignity, wellbeing, and long-term stability of underserved communities',
+    text: '"...so that wealth does not circulate only among the rich among you." (Qur\'an 59:7)\n\nWe emphasise fairness in wealth distribution and compassionate care for society\'s most vulnerable. A thriving community must care for those at its margin, not only through short-term relief, but by building systems that protect dignity and enable all to flourish.\n\nNational Waqf\'s approach aims to focus on strengthening the social infrastructure that supports community resilience.',
+    image: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1280&q=80',
   },
 ];
 
-function MapCameraController({ selectedProject, onZoomSettled }) {
+function MapCameraController({
+  selectedProject,
+  onZoomSettled,
+  overviewCenter,
+  overviewZoom,
+  projectFocusZoom,
+}) {
   const map = useMap();
   const timerRef = useRef(null);
 
@@ -176,7 +206,7 @@ function MapCameraController({ selectedProject, onZoomSettled }) {
     }
 
     if (selectedProject) {
-      map.flyTo(selectedProject.position, 8.85, {
+      map.flyTo(selectedProject.position, projectFocusZoom, {
         animate: true,
         duration: 1.25,
       });
@@ -185,9 +215,8 @@ function MapCameraController({ selectedProject, onZoomSettled }) {
         onZoomSettled();
       }, 860);
     } else {
-      map.flyTo(ukOverview.center, ukOverview.zoom, {
-        animate: true,
-        duration: 1,
+      map.setView(overviewCenter, overviewZoom, {
+        animate: false,
       });
     }
 
@@ -196,7 +225,14 @@ function MapCameraController({ selectedProject, onZoomSettled }) {
         window.clearTimeout(timerRef.current);
       }
     };
-  }, [map, onZoomSettled, selectedProject]);
+  }, [
+    map,
+    onZoomSettled,
+    overviewCenter,
+    overviewZoom,
+    projectFocusZoom,
+    selectedProject,
+  ]);
 
   return null;
 }
@@ -204,6 +240,20 @@ function MapCameraController({ selectedProject, onZoomSettled }) {
 function ImpactPage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
+  const impactAreasRef = useRef(null);
+  const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
+
+  useEffect(() => {
+    setIsProjectPanelOpen(false);
+    setSelectedProject(null);
+  }, [
+    ukOverview.center[0],
+    ukOverview.center[1],
+    ukOverview.zoom,
+    mapZoom.min,
+    mapZoom.max,
+    mapZoom.projectFocus,
+  ]);
 
   const onZoomSettled = useCallback(() => {
     setIsProjectPanelOpen(true);
@@ -219,6 +269,29 @@ function ImpactPage() {
     setSelectedProject(null);
   }, []);
 
+  useEffect(() => {
+    const section = impactAreasRef.current;
+
+    if (!section) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setImpactAreasSheenActive(entry.isIntersecting);
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="impact-page" id="impact-page">
       <section className="impact-section impact-map" aria-labelledby="impact-map-title">
@@ -226,8 +299,8 @@ function ImpactPage() {
           <MapContainer
             center={ukOverview.center}
             zoom={ukOverview.zoom}
-            minZoom={6}
-            maxZoom={9.4}
+            minZoom={mapZoom.min}
+            maxZoom={mapZoom.max}
             scrollWheelZoom={false}
             dragging={false}
             doubleClickZoom={false}
@@ -247,7 +320,13 @@ function ImpactPage() {
               noWrap
             />
 
-            <MapCameraController selectedProject={selectedProject} onZoomSettled={onZoomSettled} />
+            <MapCameraController
+              selectedProject={selectedProject}
+              onZoomSettled={onZoomSettled}
+              overviewCenter={ukOverview.center}
+              overviewZoom={ukOverview.zoom}
+              projectFocusZoom={mapZoom.projectFocus}
+            />
 
             {projects.map((project) => (
               <Marker
@@ -322,7 +401,6 @@ function ImpactPage() {
                 <div className="impact-funded-copy">
                   <h3>{project.title}</h3>
                   <p>{project.text}</p>
-                  <button type="button" className="impact-link-btn">Read More</button>
                 </div>
               </article>
             ))}
@@ -334,14 +412,22 @@ function ImpactPage() {
         <div className="impact-shell impact-shell-narrow">
           <h2 id="impact-supported-title">The social projects we have supported</h2>
         </div>
-        <div className="impact-supported-strip" role="list" aria-label="Supported organisations logos">
-          {supportedLogos.map((logo) => (
-            <div key={logo} className="impact-supported-logo" role="listitem">{logo}</div>
-          ))}
+        <div className="impact-supported-marquee" aria-label="Supported organisations logos">
+          <div className="impact-supported-track" role="list">
+            {[...supportedLogos, ...supportedLogos].map((logo, index) => (
+              <div key={`${logo}-${index}`} className="impact-supported-logo" role="listitem">
+                {logo}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="impact-section impact-areas" aria-labelledby="impact-areas-title">
+      <section
+        ref={impactAreasRef}
+        className={`impact-section impact-areas ${impactAreasSheenActive ? 'impact-areas--sheen-active' : ''}`}
+        aria-labelledby="impact-areas-title"
+      >
         <div className="impact-shell impact-shell-narrow">
           <h2 id="impact-areas-title">Areas we fund:</h2>
           <p>We focus on investing and funding particular areas that we believe will yield the best results.</p>
@@ -350,8 +436,11 @@ function ImpactPage() {
         <div className="impact-shell">
           <div className="impact-stats-grid">
             {impactStats.map((stat) => (
-              <article key={stat.value} className={`impact-stat-card impact-stat-card--${stat.size}`}>
-                <p className="impact-stat-value">{stat.value}</p>
+              <article
+                key={stat.value}
+                className={`impact-stat-card impact-stat-card--${stat.layout} impact-stat-card--${stat.tone}`}
+              >
+                <p className="impact-stat-value"><DigitalReelNumber value={stat.value} /></p>
                 <p className="impact-stat-text">{stat.text}</p>
               </article>
             ))}
@@ -398,11 +487,21 @@ function ImpactPage() {
         <div className="impact-shell">
           <div className="impact-cause-grid">
             {causeAreas.map((cause) => (
-              <article key={cause.title} className="impact-cause-card">
-                <div className="impact-placeholder impact-cause-image" aria-hidden="true">Image</div>
-                <div className="impact-cause-body">
-                  <h3>{cause.title}</h3>
-                  <p>{cause.text}</p>
+              <article key={cause.title} className="impact-cause-card" tabIndex={0}>
+                <div className="impact-cause-card-inner">
+                  <div
+                    className="impact-cause-face impact-cause-face--front"
+                    style={{ backgroundImage: `url(${cause.image})` }}
+                  >
+                    <h3>{cause.title}</h3>
+                  </div>
+                  <div className="impact-cause-face impact-cause-face--back">
+                    <h3>{cause.title}</h3>
+                    <p className="impact-cause-subtitle">{cause.subtitle}</p>
+                    {cause.text.split('\n\n').map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}
