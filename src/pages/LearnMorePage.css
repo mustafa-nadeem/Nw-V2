@@ -1,0 +1,419 @@
+.learn-page {
+  background: #f2f2f2;
+  color: #1d2230;
+}
+
+.learn-shell {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  padding: 0 44px;
+}
+
+.learn-shell-narrow {
+  max-width: 940px;
+  text-align: center;
+}
+
+.learn-section {
+  padding: 92px 0;
+}
+
+.learn-page h1,
+.learn-page h2,
+.learn-page h3,
+.learn-page h4,
+.learn-page p {
+  margin: 0;
+}
+
+.learn-page h1 {
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  line-height: 1.1;
+}
+
+.learn-page h2 {
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  line-height: 1.15;
+  margin-bottom: 22px;
+}
+
+.learn-page p {
+  color: #3f4654;
+  line-height: 1.62;
+}
+
+.learn-lead {
+  max-width: 76ch;
+  margin: 0 auto;
+}
+
+.learn-hero {
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+}
+
+.learn-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.72fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.learn-hero-copy {
+  display: grid;
+  gap: 20px;
+  text-align: center;
+}
+
+.learn-hero-copy p {
+  max-width: 64ch;
+  margin: 0 auto;
+}
+
+.learn-hero-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 240px));
+  justify-content: center;
+  gap: 22px;
+  margin-top: 18px;
+}
+
+.learn-hero-actions button,
+.learn-workshop-form button,
+.learn-download-row button,
+.learn-content-card button {
+  border: 1px solid #9ca2ad;
+  background: #b6b8bc;
+  color: #1f2330;
+  font: inherit;
+  font-size: 1.1rem;
+  border-radius: 0;
+  min-height: 50px;
+  cursor: pointer;
+}
+
+.learn-hero-image,
+.learn-workshop-image,
+.learn-content-image {
+  border-radius: 8px;
+  background: #d2d2d4;
+  color: #454b57;
+  display: grid;
+  place-items: start end;
+  padding: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.learn-hero-image {
+  min-height: 420px;
+}
+
+.learn-role-grid,
+.learn-usage-grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 34px;
+}
+
+.learn-role-card,
+.learn-usage-card {
+  background: #d7d7d9;
+  min-height: 520px;
+  border-radius: 0;
+  padding: 26px 22px;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.learn-icon-circle {
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  background: #ececed;
+  color: #666d77;
+  display: grid;
+  place-items: center;
+  font-size: 0.82rem;
+  margin-bottom: 8px;
+}
+
+.learn-role-card h3,
+.learn-usage-card h3 {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.learn-role-card h4 {
+  font-size: 1.9rem;
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.learn-role-card p,
+.learn-usage-card p {
+  font-size: 0.85rem;
+  color: #454d59;
+}
+
+.learn-examples-label {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.learn-usage-card ul {
+  margin: 0;
+  padding-left: 18px;
+  text-align: left;
+  justify-self: start;
+  color: #3f4653;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.learn-workshop {
+  border-top: 1px solid #c8c9cc;
+  border-bottom: 1px solid #c8c9cc;
+}
+
+.learn-workshop-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.68fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.learn-workshop-copy {
+  display: grid;
+  gap: 28px;
+}
+
+.learn-workshop-form {
+  display: grid;
+  gap: 12px;
+  max-width: 650px;
+}
+
+.learn-workshop-form label {
+  font-size: 0.9rem;
+  color: #404755;
+}
+
+.learn-workshop-form input {
+  min-height: 52px;
+  border: 1px solid #b7bac0;
+  background: #efeff0;
+  font: inherit;
+  padding: 0 14px;
+}
+
+.learn-workshop-form button {
+  width: 140px;
+  margin-top: 16px;
+  font-size: 1.7rem;
+}
+
+.learn-workshop-image {
+  min-height: 380px;
+}
+
+.learn-download-row {
+  margin-top: 14px;
+  background: #d7d7d9;
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.learn-download-row h3 {
+  margin-bottom: 8px;
+  font-size: 1.06rem;
+}
+
+.learn-download-row p {
+  max-width: 58ch;
+}
+
+.learn-download-row button {
+  width: 92px;
+  min-height: 92px;
+  border-radius: 50%;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.learn-content-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 16px;
+}
+
+.learn-content-card {
+  background: #eeeeef;
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 16px;
+}
+
+.learn-content-card--left {
+  grid-row: span 2;
+}
+
+.learn-content-card--tall {
+  min-height: 410px;
+}
+
+.learn-content-card--wide {
+  min-height: 196px;
+}
+
+.learn-content-card p {
+  align-self: center;
+  max-width: 32ch;
+}
+
+.learn-content-card button {
+  width: 64px;
+  min-height: 64px;
+  border-radius: 50%;
+  justify-self: end;
+}
+
+.learn-content-image {
+  min-height: 96px;
+}
+
+.learn-report-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.learn-faq-group {
+  margin-top: 34px;
+  text-align: left;
+}
+
+.learn-faq-group h3 {
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.learn-faq-list {
+  display: grid;
+  gap: 4px;
+}
+
+.learn-faq-item {
+  background: #d7d7d9;
+}
+
+.learn-faq-trigger {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: #1d2230;
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.learn-faq-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f4f4f5;
+  display: grid;
+  place-items: center;
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.learn-faq-panel {
+  padding: 0 22px 18px;
+}
+
+.learn-faq-panel p {
+  max-width: 70ch;
+}
+
+@media (max-width: 1080px) {
+  .learn-shell {
+    padding: 0 22px;
+  }
+
+  .learn-hero-grid,
+  .learn-workshop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .learn-hero-image,
+  .learn-workshop-image {
+    min-height: 300px;
+  }
+
+  .learn-role-grid,
+  .learn-usage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .learn-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .learn-content-card--left {
+    grid-row: auto;
+  }
+
+  .learn-content-card--tall,
+  .learn-content-card--wide {
+    min-height: 230px;
+  }
+}
+
+@media (max-width: 640px) {
+  .learn-section {
+    padding: 72px 0;
+  }
+
+  .learn-role-grid,
+  .learn-usage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .learn-role-card,
+  .learn-usage-card {
+    min-height: 0;
+  }
+
+  .learn-hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .learn-download-row {
+    grid-template-columns: 1fr;
+  }
+
+  .learn-download-row button {
+    width: 76px;
+    min-height: 76px;
+  }
+}
