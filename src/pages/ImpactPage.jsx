@@ -6,6 +6,7 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import DigitalReelNumber from '../components/DigitalReelNumber';
+import OurCausesSection from '../components/OurCausesSection';
 import './ImpactPage.css';
 
 L.Icon.Default.mergeOptions({
@@ -479,35 +480,7 @@ function ImpactPage() {
         </div>
       </section>
 
-      <section className="impact-section impact-causes" aria-labelledby="impact-causes-title">
-        <div className="impact-shell impact-shell-narrow">
-          <h2 id="impact-causes-title">Our cause areas</h2>
-        </div>
-
-        <div className="impact-shell">
-          <div className="impact-cause-grid">
-            {causeAreas.map((cause) => (
-              <article key={cause.title} className="impact-cause-card" tabIndex={0}>
-                <div className="impact-cause-card-inner">
-                  <div
-                    className="impact-cause-face impact-cause-face--front"
-                    style={{ backgroundImage: `url(${cause.image})` }}
-                  >
-                    <h3>{cause.title}</h3>
-                  </div>
-                  <div className="impact-cause-face impact-cause-face--back">
-                    <h3>{cause.title}</h3>
-                    <p className="impact-cause-subtitle">{cause.subtitle}</p>
-                    {cause.text.split('\n\n').map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <OurCausesSection slides={causeAreas} />
     </div>
   );
 }
