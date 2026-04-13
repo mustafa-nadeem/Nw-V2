@@ -182,16 +182,14 @@ function AboutPage() {
       <section className="about-section about-fullscreen about-pvm about-pvm--dark" aria-labelledby="about-purpose-title">
         <div className="about-shell">
           <div className="about-pvm-grid">
-            <div className="about-pvm-text">
-              <h2 id="about-purpose-title">Our <span className="about-pvm-accent">Purpose</span></h2>
-              <p>
-                National Waqf exists to institutionalise the revival of waqf in the UK as a
-                permanent engine for community resilience, social good, and ethical
-                nation-building. This document sets out a clear strategic framework that
-                defines our long-term direction, priority objectives, and measurable goals
-                over the next three to five years.
-              </p>
-            </div>
+            <h2 id="about-purpose-title" className="about-pvm-title">Our <span className="about-pvm-accent">Purpose</span></h2>
+            <p className="about-pvm-body">
+              National Waqf exists to institutionalise the revival of waqf in the UK as a
+              permanent engine for community resilience, social good, and ethical
+              nation-building. This document sets out a clear strategic framework that
+              defines our long-term direction, priority objectives, and measurable goals
+              over the next three to five years.
+            </p>
             <div className="about-pvm-img">
               <span>Image</span>
             </div>
@@ -202,16 +200,14 @@ function AboutPage() {
       <section className="about-section about-fullscreen about-pvm about-pvm--light" aria-labelledby="about-vision-title">
         <div className="about-shell">
           <div className="about-pvm-grid about-pvm-grid--reverse">
+            <h2 id="about-vision-title" className="about-pvm-title">Our <span className="about-pvm-accent">Vision</span></h2>
+            <p className="about-pvm-body">
+              To establish Waqf as a permanent, trusted, and transformative institution
+              in the UK, funding generations of social, educational, civic, and spiritual
+              impact without dependency on short-term fundraising.
+            </p>
             <div className="about-pvm-img">
               <span>Image</span>
-            </div>
-            <div className="about-pvm-text">
-              <h2 id="about-vision-title">Our <span className="about-pvm-accent">Vision</span></h2>
-              <p>
-                To establish Waqf as a permanent, trusted, and transformative institution
-                in the UK, funding generations of social, educational, civic, and spiritual
-                impact without dependency on short-term fundraising.
-              </p>
             </div>
           </div>
         </div>
@@ -220,15 +216,13 @@ function AboutPage() {
       <section className="about-section about-fullscreen about-pvm about-pvm--dark" aria-labelledby="about-mission-title">
         <div className="about-shell">
           <div className="about-pvm-grid">
-            <div className="about-pvm-text">
-              <h2 id="about-mission-title">Our <span className="about-pvm-accent">Mission</span></h2>
-              <p>
-                To build, protect, and grow sustainable Waqf assets and deploy their
-                returns strategically to empower communities, strengthen institutions, and
-                enable long-term positive change through ethical, transparent, and
-                professional governance.
-              </p>
-            </div>
+            <h2 id="about-mission-title" className="about-pvm-title">Our <span className="about-pvm-accent">Mission</span></h2>
+            <p className="about-pvm-body">
+              To build, protect, and grow sustainable Waqf assets and deploy their
+              returns strategically to empower communities, strengthen institutions, and
+              enable long-term positive change through ethical, transparent, and
+              professional governance.
+            </p>
             <div className="about-pvm-img">
               <span>Image</span>
             </div>

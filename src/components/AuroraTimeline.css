@@ -251,11 +251,8 @@
 
 @media (max-width: 768px) {
   .aurora-timeline-section {
-    --aurora-sticky-top: 86px;
+    --aurora-sticky-top: 96px;
     --aurora-right-offset: 0px;
-  }
-
-  .aurora-timeline-section {
     padding: 80px 0;
   }
 
@@ -266,48 +263,62 @@
   }
 
   .aurora-timeline__wrapper {
-    display: block;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+    padding-left: 16px;
   }
 
   .aurora-timeline__sticky-left {
-    position: -webkit-sticky;
-    position: sticky;
-    top: var(--aurora-sticky-top);
-    width: 100%;
-    padding: 10px 16px 12px;
-    margin-bottom: 18px;
-    background: #ffffff;
-    border-bottom: 1px solid #e4e8ef;
-    z-index: 150;
+    position: relative;
+    top: auto;
+    width: 56px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    z-index: auto;
+    align-self: stretch;
+    height: auto;
   }
 
   .aurora-timeline__sticky-inner {
-    position: static;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: var(--aurora-sticky-top);
+    display: block;
+    height: calc(100vh - var(--aurora-sticky-top) - 80px);
+    max-height: 560px;
+    gap: 0;
   }
 
+  .aurora-timeline__header-label,
   .aurora-timeline__giant-year {
-    font-size: 45px;
-    line-height: 1;
+    display: none;
   }
 
   .aurora-timeline__progress-rail {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 100%;
   }
 
   .aurora-timeline__progress-track {
-    width: 80px;
-    height: 2px;
+    position: absolute;
+    left: 50%;
+    top: 22px;
+    bottom: 22px;
+    width: 2px;
+    height: auto;
+    transform: translateX(-50%);
   }
 
   .aurora-timeline__progress-track-bg {
     background: repeating-linear-gradient(
-      to right,
+      to bottom,
       #c8cfdb 0 4px,
       transparent 4px 8px
     );
@@ -317,26 +328,51 @@
     top: 0;
     left: 0;
     bottom: auto;
-    height: 100%;
-    width: var(--aurora-progress, 0%);
-    transition: width 0.16s linear;
+    width: 100%;
+    height: var(--aurora-progress, 0%);
+    transition: height 0.16s linear;
   }
 
   .aurora-timeline__progress-dot {
-    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
     transform: translate(-50%, -50%);
   }
 
   .aurora-timeline__progress-dot--start {
-    left: 0;
+    top: 0;
   }
 
   .aurora-timeline__progress-dot--end {
-    left: 100%;
+    top: 100%;
+    bottom: auto;
+  }
+
+  .aurora-timeline__progress-start,
+  .aurora-timeline__progress-end {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #00ACA6;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .aurora-timeline__progress-start {
+    top: 0;
+  }
+
+  .aurora-timeline__progress-end {
+    bottom: 0;
   }
 
   .aurora-timeline__content {
-    padding: 0 16px;
+    padding: 0 16px 0 8px;
+    justify-content: flex-start;
   }
 
   .aurora-timeline__columns {

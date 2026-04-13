@@ -54,7 +54,9 @@ function WhatIsWaqfStack() {
     description: 'what-is-waqf-description-reveal-trigger',
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isMobileLayout, setIsMobileLayout] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+  );
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -89,7 +91,7 @@ function WhatIsWaqfStack() {
     return () => media.removeListener(update);
   }, []);
 
-  const useStaticLayout = prefersReducedMotion || isMobileLayout;
+  const useStaticLayout = prefersReducedMotion;
 
   useLayoutEffect(() => {
     if (!sectionRef.current || useStaticLayout) {
@@ -111,6 +113,60 @@ function WhatIsWaqfStack() {
       const descriptionEl = sectionEl.querySelector('.waqf-stack-description');
       const cardsWrap = sectionEl.querySelector('.waqf-stack-cards');
       const headingWords = gsap.utils.toArray('.waqf-word');
+
+      if (isMobileLayout) {
+        const MOBILE_PEEK_VH = 12;
+        const MOBILE_CARD_HEIGHT_VH = 52;
+        const stackHeightVh = MOBILE_CARD_HEIGHT_VH + (cardEls.length - 1) * MOBILE_PEEK_VH;
+
+        gsap.set(cardsWrap, { height: `${stackHeightVh}vh`, position: 'relative' });
+
+        cardEls.forEach((card, index) => {
+          gsap.set(card, {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 'auto',
+            top: `${index * MOBILE_PEEK_VH}vh`,
+            width: '100%',
+            height: `${MOBILE_CARD_HEIGHT_VH}vh`,
+            zIndex: index + 1,
+            y: index === 0 ? 0 : '110vh',
+          });
+        });
+
+        gsap.set(headingWords, { autoAlpha: 1, y: 0 });
+        gsap.set(descriptionEl, { autoAlpha: 1, y: 0 });
+
+        const totalScroll = (cardEls.length - 1) * 360;
+
+        const navbarOffset = 140;
+
+        const mobileTimeline = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: pinTriggerId,
+            trigger: cardsWrap,
+            start: `top ${navbarOffset}px`,
+            end: '+=' + totalScroll,
+            pin: sectionEl,
+            pinSpacing: true,
+            anticipatePin: 1,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        cardEls.forEach((card, index) => {
+          if (index === 0) {
+            return;
+          }
+          mobileTimeline.to(card, { y: 0, duration: 1 });
+        });
+
+        return;
+      }
+
       const totalScroll = HEADING_SCROLL + cardEls.length * SCROLL_PER_CARD;
 
       // Heading starts centered and large
@@ -249,7 +305,7 @@ function WhatIsWaqfStack() {
       });
       ctx.revert();
     };
-  }, [useStaticLayout]);
+  }, [useStaticLayout, isMobileLayout]);
 
   return (
     <section

@@ -412,16 +412,38 @@
 
 @media (max-width: 860px) {
   .about-section.about-principles {
-    height: auto;
+    height: 100vh;
     min-height: 100vh;
+    padding-top: 72px;
+    padding-bottom: 24px;
+  }
+
+  .about-principles h2 {
+    font-size: 1.6rem;
+  }
+
+  .about-principles .about-principles-subhead {
+    margin: 4px 0 14px;
+    font-size: 0.88rem;
   }
 
   .about-principles-list {
-    grid-template-rows: none;
+    gap: 10px;
   }
 
   .about-principle-card {
-    padding: 22px 26px;
+    padding: 14px 20px;
+    border-radius: 14px;
+  }
+
+  .about-principle-content h3 {
+    font-size: 1.05rem;
+    margin: 0 0 4px;
+  }
+
+  .about-principle-content p {
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 }
 
@@ -443,39 +465,51 @@
 .about-pvm-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-areas:
+    "title img"
+    "body  img";
+  column-gap: 60px;
+  row-gap: 20px;
   align-items: center;
   width: 100%;
-}
-
-.about-pvm-grid--reverse {
-  direction: ltr;
-}
-
-.about-pvm-text {
   text-align: left;
 }
 
-.about-pvm-text h2 {
+.about-pvm-grid--reverse {
+  grid-template-areas:
+    "img title"
+    "img body";
+}
+
+.about-pvm-title {
+  grid-area: title;
   font-size: clamp(2rem, 3.2vw, 3.2rem);
-  margin-bottom: 20px;
+  margin: 0;
+  align-self: end;
+}
+
+.about-pvm-body {
+  grid-area: body;
+  margin: 0;
+  align-self: start;
 }
 
 .about-pvm-accent {
   color: #01ACA6;
 }
 
-.about-pvm--dark .about-pvm-text p {
+.about-pvm--dark .about-pvm-body {
   color: rgba(255, 255, 255, 0.75);
   max-width: none;
 }
 
-.about-pvm--light .about-pvm-text p {
+.about-pvm--light .about-pvm-body {
   color: #4a5060;
   max-width: none;
 }
 
 .about-pvm-img {
+  grid-area: img;
   background: #d4d4d8;
   border-radius: 16px;
   min-height: 360px;
@@ -490,11 +524,23 @@
   .about-pvm-grid,
   .about-pvm-grid--reverse {
     grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-areas:
+      "title"
+      "img"
+      "body";
+    column-gap: 0;
+    row-gap: 22px;
+  }
+
+  .about-pvm-title {
+    align-self: start;
   }
 
   .about-pvm-img {
-    min-height: 240px;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
   }
 }
 
