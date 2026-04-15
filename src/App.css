@@ -104,7 +104,7 @@ h3 {
   display: flex;
   align-items: center;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-              url('./assets/hero.png') center / cover no-repeat;
+              url('./assets/hero.png') center 30% / cover no-repeat;
   color: #fff;
 }
 
@@ -164,8 +164,8 @@ h3 {
 }
 
 .dc-tab--active {
-  background: #2B346C;
-  color: #fff;
+  background: #01ACA6;
+  color: #2B346C;
 }
 
 /* Body */
@@ -226,7 +226,13 @@ h3 {
 .dc-amount--active {
   background: #01ACA6;
   border-color: #01ACA6;
-  color: #fff;
+  color: #2B346C;
+}
+
+.dc-amount--active .dc-amount-value,
+.dc-amount--active .dc-amount-label {
+  color: #2B346C;
+  opacity: 1;
 }
 
 .dc-amount--active:hover {
@@ -288,7 +294,7 @@ h3 {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
+  color: #2B346C;
   background: #01ACA6;
   border: none;
   border-radius: 14px;
@@ -403,7 +409,7 @@ h3 {
 .impact {
   padding-top: 120px;
   padding-bottom: 140px;
-  background: #F3FFFF;
+  background: #FFF9F3;
 }
 
 .impact-shell {
@@ -652,7 +658,7 @@ h3 {
     height: 100vh;
     padding: 96px 20px 24px;
     align-items: center;
-    background-position: 58% 100%, 58% 100%;
+    background-position: 58% 78%, 58% 78%;
   }
 
   .hero-grid {

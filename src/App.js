@@ -20,7 +20,7 @@ function App() {
 
     const id = location.hash.replace('#', '');
 
-    const scrollToHash = (retries = 10) => {
+    const scrollToHash = (retries = 40) => {
       const target = document.getElementById(id);
 
       if (target) {
@@ -29,7 +29,7 @@ function App() {
       }
 
       if (retries > 0) {
-        window.setTimeout(() => scrollToHash(retries - 1), 60);
+        window.setTimeout(() => scrollToHash(retries - 1), 80);
       }
     };
 

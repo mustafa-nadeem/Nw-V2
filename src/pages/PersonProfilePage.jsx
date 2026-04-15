@@ -13,12 +13,17 @@ function PersonProfilePage() {
     return <Navigate to="/about" replace />;
   }
 
+  const isTrustee = person.group === 'trustees';
+  const backHash = isTrustee ? '#about-trustees' : '#about-shariah-board';
+  const backLabel = isTrustee ? 'Back to Meet our trustees' : 'Back to Meet our Shariah board';
+
   return (
     <div className="person-profile-page">
       <section className="person-profile-hero" aria-labelledby="person-profile-title">
         <div className="person-profile-shell">
-          <Link className="person-profile-back" to="/about#about-trustees">
-            Back to About
+          <Link className="person-profile-back" to={`/about${backHash}`}>
+            <span className="person-profile-back-arrow" aria-hidden="true">&larr;</span>
+            {backLabel}
           </Link>
 
           <div className="person-profile-grid">
