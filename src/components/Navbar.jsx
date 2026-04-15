@@ -58,7 +58,11 @@ function Navbar() {
   };
 
   return (
-    <header className={`navbar-wrapper${scrolled ? ' scrolled' : ''}`}>
+    <header
+      className={`navbar-wrapper${scrolled ? ' scrolled' : ''}${
+        location.pathname.startsWith('/impact') ? ' navbar-wrapper--dark-logo' : ''
+      }`}
+    >
       <nav className={`navbar${open ? ' open' : ''}`}>
         <Link to="/" className="navbar-logo" aria-label="National Waqf home" onClick={closeMenu}>
           <img

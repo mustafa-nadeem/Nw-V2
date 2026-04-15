@@ -652,7 +652,7 @@ h3 {
     height: 100vh;
     padding: 96px 20px 24px;
     align-items: center;
-    background-position: left center, left center;
+    background-position: 58% 100%, 58% 100%;
   }
 
   .hero-grid {
@@ -663,6 +663,11 @@ h3 {
 
   .hero-content {
     gap: 10px;
+    order: 2;
+  }
+
+  .donation-card {
+    order: 1;
   }
 
   .hero-content h1 {

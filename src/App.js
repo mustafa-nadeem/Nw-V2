@@ -13,6 +13,7 @@ function App() {
 
   useEffect(() => {
     if (!location.hash) {
+      window.scrollTo(0, 0);
       return;
     }
 

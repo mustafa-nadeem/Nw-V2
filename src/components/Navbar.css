@@ -81,6 +81,10 @@
 .navbar-wrapper.scrolled .navbar-logo-white { display: none; }
 .navbar-wrapper.scrolled .navbar-logo-black { display: block; }
 
+/* Impact page: force black logo in non-scrolled state */
+.navbar-wrapper--dark-logo .navbar-logo-white { display: none; }
+.navbar-wrapper--dark-logo .navbar-logo-black { display: block; }
+
 /* ── Shared pill container ── */
 .navbar-center,
 .navbar-actions {

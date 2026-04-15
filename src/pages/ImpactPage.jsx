@@ -19,10 +19,21 @@ const ukOverview = {
   zoom: 5.95,
 };
 
+const ukOverviewMobile = {
+  center: [54.2, -3.2],
+  zoom: 4.85,
+};
+
 const mapZoom = {
   min: 5.2,
   max: 9.4,
   projectFocus: 8.2,
+};
+
+const mapZoomMobile = {
+  min: 4.4,
+  max: 9.4,
+  projectFocus: 7.6,
 };
 
 const ukViewBounds = [
@@ -242,18 +253,32 @@ function ImpactPage() {
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
   const impactAreasRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
+  const [isMobileMap, setIsMobileMap] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 860px)');
+    const update = () => setIsMobileMap(media.matches);
+
+    update();
+
+    if (media.addEventListener) {
+      media.addEventListener('change', update);
+      return () => media.removeEventListener('change', update);
+    }
+
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
+
+  const activeOverview = isMobileMap ? ukOverviewMobile : ukOverview;
+  const activeZoom = isMobileMap ? mapZoomMobile : mapZoom;
 
   useEffect(() => {
     setIsProjectPanelOpen(false);
     setSelectedProject(null);
-  }, [
-    ukOverview.center[0],
-    ukOverview.center[1],
-    ukOverview.zoom,
-    mapZoom.min,
-    mapZoom.max,
-    mapZoom.projectFocus,
-  ]);
+  }, [isMobileMap]);
 
   const onZoomSettled = useCallback(() => {
     setIsProjectPanelOpen(true);
@@ -297,10 +322,11 @@ function ImpactPage() {
       <section className="impact-section impact-map" aria-labelledby="impact-map-title">
         <div className="impact-map-stage" role="region" aria-label="UK projects map">
           <MapContainer
-            center={ukOverview.center}
-            zoom={ukOverview.zoom}
-            minZoom={mapZoom.min}
-            maxZoom={mapZoom.max}
+            key={isMobileMap ? 'mobile' : 'desktop'}
+            center={activeOverview.center}
+            zoom={activeOverview.zoom}
+            minZoom={activeZoom.min}
+            maxZoom={activeZoom.max}
             scrollWheelZoom={false}
             dragging={false}
             doubleClickZoom={false}
@@ -323,9 +349,9 @@ function ImpactPage() {
             <MapCameraController
               selectedProject={selectedProject}
               onZoomSettled={onZoomSettled}
-              overviewCenter={ukOverview.center}
-              overviewZoom={ukOverview.zoom}
-              projectFocusZoom={mapZoom.projectFocus}
+              overviewCenter={activeOverview.center}
+              overviewZoom={activeOverview.zoom}
+              projectFocusZoom={activeZoom.projectFocus}
             />
 
             {projects.map((project) => (
@@ -349,7 +375,19 @@ function ImpactPage() {
             </div>
           </div>
 
-          <aside className={`impact-project-panel ${isProjectPanelOpen ? 'impact-project-panel--open' : ''}`}>
+          <button
+            type="button"
+            className={`impact-project-backdrop ${isProjectPanelOpen ? 'impact-project-backdrop--open' : ''}`}
+            onClick={onCloseProjectPanel}
+            aria-label="Close project details"
+            tabIndex={isProjectPanelOpen ? 0 : -1}
+          />
+
+          <aside
+            className={`impact-project-panel ${isProjectPanelOpen ? 'impact-project-panel--open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+          >
             {selectedProject && (
               <>
                 <button
