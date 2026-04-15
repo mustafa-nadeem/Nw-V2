@@ -1,0 +1,157 @@
+.person-profile-page {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(1, 172, 166, 0.2), transparent 46%),
+    radial-gradient(circle at 88% 80%, rgba(226, 125, 80, 0.24), transparent 42%),
+    linear-gradient(135deg, #f4f6fb 0%, #f1f5f3 100%);
+  color: #20263a;
+  min-height: 100vh;
+}
+
+.person-profile-hero {
+  min-height: calc(100vh - 140px);
+  display: grid;
+  align-items: center;
+  padding: 88px 0;
+}
+
+.person-profile-shell {
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 0 44px;
+}
+
+.person-profile-back {
+  display: inline-flex;
+  align-items: center;
+  color: #2b346c;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 28px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 220ms ease, color 220ms ease;
+}
+
+.person-profile-back:hover,
+.person-profile-back:focus-visible {
+  color: #e27d50;
+  border-color: #e27d50;
+}
+
+.person-profile-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 450px) minmax(320px, 1fr);
+  gap: 42px;
+  align-items: stretch;
+}
+
+.person-profile-card {
+  margin: 0;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #2b346c;
+  box-shadow: 0 26px 64px rgba(43, 52, 108, 0.25);
+}
+
+.person-profile-image {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  object-fit: cover;
+  display: block;
+}
+
+.person-profile-content {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(43, 52, 108, 0.09);
+  border-radius: 22px;
+  padding: 36px 34px;
+  backdrop-filter: blur(2px);
+}
+
+.person-profile-kicker {
+  margin: 0 0 10px;
+  color: #00aca6;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.person-profile-content h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #2b346c;
+}
+
+.person-profile-role {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  color: #1f5e7a;
+  font-weight: 600;
+}
+
+.person-profile-group {
+  margin: 8px 0 0;
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: rgba(32, 38, 58, 0.56);
+}
+
+.person-profile-divider {
+  height: 2px;
+  width: 96px;
+  margin: 24px 0 22px;
+  background: linear-gradient(90deg, #e27d50, #00aca6);
+  border-radius: 999px;
+}
+
+.person-profile-bio {
+  margin: 0;
+  color: #2b3144;
+  line-height: 1.76;
+  font-size: 1.01rem;
+  max-width: 68ch;
+}
+
+@media (max-width: 1024px) {
+  .person-profile-shell {
+    padding: 0 24px;
+  }
+
+  .person-profile-grid {
+    gap: 30px;
+    grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+  }
+
+  .person-profile-image {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 860px) {
+  .person-profile-hero {
+    padding: 64px 0;
+  }
+
+  .person-profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .person-profile-card {
+    max-width: 560px;
+  }
+
+  .person-profile-image {
+    min-height: 420px;
+  }
+
+  .person-profile-content {
+    padding: 28px 24px;
+  }
+}
