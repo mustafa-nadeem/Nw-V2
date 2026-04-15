@@ -146,15 +146,13 @@ function LearnMorePage() {
           <div className="learn-hero-copy">
             <h1 id="learn-hero-title">Donate here to earn eternal rewards</h1>
             <p>
-              Log in or sign up to donate. It does not take long and you can set up your giving
-              to be a regular donation.
+              Log in or sign up to donate. It doesn't take long and you can set up your giving to be a regular donation.
             </p>
             <div className="learn-hero-actions">
               <button type="button">Log in</button>
               <button type="button">Sign up</button>
             </div>
           </div>
-          <div className="learn-hero-image" aria-hidden="true">Image</div>
         </div>
       </section>
 
