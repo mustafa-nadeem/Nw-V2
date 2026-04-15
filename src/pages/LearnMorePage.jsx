@@ -282,14 +282,30 @@ function LearnMorePage() {
       <section className="learn-section" aria-labelledby="learn-policies-title">
         <div className="learn-shell learn-shell-narrow">
           <h2 id="learn-policies-title">Our policies</h2>
+          <p className="learn-lead">Download and learn more about our policies in this thorough document.</p>
         </div>
-        <div className="learn-shell learn-shell-narrow">
-          <article className="learn-download-row">
-            <div>
-              <h3>Download our policies:</h3>
-              <p>Download and learn more about our policies in this thorough document.</p>
+        <div className="learn-shell">
+          <article className="learn-policies-card">
+            <span className="learn-policies-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6" />
+                <path d="M9 13h6" />
+                <path d="M9 17h4" />
+              </svg>
+            </span>
+            <div className="learn-policies-text">
+              <h3>Policies document</h3>
+              <p>PDF &middot; Updated 2026</p>
             </div>
-            <button type="button" aria-label="Download policies">Download</button>
+            <button type="button" className="learn-policies-button" aria-label="Download policies">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download
+            </button>
           </article>
         </div>
       </section>
@@ -325,7 +341,7 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section" aria-labelledby="learn-finance-title">
+      <section className="learn-section learn-section--reports" aria-labelledby="learn-finance-title">
         <div className="learn-shell">
           <div className="learn-reports-header">
             <h2 id="learn-finance-title" className="learn-reports-heading">Financial reports</h2>
@@ -402,7 +418,11 @@ function LearnMorePage() {
                     onClick={() => toggleFaq(key)}
                   >
                     <span>{item.question}</span>
-                    <span className="learn-faq-icon" aria-hidden="true">{isOpen ? '−' : '+'}</span>
+                    <span className="learn-faq-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </span>
                   </button>
                   <div
                     id={`learn-faq-panel-${key}`}

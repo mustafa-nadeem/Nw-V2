@@ -166,37 +166,37 @@ const causeAreas = [
     title: 'Spiritual Preservation and Growth',
     subtitle: 'Supporting Muslims to confidently live Islam and spiritually grow',
     text: '"O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow..." (Qur\'an, Al-Hashr 59:18)\n\nSpiritual preservation is the heart of a strong Muslim identity. The Prophet (peace be upon him) taught that the health of the heart shapes the entire person. When faith is nurtured, communities grow with resilience and direction.',
-    image: 'https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=1280&q=80',
+    color: '#2B346C',
   },
   {
     title: 'Civic, Media and Legal Engagement',
     subtitle: 'Positive development and protection of Muslims in public life',
     text: '"O you who believe! Be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives." (Qur\'an 4:135)\n\nWe are commanded as believers to uphold justice in all circumstances. Civic engagement and legal empowerment are vital pathways through which communities can fulfil this duty, ensuring fairness, representation, and the protection of rights for all.',
-    image: 'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1280&q=80',
+    color: '#01ACA6',
   },
   {
     title: 'Youth Empowerment and Leadership',
     subtitle: 'Nurturing and equipping the youth to become future leaders',
     text: 'The Prophet (peace be upon him) inspired many youth in his time. From Mus\'ab ibn Umair (RA) delivering Islam to Madinah in his early 20s, to Mu\'adh ibn Jabal (RA) being sent to Yemen as a young governor, our tradition teaches that youth must be given the opportunity to achieve their full potential.\n\nNational Waqf invests in initiatives that build real opportunities, and connect youth with purpose-driven action. We aim to help develop confident, capable changemakers who give back to society.',
-    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1280&q=80',
+    color: '#E27D50',
   },
   {
     title: 'Da\'wah - Religious Awareness & Outreach',
     subtitle: 'Supporting organisations to share Islamic values with wisdom and integrity',
     text: '"Invite to the way of your Lord with wisdom and good advice..." (Qur\'an 16:125)\n\nSharing the values of Islam with clarity is a prophetic tradition. Islam\'s teachings offer guidance for the flourishing of society as a whole. Religious outreach, therefore, is about helping people better understand Islam\'s message and contribution to our shared lives.\n\nNational Waqf\'s approach to religious outreach values collaboration, supporting stronger connections between Muslim organisations, as well as across diverse faith communities.',
-    image: 'https://images.unsplash.com/photo-1496115965489-21be7e6e59a0?auto=format&fit=crop&w=1280&q=80',
+    color: '#3a4284',
   },
   {
     title: 'Educational Excellence and Development',
     subtitle: 'Equipping individuals with knowledge and holistic growth',
     text: '"The seeking of knowledge is an obligation upon every Muslim." (Hadith - Ibn Majah)\n\nEducation is the foundation of community development. To secure a thriving future, we must invest in nurturing talent and innovation across all sectors.\n\nNational Waqf supports initiatives that close these gaps. By building an educational ecosystem that empowers young Muslims intellectually, spiritually, and professionally, we create a generation who positively contribute to wider society.',
-    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1280&q=80',
+    color: '#019d98',
   },
   {
     title: 'Socio-economic Empowerment',
     subtitle: 'Investing in the dignity, wellbeing, and long-term stability of underserved communities',
     text: '"...so that wealth does not circulate only among the rich among you." (Qur\'an 59:7)\n\nWe emphasise fairness in wealth distribution and compassionate care for society\'s most vulnerable. A thriving community must care for those at its margin, not only through short-term relief, but by building systems that protect dignity and enable all to flourish.\n\nNational Waqf\'s approach aims to focus on strengthening the social infrastructure that supports community resilience.',
-    image: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1280&q=80',
+    color: '#FF8E53',
   },
 ];
 
@@ -251,6 +251,8 @@ function MapCameraController({
 function ImpactPage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
+  const [selectedCause, setSelectedCause] = useState(null);
+  const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
   const impactAreasRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const [isMobileMap, setIsMobileMap] = useState(
@@ -293,6 +295,30 @@ function ImpactPage() {
     setIsProjectPanelOpen(false);
     setSelectedProject(null);
   }, []);
+
+  const onSelectCause = useCallback((cause) => {
+    setSelectedCause(cause);
+    setIsCausePanelOpen(true);
+  }, []);
+
+  const onCloseCausePanel = useCallback(() => {
+    setIsCausePanelOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isCausePanelOpen) {
+      return undefined;
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onCloseCausePanel();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isCausePanelOpen, onCloseCausePanel]);
 
   useEffect(() => {
     const section = impactAreasRef.current;
@@ -525,27 +551,64 @@ function ImpactPage() {
         <div className="impact-shell">
           <div className="impact-cause-grid">
             {causeAreas.map((cause) => (
-              <article key={cause.title} className="impact-cause-card" tabIndex={0}>
-                <div className="impact-cause-card-inner">
-                  <div
-                    className="impact-cause-face impact-cause-face--front"
-                    style={{ backgroundImage: `url(${cause.image})` }}
-                  >
-                    <h3>{cause.title}</h3>
-                  </div>
-                  <div className="impact-cause-face impact-cause-face--back">
-                    <h3>{cause.title}</h3>
-                    <p className="impact-cause-subtitle">{cause.subtitle}</p>
-                    {cause.text.split('\n\n').map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
-                  </div>
-                </div>
-              </article>
+              <button
+                type="button"
+                key={cause.title}
+                className="impact-cause-card"
+                style={{ backgroundColor: cause.color }}
+                onClick={() => onSelectCause(cause)}
+                aria-label={`Learn more about ${cause.title}`}
+              >
+                <span className="impact-cause-card-title">{cause.title}</span>
+                <span className="impact-cause-card-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </span>
+              </button>
             ))}
           </div>
         </div>
       </section>
+
+      <button
+        type="button"
+        className={`impact-cause-backdrop ${isCausePanelOpen ? 'impact-cause-backdrop--open' : ''}`}
+        onClick={onCloseCausePanel}
+        aria-label="Close cause details"
+        tabIndex={isCausePanelOpen ? 0 : -1}
+      />
+
+      <aside
+        className={`impact-cause-panel ${isCausePanelOpen ? 'impact-cause-panel--open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!isCausePanelOpen}
+      >
+        {selectedCause && (
+          <>
+            <button
+              type="button"
+              className="impact-cause-panel__close"
+              onClick={onCloseCausePanel}
+              aria-label="Close cause details"
+            >
+              Close
+            </button>
+            <span
+              className="impact-cause-panel__swatch"
+              style={{ backgroundColor: selectedCause.color }}
+              aria-hidden="true"
+            />
+            <h2>{selectedCause.title}</h2>
+            <p className="impact-cause-panel__subtitle">{selectedCause.subtitle}</p>
+            {selectedCause.text.split('\n\n').map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </>
+        )}
+      </aside>
     </div>
   );
 }

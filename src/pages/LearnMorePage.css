@@ -1,5 +1,5 @@
 .learn-page {
-  background: #f2f2f2;
+  background: #F2FFFF;
   color: #1d2230;
 }
 
@@ -21,6 +21,11 @@
 
 .learn-section--usage {
   background: #FFEDDE;
+}
+
+.learn-section--reports,
+.learn-faq {
+  background: #EDF1FF;
 }
 
 .learn-page h1,
@@ -114,8 +119,7 @@
   width: fit-content;
 }
 
-.learn-hero-actions button,
-.learn-download-row button {
+.learn-hero-actions button {
   border: 0;
   background: #01ACA6;
   color: #ffffff;
@@ -129,8 +133,7 @@
   transition: background 0.2s ease;
 }
 
-.learn-hero-actions button:hover,
-.learn-download-row button:hover {
+.learn-hero-actions button:hover {
   background: #019d98;
 }
 
@@ -152,7 +155,7 @@
 }
 
 .learn-role-accordion {
-  margin-top: 26px;
+  margin-top: 64px;
   display: grid;
   grid-template-columns: 0.85fr 1.3fr;
   gap: 48px;
@@ -291,7 +294,7 @@
 }
 
 .learn-usage-grid {
-  margin-top: 26px;
+  margin-top: 64px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
@@ -324,9 +327,9 @@
   opacity: 0;
   background: radial-gradient(
     circle 280px at var(--usage-mx) var(--usage-my),
-    rgba(1, 172, 166, 0.55) 0%,
-    rgba(1, 172, 166, 0.2) 35%,
-    rgba(1, 172, 166, 0) 75%
+    rgba(255, 142, 83, 0.55) 0%,
+    rgba(255, 142, 83, 0.2) 35%,
+    rgba(255, 142, 83, 0) 75%
   );
   transition: opacity 0.5s ease;
 }
@@ -467,7 +470,7 @@
 
 .learn-workshop-fineprint {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.48);
+  color: rgba(255, 255, 255, 0.78);
   margin-top: 2px;
 }
 
@@ -556,53 +559,75 @@
   top: 24%;
 }
 
-.learn-download-row {
-  margin-top: 14px;
-  background: rgba(1, 172, 166, 0.08);
-  padding: 32px 40px;
+.learn-policies-card {
+  margin: 40px auto 0;
+  max-width: 720px;
+  background: #ffffff;
+  border: 1px solid rgba(43, 52, 108, 0.08);
+  border-radius: 16px;
+  padding: 24px 28px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 32px;
-  border-radius: 8px;
-  border: 1px solid rgba(1, 172, 166, 0.15);
+  gap: 22px;
+  box-shadow: 0 18px 48px rgba(43, 52, 108, 0.06);
+  text-align: left;
 }
 
-.learn-download-row h3 {
-  margin-bottom: 8px;
-  font-size: 1.06rem;
-  color: #1d2230;
-  font-weight: 600;
-}
-
-.learn-download-row p {
-  max-width: 58ch;
-  color: #3f4654;
-  font-size: 0.95rem;
-}
-
-.learn-download-row button {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-  background: #01ACA6;
-  color: #ffffff;
-  border: 0;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.learn-policies-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: rgba(1, 172, 166, 0.1);
+  color: #01ACA6;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
 }
 
-.learn-download-row button:hover {
+.learn-policies-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.learn-policies-text h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1d2230;
+  margin-bottom: 4px;
+}
+
+.learn-policies-text p {
+  font-size: 0.88rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.learn-policies-button {
+  border: 0;
+  background: #01ACA6;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 12px 24px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.learn-policies-button:hover {
   background: #019d98;
-  transform: scale(1.05);
+  transform: translateY(-1px);
+}
+
+.learn-policies-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .learn-content-heading {
@@ -707,7 +732,7 @@
 }
 
 .learn-reports-rail {
-  margin-top: 28px;
+  margin-top: 64px;
   margin-left: -44px;
   margin-right: -44px;
   padding-left: 44px;
@@ -760,10 +785,18 @@
 
 .learn-faq-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   gap: 38px;
   margin-bottom: 38px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 0 22px;
+}
+
+.learn-faq-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .learn-faq-tab {
@@ -776,6 +809,8 @@
   cursor: pointer;
   position: relative;
   transition: color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .learn-faq-tab:hover {
@@ -799,18 +834,20 @@
 
 .learn-faq-list {
   display: grid;
-  gap: 10px;
+  gap: 14px;
   text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .learn-faq-item {
-  background: #f1f1f2;
-  border-radius: 8px;
-  transition: background 0.2s ease;
+  background: #ffffff;
+  border-radius: 14px;
+  transition: background 0.2s ease, box-shadow 0.25s ease;
 }
 
 .learn-faq-item:hover {
-  background: #ebebed;
+  box-shadow: 0 8px 24px rgba(43, 52, 108, 0.06);
 }
 
 .learn-faq-trigger {
@@ -818,16 +855,22 @@
   border: 0;
   background: transparent;
   font: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1d2230;
-  padding: 20px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 22px 28px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   cursor: pointer;
   text-align: left;
+  transition: color 0.2s ease;
+}
+
+.learn-faq-item.is-open .learn-faq-trigger {
+  color: #1d2230;
+  padding-bottom: 12px;
 }
 
 .learn-faq-icon {
@@ -835,15 +878,18 @@
   height: 22px;
   display: grid;
   place-items: center;
-  font-size: 1.4rem;
-  font-weight: 400;
-  line-height: 1;
-  color: #4b5363;
-  transition: transform 0.3s ease;
+  color: #9ca2ad;
+  transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.learn-faq-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 .learn-faq-item.is-open .learn-faq-icon {
   transform: rotate(180deg);
+  color: #1d2230;
 }
 
 .learn-faq-panel {
@@ -862,14 +908,14 @@
 .learn-faq-panel-inner {
   min-height: 0;
   overflow: hidden;
-  padding: 0 24px 20px;
 }
 
 .learn-faq-panel-inner p {
   max-width: 70ch;
-  font-size: 0.92rem;
-  color: #4b5363;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #1d2230;
+  line-height: 1.65;
+  padding: 0 28px 24px;
 }
 
 @media (max-width: 1080px) {
@@ -918,6 +964,23 @@
     padding: 72px 0;
   }
 
+  .learn-faq-heading {
+    text-align: left;
+  }
+
+  .learn-faq-tabs {
+    gap: 22px;
+    justify-content: flex-start;
+    padding: 0 22px;
+    margin-left: -22px;
+    margin-right: -22px;
+    margin-bottom: 28px;
+  }
+
+  .learn-faq-tab {
+    font-size: 0.92rem;
+  }
+
   .learn-usage-grid {
     grid-template-columns: 1fr;
   }
@@ -936,7 +999,7 @@
   }
 
   .learn-usage-glow {
-    opacity: 1;
+    display: none;
   }
 
   .learn-role-media,
@@ -952,12 +1015,18 @@
     grid-template-columns: 1fr;
   }
 
-  .learn-download-row {
+  .learn-policies-card {
     grid-template-columns: 1fr;
+    text-align: center;
+    padding: 24px;
+    gap: 16px;
   }
 
-  .learn-download-row button {
-    width: 76px;
-    min-height: 76px;
+  .learn-policies-icon {
+    margin: 0 auto;
+  }
+
+  .learn-policies-button {
+    justify-self: center;
   }
 }
