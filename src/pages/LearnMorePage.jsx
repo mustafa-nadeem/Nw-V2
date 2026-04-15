@@ -213,7 +213,7 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section" aria-labelledby="learn-usage-title">
+      <section className="learn-section learn-section--usage" aria-labelledby="learn-usage-title">
         <div className="learn-shell">
           <h2 id="learn-usage-title" className="learn-usage-heading">Usages of Awqaf</h2>
           <div className="learn-usage-grid">
