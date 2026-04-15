@@ -43,22 +43,24 @@
   gap: 20px;
 }
 
-.aurora-timeline__header-label {
+.about-page .aurora-timeline__header-label {
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.72rem;
   color: #8f97a4;
   font-weight: 600;
+  max-width: none;
 }
 
-.aurora-timeline__giant-year {
+.about-page .aurora-timeline__giant-year {
   margin: 0;
   font-size: clamp(86px, 8.6vw, 138px);
   color: #00ACA6;
   line-height: 0.88;
   letter-spacing: -0.04em;
   font-weight: 700;
+  max-width: none;
 }
 
 .aurora-timeline__progress-rail {
@@ -67,14 +69,15 @@
   margin-top: 24px;
 }
 
-.aurora-timeline__progress-start,
-.aurora-timeline__progress-end {
+.about-page .aurora-timeline__progress-start,
+.about-page .aurora-timeline__progress-end {
   margin: 0;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-size: 0.72rem;
   color: #8f97a4;
   font-weight: 600;
+  max-width: none;
 }
 
 .aurora-timeline__progress-track {
@@ -150,15 +153,17 @@
   margin-bottom: 80px;
 }
 
-.aurora-timeline__year {
+.about-page .aurora-timeline__year {
   margin: 0 0 16px;
   color: #8a92a0;
   font-size: 1.25rem;
+  line-height: 1.2;
   font-weight: 600;
   transition: color 0.16s linear;
+  max-width: none;
 }
 
-.aurora-timeline__year--active {
+.about-page .aurora-timeline__year--active {
   color: #00ACA6;
 }
 
@@ -169,18 +174,20 @@
   margin-bottom: 16px;
 }
 
-.aurora-timeline__title {
+.about-page .aurora-timeline__title {
   margin: 0 0 10px;
   color: #1b1f26;
   font-size: 1.25rem;
+  line-height: 1.2;
   font-weight: 600;
 }
 
-.aurora-timeline__body {
+.about-page .aurora-timeline__body {
   margin: 0;
   color: #394250;
   line-height: 1.62;
   font-size: 1rem;
+  max-width: none;
 }
 
 @media (max-width: 1400px) {
@@ -208,7 +215,7 @@
     grid-template-columns: 200px minmax(0, 1fr);
   }
 
-  .aurora-timeline__giant-year {
+  .about-page .aurora-timeline__giant-year {
     font-size: clamp(78px, 8.1vw, 120px);
   }
 
@@ -232,7 +239,7 @@
     grid-template-columns: 160px minmax(0, 1fr);
   }
 
-  .aurora-timeline__giant-year {
+  .about-page .aurora-timeline__giant-year {
     font-size: clamp(66px, 7.5vw, 96px);
   }
 
@@ -385,7 +392,7 @@
     padding-top: 0;
   }
 
-  .aurora-timeline__title {
+  .about-page .aurora-timeline__title {
     font-size: 1.16rem;
   }
 
@@ -393,8 +400,8 @@
     font-size: 0.95rem;
   }
 
-  .aurora-timeline__year {
-    font-size: 1.12rem;
+  .about-page .aurora-timeline__year {
+    font-size: 1.16rem;
   }
 }
 
@@ -403,7 +410,7 @@
     transition: none;
   }
 
-  .aurora-timeline__year {
+  .about-page .aurora-timeline__year {
     transition: none;
   }
 }

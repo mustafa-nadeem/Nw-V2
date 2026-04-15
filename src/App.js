@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ImpactPage from './pages/ImpactPage';
 import LearnMorePage from './pages/LearnMorePage';
+import PersonProfilePage from './pages/PersonProfilePage';
 
 function App() {
   const location = useLocation();
@@ -19,7 +20,7 @@ function App() {
 
     const id = location.hash.replace('#', '');
 
-    const scrollToHash = (retries = 10) => {
+    const scrollToHash = (retries = 40) => {
       const target = document.getElementById(id);
 
       if (target) {
@@ -28,7 +29,7 @@ function App() {
       }
 
       if (retries > 0) {
-        window.setTimeout(() => scrollToHash(retries - 1), 60);
+        window.setTimeout(() => scrollToHash(retries - 1), 80);
       }
     };
 
@@ -42,6 +43,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/about/people/:slug" element={<PersonProfilePage />} />
         <Route path="/impact" element={<ImpactPage />} />
         <Route path="/learn-more" element={<LearnMorePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

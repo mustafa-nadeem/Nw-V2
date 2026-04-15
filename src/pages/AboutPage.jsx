@@ -1,6 +1,7 @@
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
 import ProfileGridSection from '../components/ProfileGridSection';
+import { shariaBoard, trustees } from '../data/peopleData';
 
 const floatingCards = [
   { className: 'hero-card hero-card--1' },
@@ -9,44 +10,6 @@ const floatingCards = [
   { className: 'hero-card hero-card--4' },
   { className: 'hero-card hero-card--5' },
   { className: 'hero-card hero-card--6' },
-];
-
-const trustees = [
-  {
-    name: 'Placeholder Name 01',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 02',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 03',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 04',
-    role: 'Placeholder role',
-  },
-];
-
-const shariaBoard = [
-  {
-    name: 'Placeholder Name 01',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 02',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 03',
-    role: 'Placeholder role',
-  },
-  {
-    name: 'Placeholder Name 04',
-    role: 'Placeholder role',
-  },
 ];
 
 const principles = [

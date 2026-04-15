@@ -149,7 +149,7 @@
 /* ── Donate button override ── */
 .navbar-btn--donate {
   background: #01ACA6;
-  color: #fff;
+  color: #2B346C;
   font-weight: 600;
 }
 
@@ -301,7 +301,7 @@
   .navbar.open .navbar-btn--donate {
     background: #01ACA6;
     border-color: #01ACA6;
-    color: #fff;
+    color: #2B346C;
     text-align: center;
     font-weight: 600;
   }

@@ -1,6 +1,6 @@
 .why-waqf-scroll {
   position: relative;
-  background: #FFF9F3;
+  background: #F3FFFF;
   overflow: hidden;
   width: 100%;
 }
@@ -17,7 +17,7 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: #121722;
+  color: #2B346C;
 }
 
 .why-waqf-heading {
@@ -40,10 +40,10 @@
   width: 100%;
 }
 
-.why-waqf-panel:nth-child(1) { background: #FFF9F3; }
-.why-waqf-panel:nth-child(2) { background: #FFF5EC; }
-.why-waqf-panel:nth-child(3) { background: #FFF1E5; }
-.why-waqf-panel:nth-child(4) { background: #FFEDDE; }
+.why-waqf-panel:nth-child(1) { background: #F3FFFF; }
+.why-waqf-panel:nth-child(2) { background: #ECFFFE; }
+.why-waqf-panel:nth-child(3) { background: #E5FFFD; }
+.why-waqf-panel:nth-child(4) { background: #DEFFFC; }
 
 .why-waqf-panel-overlay {
   position: absolute;
@@ -100,7 +100,7 @@
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #121722;
+  color: #2B346C;
 }
 
 .why-waqf-panel-content p {

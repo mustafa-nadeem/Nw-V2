@@ -3,7 +3,7 @@
   padding-top: 140px;
   padding-bottom: 240px;
   overflow: visible;
-  background: #F3FFFF;
+  background: #FFF9F3;
 }
 
 .waqf-stack-layout {
@@ -96,9 +96,16 @@
 .waqf-stack-card:nth-child(3) { background: #FF8E54; }
 
 .waqf-stack-card:nth-child(2),
+.waqf-stack-card:nth-child(3),
 .waqf-stack-card:nth-child(2) h3,
-.waqf-stack-card:nth-child(2) p {
+.waqf-stack-card:nth-child(3) h3,
+.waqf-stack-card:nth-child(2) p,
+.waqf-stack-card:nth-child(3) p {
   color: #fff;
+}
+
+.waqf-stack-card:nth-child(3) p {
+  font-weight: 500;
 }
 
 .waqf-stack-icon {

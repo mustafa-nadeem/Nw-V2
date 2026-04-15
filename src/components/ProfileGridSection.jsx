@@ -18,7 +18,7 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
 
         <div className="profile-grid-section__grid" role="list" aria-label={`${title} profiles`}>
           {profiles.map((profile, index) => (
-            <ProfileCard profile={profile} index={index} key={`${title}-${profile.name}-${index}`} />
+            <ProfileCard profile={profile} key={`${title}-${profile.name}-${index}`} />
           ))}
         </div>
       </div>

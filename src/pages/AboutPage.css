@@ -19,6 +19,35 @@
   padding: 84px 0;
 }
 
+.about-page h1,
+.about-page h2,
+.about-page h3,
+.about-page p {
+  margin: 0;
+}
+
+.about-page h1 {
+  font-size: clamp(2.1rem, 3.4vw, 3.7rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.about-page h2 {
+  font-size: clamp(1.9rem, 2.2vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.about-page h3 {
+  font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.about-page p {
+  font-size: 1.02rem;
+  line-height: 1.64;
+}
+
 .about-hero {
   min-height: 100vh;
   display: grid;
@@ -115,8 +144,7 @@
 }
 
 .about-hero h1 {
-  font-size: clamp(2.3rem, 4.2vw, 4.4rem);
-  line-height: 1.1;
+  font-weight: 600;
   margin-bottom: 28px;
   color: #fff;
 }
@@ -126,16 +154,31 @@
 }
 
 .about-section h2 {
-  font-size: clamp(1.9rem, 3vw, 3rem);
-  line-height: 1.16;
   margin-bottom: 18px;
 }
 
 .about-section p {
   max-width: 76ch;
   margin: 0 auto;
-  color: #353d49;
-  line-height: 1.7;
+  color: #343a46;
+}
+
+/* Force the same typography system used on landing page for key About sections. */
+#about-works-title,
+#about-funding-title,
+#about-principles-title,
+.about-pvm-title {
+  font-size: clamp(1.9rem, 2.2vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.about-principles-subhead,
+.about-pvm-body,
+.about-principle-content p {
+  font-size: 1.02rem;
+  line-height: 1.64;
 }
 
 .about-fullscreen {
@@ -276,15 +319,12 @@
 .about-profile-content h3,
 .about-principle-card h3 {
   margin: 0 0 10px;
-  font-size: 1.08rem;
 }
 
 .about-journey-body p,
 .about-profile-content p,
 .about-principle-card p {
   margin: 0;
-  font-size: 0.96rem;
-  line-height: 1.62;
 }
 
 .about-profile-grid {
@@ -387,7 +427,6 @@
 }
 
 .about-principle-content h3 {
-  font-size: clamp(1.15rem, 1.5vw, 1.5rem);
   margin: 0 0 8px;
   color: #fff;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -399,8 +438,6 @@
 
 .about-principle-content p {
   margin: 0;
-  font-size: clamp(0.85rem, 0.95vw, 0.98rem);
-  line-height: 1.55;
   color: rgba(255, 255, 255, 0.8);
   max-width: none;
   transition: color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -418,13 +455,8 @@
     padding-bottom: 24px;
   }
 
-  .about-principles h2 {
-    font-size: 1.6rem;
-  }
-
   .about-principles .about-principles-subhead {
     margin: 4px 0 14px;
-    font-size: 0.88rem;
   }
 
   .about-principles-list {
@@ -437,13 +469,7 @@
   }
 
   .about-principle-content h3 {
-    font-size: 1.05rem;
     margin: 0 0 4px;
-  }
-
-  .about-principle-content p {
-    font-size: 0.78rem;
-    line-height: 1.4;
   }
 }
 
@@ -483,7 +509,6 @@
 
 .about-pvm-title {
   grid-area: title;
-  font-size: clamp(2rem, 3.2vw, 3.2rem);
   margin: 0;
   align-self: end;
 }
