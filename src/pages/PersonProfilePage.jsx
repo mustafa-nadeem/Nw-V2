@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { allPeople } from '../data/peopleData';
 import './PersonProfilePage.css';
@@ -7,7 +8,19 @@ const PLACEHOLDER_IMAGE =
 
 function PersonProfilePage() {
   const { slug } = useParams();
+  const [isReady, setIsReady] = useState(false);
   const person = allPeople.find((entry) => entry.slug === slug);
+
+  useEffect(() => {
+    setIsReady(false);
+    const rafId = window.requestAnimationFrame(() => {
+      setIsReady(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [slug]);
 
   if (!person) {
     return <Navigate to="/about" replace />;
@@ -18,7 +31,7 @@ function PersonProfilePage() {
   const backLabel = isTrustee ? 'Back to Meet our trustees' : 'Back to Meet our Shariah board';
 
   return (
-    <div className="person-profile-page">
+    <div className={`person-profile-page ${isReady ? 'person-profile-page--ready' : ''}`}>
       <section className="person-profile-hero" aria-labelledby="person-profile-title">
         <div className="person-profile-shell">
           <Link className="person-profile-back" to={`/about${backHash}`}>

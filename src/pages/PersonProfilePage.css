@@ -20,6 +20,43 @@
   padding: 0 44px;
 }
 
+.person-profile-back,
+.person-profile-card,
+.person-profile-content {
+  opacity: 0;
+}
+
+.person-profile-back {
+  transform: translateY(16px);
+}
+
+.person-profile-card {
+  transform: translateY(56px) scale(0.935);
+}
+
+.person-profile-content {
+  transform: translateY(46px);
+}
+
+.person-profile-page--ready .person-profile-back,
+.person-profile-page--ready .person-profile-card,
+.person-profile-page--ready .person-profile-content {
+  opacity: 1;
+  transform: none;
+}
+
+.person-profile-page--ready .person-profile-back {
+  transition: opacity 420ms ease, transform 520ms cubic-bezier(0.16, 0.84, 0.22, 1);
+}
+
+.person-profile-page--ready .person-profile-card {
+  transition: opacity 620ms ease 140ms, transform 760ms cubic-bezier(0.16, 0.84, 0.22, 1) 140ms;
+}
+
+.person-profile-page--ready .person-profile-content {
+  transition: opacity 700ms ease 220ms, transform 860ms cubic-bezier(0.16, 0.84, 0.22, 1) 220ms;
+}
+
 .person-profile-back {
   display: inline-flex;
   align-items: center;
@@ -170,5 +207,15 @@
 
   .person-profile-content {
     padding: 28px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .person-profile-back,
+  .person-profile-card,
+  .person-profile-content {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
   }
 }

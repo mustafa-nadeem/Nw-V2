@@ -201,13 +201,46 @@
 }
 
 /* ── Cycle Diagram ── */
-.cycle-wrap {
-  width: min(100%, 700px);
-  margin: 48px auto 0;
+.about-section.about-works-pinned {
+  background: #f2f2f2;
+  padding: 0;
+}
+
+.about-works-pin-stage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.cycle-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.cycle-header p {
+  max-width: 68ch;
+  margin: 0 auto;
+}
+
+.cycle-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.cycle-diagram-col {
+  display: flex;
+  justify-content: center;
 }
 
 .cycle-svg {
   width: 100%;
+  max-width: 480px;
   height: auto;
   display: block;
   overflow: visible;
@@ -215,27 +248,35 @@
 
 .cycle-group {
   cursor: pointer;
+  opacity: 0.1;
+  transform: translateY(24px) scale(0.94);
+  transform-origin: 350px 350px;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cycle-svg.is-step-1 .cycle-group:nth-of-type(-n + 1),
+.cycle-svg.is-step-2 .cycle-group:nth-of-type(-n + 2),
+.cycle-svg.is-step-3 .cycle-group:nth-of-type(-n + 3),
+.cycle-svg.is-step-4 .cycle-group:nth-of-type(-n + 4) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.cycle-svg.has-hover .cycle-group {
+  opacity: 0.35;
+  filter: saturate(0.5);
+}
+
+.cycle-svg.has-hover .cycle-group.is-active {
+  opacity: 1;
+  filter: saturate(1) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.22));
+  transform: translateY(0) scale(1.06);
 }
 
 .cycle-slice {
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: 350px 350px;
-}
-
-.cycle-group:hover .cycle-slice {
-  transform: scale(1.05);
-  filter: brightness(1.1) drop-shadow(0 6px 20px rgba(0,0,0,0.2));
-}
-
-.cycle-group text {
-  pointer-events: none;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: 350px 350px;
-}
-
-.cycle-group:hover text {
-  transform: scale(1.05);
 }
 
 .cycle-slice--1 { fill: #E27D50; }
@@ -244,9 +285,10 @@
 .cycle-slice--4 { fill: #01ACA6; }
 
 .cycle-label-num {
-  fill: rgba(255, 255, 255, 0.25);
+  fill: rgba(255, 255, 255, 0.22);
   font-size: 52px;
   font-weight: 500;
+  pointer-events: none;
 }
 
 .cycle-label-title {
@@ -254,15 +296,9 @@
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.05em;
+  pointer-events: none;
 }
 
-.cycle-label-desc {
-  fill: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Center ring spin */
 @keyframes ringRotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -274,15 +310,171 @@
   animation: ringRotate 12s linear infinite;
 }
 
+/* ── Info Panel ── */
+.cycle-info-panel {
+  position: relative;
+  padding-left: 32px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cycle-accent-line {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 3px;
+  border-radius: 3px;
+  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cycle-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cycle-info-num {
+  font-size: clamp(3.5rem, 5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.18;
+  transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cycle-info-title {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #1a1e2e;
+  line-height: 1.15;
+}
+
+.cycle-info-desc {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #4a5060;
+  max-width: 38ch;
+}
+
+@keyframes cycleSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cycleSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cycle-info-down .cycle-info-num {
+  animation: cycleSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cycle-info-down .cycle-info-title {
+  animation: cycleSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.cycle-info-down .cycle-info-desc {
+  animation: cycleSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+
+.cycle-info-up .cycle-info-num {
+  animation: cycleSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cycle-info-up .cycle-info-title {
+  animation: cycleSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.cycle-info-up .cycle-info-desc {
+  animation: cycleSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+
+.cycle-info-panel.is-hover .cycle-info-num {
+  animation-duration: 0.28s;
+}
+
+.cycle-info-panel.is-hover .cycle-info-title {
+  animation-duration: 0.28s;
+  animation-delay: 0.04s;
+}
+
+.cycle-info-panel.is-hover .cycle-info-desc {
+  animation-duration: 0.28s;
+  animation-delay: 0.08s;
+}
+
+/* ── Cycle mobile ── */
+@media (max-width: 860px) {
+  .cycle-split {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 520px;
+  }
+
+  .cycle-svg {
+    max-width: 380px;
+  }
+
+  .cycle-info-panel {
+    padding-left: 24px;
+    min-height: 160px;
+  }
+}
+
 @media (max-width: 520px) {
-  .cycle-wrap {
-    width: 100%;
-    margin-top: 32px;
+  .about-section.about-works-pinned {
+    padding: 64px 0;
+  }
+
+  .about-works-pin-stage {
+    min-height: 0;
+  }
+
+  .cycle-header {
+    margin-bottom: 28px;
+  }
+
+  .cycle-split {
+    gap: 24px;
+  }
+
+  .cycle-svg {
+    max-width: 100%;
+  }
+
+  .cycle-group {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .cycle-label-num { font-size: 36px; }
   .cycle-label-title { font-size: 16px; }
-  .cycle-label-desc { font-size: 11px; }
+
+  .cycle-info-panel {
+    padding-left: 20px;
+    min-height: 120px;
+  }
+
+  .cycle-info-num {
+    font-size: 2.5rem;
+  }
 }
 
 

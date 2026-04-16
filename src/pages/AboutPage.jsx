@@ -1,7 +1,12 @@
+import { useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
 import ProfileGridSection from '../components/ProfileGridSection';
 import { shariaBoard, trustees } from '../data/peopleData';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const floatingCards = [
   { className: 'hero-card hero-card--1' },
@@ -10,6 +15,13 @@ const floatingCards = [
   { className: 'hero-card hero-card--4' },
   { className: 'hero-card hero-card--5' },
   { className: 'hero-card hero-card--6' },
+];
+
+const steps = [
+  { num: '01', title: 'DONATE', desc: 'We receive your donation to the National Waqf', color: '#E27D50' },
+  { num: '02', title: 'INVEST', desc: 'Our investment committee invests your donation to generate long-term returns', color: '#C7366B' },
+  { num: '03', title: 'DISTRIBUTE', desc: '50% of the returns are given as grants to verified UK causes and charities', color: '#2B346C' },
+  { num: '04', title: 'GROW', desc: 'The other 50% is re-invested so your donation continues to grow year after year', color: '#01ACA6' },
 ];
 
 const principles = [
@@ -32,6 +44,65 @@ const principles = [
 ];
 
 function AboutPage() {
+  const worksSectionRef = useRef(null);
+  const worksStageRef = useRef(null);
+  const [cycleStep, setCycleStep] = useState(1);
+  const [hoverStep, setHoverStep] = useState(null);
+  const prevStepRef = useRef(1);
+
+  const activeStep = hoverStep ?? cycleStep;
+  const activeData = steps[activeStep - 1];
+  const isHovering = hoverStep !== null;
+
+  const direction = activeStep >= prevStepRef.current ? 'down' : 'up';
+  if (activeStep !== prevStepRef.current) {
+    prevStepRef.current = activeStep;
+  }
+
+  useLayoutEffect(() => {
+    const stageEl = worksStageRef.current;
+    if (!stageEl) return undefined;
+
+    const isMobile = window.matchMedia('(max-width: 520px)').matches;
+    if (isMobile) {
+      setCycleStep(4);
+      return undefined;
+    }
+
+    const triggerId = 'about-works-cycle-pin';
+    const earlyTriggerId = 'about-works-cycle-early';
+
+    ScrollTrigger.create({
+      id: earlyTriggerId,
+      trigger: stageEl,
+      start: 'top 90%',
+      end: 'bottom bottom',
+      onEnter: () => setCycleStep(1),
+      onLeaveBack: () => setCycleStep(1),
+    });
+
+    const trigger = ScrollTrigger.create({
+      id: triggerId,
+      trigger: stageEl,
+      start: 'bottom bottom',
+      end: () => '+=' + window.innerHeight * 3,
+      pin: true,
+      pinSpacing: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const nextStep = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
+        setCycleStep((prev) => (prev === nextStep ? prev : nextStep));
+      },
+      onLeaveBack: () => setCycleStep(1),
+    });
+
+    return () => {
+      ScrollTrigger.getById(earlyTriggerId)?.kill();
+      trigger.kill();
+    };
+  }, []);
+
   return (
     <div className="about-page" id="about">
       <section className="about-section about-hero" aria-labelledby="about-hero-title">
@@ -50,82 +121,96 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="about-section about-fullscreen" aria-labelledby="about-works-title">
-        <div className="about-shell about-shell-narrow">
-          <h2 id="about-works-title">How does National Waqf Work?</h2>
-          <p>
-            National Waqf operates a sustainable funding cycle where donations are first
-            received, then invested by an expert investment committee to generate long-term
-            returns. From these returns, a portion is distributed as grants while the
-            remaining balance is reinvested so communities can benefit year after year.
-          </p>
-          <div className="cycle-wrap">
-            <svg className="cycle-svg" viewBox="0 0 700 700" aria-label="National Waqf funding cycle">
-              <defs>
-                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#E27D50" />
-                  <stop offset="25%" stopColor="#C7366B" />
-                  <stop offset="50%" stopColor="#2B346C" />
-                  <stop offset="75%" stopColor="#01ACA6" />
-                  <stop offset="100%" stopColor="#E27D50" />
-                </linearGradient>
-              </defs>
-              {/* Segment 1 — DONATE (top-right, orange) */}
-              <g className="cycle-group">
-                <path className="cycle-slice cycle-slice--1" d="M350,350 L350,20 A330,330 0 0,1 680,350 Z" />
-                <text x="515" y="135" className="cycle-label-num" textAnchor="middle">01</text>
-                <text x="515" y="185" className="cycle-label-title" textAnchor="middle">DONATE</text>
-                <text className="cycle-label-desc" textAnchor="middle">
-                  <tspan x="515" y="215">We receive your</tspan>
-                  <tspan x="515" dy="22">donation to the</tspan>
-                  <tspan x="515" dy="22">National Waqf</tspan>
-                </text>
-              </g>
-
-              {/* Segment 2 — INVEST (bottom-right, pink) */}
-              <g className="cycle-group">
-                <path className="cycle-slice cycle-slice--2" d="M350,350 L680,350 A330,330 0 0,1 350,680 Z" />
-                <text x="515" y="455" className="cycle-label-num" textAnchor="middle">02</text>
-                <text x="515" y="505" className="cycle-label-title" textAnchor="middle">INVEST</text>
-                <text className="cycle-label-desc" textAnchor="middle">
-                  <tspan x="515" y="535">Our investment</tspan>
-                  <tspan x="515" dy="22">committee invests</tspan>
-                  <tspan x="515" dy="22">your donation</tspan>
-                </text>
-              </g>
-
-              {/* Segment 3 — DISTRIBUTE (bottom-left, navy) */}
-              <g className="cycle-group">
-                <path className="cycle-slice cycle-slice--3" d="M350,350 L350,680 A330,330 0 0,1 20,350 Z" />
-                <text x="185" y="455" className="cycle-label-num" textAnchor="middle">03</text>
-                <text x="185" y="505" className="cycle-label-title" textAnchor="middle">DISTRIBUTE</text>
-                <text className="cycle-label-desc" textAnchor="middle">
-                  <tspan x="185" y="535">50% of the returns</tspan>
-                  <tspan x="185" dy="22">are given as grants</tspan>
-                  <tspan x="185" dy="22">to verified UK causes</tspan>
-                  <tspan x="185" dy="22">and charities</tspan>
-                </text>
-              </g>
-
-              {/* Segment 4 — GROW (top-left, teal) */}
-              <g className="cycle-group">
-                <path className="cycle-slice cycle-slice--4" d="M350,350 L20,350 A330,330 0 0,1 350,20 Z" />
-                <text x="185" y="135" className="cycle-label-num" textAnchor="middle">04</text>
-                <text x="185" y="185" className="cycle-label-title" textAnchor="middle">GROW</text>
-                <text className="cycle-label-desc" textAnchor="middle">
-                  <tspan x="185" y="215">The other 50% is</tspan>
-                  <tspan x="185" dy="22">re-invested so your</tspan>
-                  <tspan x="185" dy="22">donation continues</tspan>
-                  <tspan x="185" dy="22">to grow year</tspan>
-                  <tspan x="185" dy="22">after year</tspan>
-                </text>
-              </g>
-
-              {/* Center ring */}
-              <circle cx="350" cy="350" r="90" fill="#d0d0d6" />
-              <circle className="cycle-ring" cx="350" cy="350" r="78" fill="none" strokeWidth="8" />
-              <circle cx="350" cy="350" r="72" fill="#f2f2f2" />
-            </svg>
+      <section
+        ref={worksSectionRef}
+        className="about-section about-works-pinned"
+        aria-labelledby="about-works-title"
+      >
+        <div ref={worksStageRef} className="about-works-pin-stage">
+          <div className="about-shell">
+            <div className="cycle-header">
+              <h2 id="about-works-title">How does National Waqf Work?</h2>
+              <p>
+                National Waqf operates a sustainable funding cycle where donations are first
+                received, then invested by an expert investment committee to generate long-term
+                returns. From these returns, a portion is distributed as grants while the
+                remaining balance is reinvested so communities can benefit year after year.
+              </p>
+            </div>
+            <div className="cycle-split">
+              <div className="cycle-diagram-col">
+                <svg
+                  className={`cycle-svg is-step-${cycleStep}${isHovering ? ' has-hover' : ''}`}
+                  viewBox="0 0 700 700"
+                  aria-label="National Waqf funding cycle"
+                >
+                  <defs>
+                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#E27D50" />
+                      <stop offset="25%" stopColor="#C7366B" />
+                      <stop offset="50%" stopColor="#2B346C" />
+                      <stop offset="75%" stopColor="#01ACA6" />
+                      <stop offset="100%" stopColor="#E27D50" />
+                    </linearGradient>
+                  </defs>
+                  <g
+                    className={`cycle-group${activeStep === 1 ? ' is-active' : ''}`}
+                    onMouseEnter={() => setHoverStep(1)}
+                    onMouseLeave={() => setHoverStep(null)}
+                  >
+                    <path className="cycle-slice cycle-slice--1" d="M350,350 L350,20 A330,330 0 0,1 680,350 Z" />
+                    <text x="515" y="160" className="cycle-label-num" textAnchor="middle">01</text>
+                    <text x="515" y="210" className="cycle-label-title" textAnchor="middle">DONATE</text>
+                  </g>
+                  <g
+                    className={`cycle-group${activeStep === 2 ? ' is-active' : ''}`}
+                    onMouseEnter={() => setHoverStep(2)}
+                    onMouseLeave={() => setHoverStep(null)}
+                  >
+                    <path className="cycle-slice cycle-slice--2" d="M350,350 L680,350 A330,330 0 0,1 350,680 Z" />
+                    <text x="515" y="480" className="cycle-label-num" textAnchor="middle">02</text>
+                    <text x="515" y="530" className="cycle-label-title" textAnchor="middle">INVEST</text>
+                  </g>
+                  <g
+                    className={`cycle-group${activeStep === 3 ? ' is-active' : ''}`}
+                    onMouseEnter={() => setHoverStep(3)}
+                    onMouseLeave={() => setHoverStep(null)}
+                  >
+                    <path className="cycle-slice cycle-slice--3" d="M350,350 L350,680 A330,330 0 0,1 20,350 Z" />
+                    <text x="185" y="480" className="cycle-label-num" textAnchor="middle">03</text>
+                    <text x="185" y="530" className="cycle-label-title" textAnchor="middle">DISTRIBUTE</text>
+                  </g>
+                  <g
+                    className={`cycle-group${activeStep === 4 ? ' is-active' : ''}`}
+                    onMouseEnter={() => setHoverStep(4)}
+                    onMouseLeave={() => setHoverStep(null)}
+                  >
+                    <path className="cycle-slice cycle-slice--4" d="M350,350 L20,350 A330,330 0 0,1 350,20 Z" />
+                    <text x="185" y="160" className="cycle-label-num" textAnchor="middle">04</text>
+                    <text x="185" y="210" className="cycle-label-title" textAnchor="middle">GROW</text>
+                  </g>
+                  <circle cx="350" cy="350" r="90" fill="#d0d0d6" />
+                  <circle className="cycle-ring" cx="350" cy="350" r="78" fill="none" strokeWidth="8" />
+                  <circle cx="350" cy="350" r="72" fill="#f2f2f2" />
+                </svg>
+              </div>
+              <div className={`cycle-info-panel${isHovering ? ' is-hover' : ''}`}>
+                <div
+                  className="cycle-accent-line"
+                  style={{ background: activeData.color }}
+                />
+                <div
+                  className={`cycle-info-card cycle-info-${direction}`}
+                  key={activeStep}
+                >
+                  <span className="cycle-info-num" style={{ color: activeData.color }}>
+                    {activeData.num}
+                  </span>
+                  <h3 className="cycle-info-title">{activeData.title}</h3>
+                  <p className="cycle-info-desc">{activeData.desc}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
