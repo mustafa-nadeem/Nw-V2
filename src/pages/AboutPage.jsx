@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
@@ -43,12 +43,44 @@ const principles = [
   },
 ];
 
+const PVM_SCROLL_PACING = 1.28;
+
+const pvmSlides = [
+  {
+    id: 'about-purpose-title',
+    label: 'Purpose',
+    theme: 'dark',
+    reverse: false,
+    body: 'National Waqf exists to institutionalise the revival of waqf in the UK as a permanent engine for community resilience, social good, and ethical nation-building. This document sets out a clear strategic framework that defines our long-term direction, priority objectives, and measurable goals over the next three to five years.',
+  },
+  {
+    id: 'about-vision-title',
+    label: 'Vision',
+    theme: 'light',
+    reverse: true,
+    body: 'To establish Waqf as a permanent, trusted, and transformative institution in the UK, funding generations of social, educational, civic, and spiritual impact without dependency on short-term fundraising.',
+  },
+  {
+    id: 'about-mission-title',
+    label: 'Mission',
+    theme: 'dark',
+    reverse: false,
+    body: 'To build, protect, and grow sustainable Waqf assets and deploy their returns strategically to empower communities, strengthen institutions, and enable long-term positive change through ethical, transparent, and professional governance.',
+  },
+];
+
 function AboutPage() {
   const worksSectionRef = useRef(null);
   const worksStageRef = useRef(null);
+  const pvmSectionRef = useRef(null);
+  const pvmStageRef = useRef(null);
   const [cycleStep, setCycleStep] = useState(1);
   const [hoverStep, setHoverStep] = useState(null);
   const prevStepRef = useRef(1);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isPvmMobile, setIsPvmMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
+  );
 
   const activeStep = hoverStep ?? cycleStep;
   const activeData = steps[activeStep - 1];
@@ -102,6 +134,86 @@ function AboutPage() {
       trigger.kill();
     };
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsPvmMobile(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion || isPvmMobile) {
+      return undefined;
+    }
+
+    const pvmTriggerId = 'about-pvm-stage-pin';
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 768px)', () => {
+      const ctx = gsap.context(() => {
+        const panels = gsap.utils.toArray('.about-pvm-panel');
+
+        gsap.set(panels, {
+          yPercent: (i) => (i === 0 ? 0 : 100),
+        });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: pvmTriggerId,
+            trigger: pvmStageRef.current,
+            start: 'top top',
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.8,
+            end: () => '+=' + (panels.length - 1) * window.innerHeight * PVM_SCROLL_PACING,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const progress = self.progress * (panels.length - 1);
+              panels.forEach((p) => p.setAttribute('data-overlap', 'false'));
+              for (let idx = 0; idx < panels.length - 1; idx += 1) {
+                if (progress > idx && progress < idx + 1) {
+                  panels[idx].setAttribute('data-overlap', 'true');
+                  break;
+                }
+              }
+            },
+          },
+        });
+
+        for (let idx = 1; idx < panels.length; idx += 1) {
+          tl.to(panels[idx], { yPercent: 0, duration: 1 }, idx - 1);
+        }
+      }, pvmSectionRef);
+
+      return () => ctx.revert();
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => {
+        if (t.vars?.id === pvmTriggerId) t.kill();
+      });
+      mm.revert();
+    };
+  }, [prefersReducedMotion, isPvmMobile]);
 
   return (
     <div className="about-page" id="about">
@@ -227,54 +339,34 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="about-section about-fullscreen about-pvm about-pvm--dark" aria-labelledby="about-purpose-title">
-        <div className="about-shell">
-          <div className="about-pvm-grid">
-            <h2 id="about-purpose-title" className="about-pvm-title">Our <span className="about-pvm-accent">Purpose</span></h2>
-            <p className="about-pvm-body">
-              National Waqf exists to institutionalise the revival of waqf in the UK as a
-              permanent engine for community resilience, social good, and ethical
-              nation-building. This document sets out a clear strategic framework that
-              defines our long-term direction, priority objectives, and measurable goals
-              over the next three to five years.
-            </p>
-            <div className="about-pvm-img">
-              <span>Image</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="about-section about-fullscreen about-pvm about-pvm--light" aria-labelledby="about-vision-title">
-        <div className="about-shell">
-          <div className="about-pvm-grid about-pvm-grid--reverse">
-            <h2 id="about-vision-title" className="about-pvm-title">Our <span className="about-pvm-accent">Vision</span></h2>
-            <p className="about-pvm-body">
-              To establish Waqf as a permanent, trusted, and transformative institution
-              in the UK, funding generations of social, educational, civic, and spiritual
-              impact without dependency on short-term fundraising.
-            </p>
-            <div className="about-pvm-img">
-              <span>Image</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="about-section about-fullscreen about-pvm about-pvm--dark" aria-labelledby="about-mission-title">
-        <div className="about-shell">
-          <div className="about-pvm-grid">
-            <h2 id="about-mission-title" className="about-pvm-title">Our <span className="about-pvm-accent">Mission</span></h2>
-            <p className="about-pvm-body">
-              To build, protect, and grow sustainable Waqf assets and deploy their
-              returns strategically to empower communities, strengthen institutions, and
-              enable long-term positive change through ethical, transparent, and
-              professional governance.
-            </p>
-            <div className="about-pvm-img">
-              <span>Image</span>
-            </div>
-          </div>
+      <section
+        ref={pvmSectionRef}
+        className={`about-pvm-scroll${prefersReducedMotion ? ' reduced-motion' : ''}`}
+        aria-label="Purpose, Vision, and Mission"
+      >
+        <div ref={pvmStageRef} className="about-pvm-stage">
+          {pvmSlides.map((slide) => (
+            <article
+              className={`about-pvm-panel about-pvm-panel--${slide.theme}`}
+              key={slide.id}
+              data-overlap="false"
+            >
+              <div className="about-pvm-panel-overlay" aria-hidden="true" />
+              <div className="about-pvm-panel-inner">
+                <div className="about-shell">
+                  <div className={`about-pvm-grid${slide.reverse ? ' about-pvm-grid--reverse' : ''}`}>
+                    <h2 id={slide.id} className="about-pvm-title">
+                      Our <span className="about-pvm-accent">{slide.label}</span>
+                    </h2>
+                    <p className="about-pvm-body">{slide.body}</p>
+                    <div className="about-pvm-img">
+                      <span>Image</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 

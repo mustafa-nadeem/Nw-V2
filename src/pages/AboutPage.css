@@ -665,19 +665,65 @@
   }
 }
 
-/* ── Purpose / Vision / Mission sections ── */
-.about-pvm {
-  padding: 0;
+/* ── Purpose / Vision / Mission — pinned scroll stack ── */
+.about-pvm-scroll {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 }
 
-.about-pvm--dark {
+.about-pvm-stage {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+.about-pvm-panel {
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+.about-pvm-panel--dark {
   background: #2B346C;
   color: #fff;
 }
 
-.about-pvm--light {
+.about-pvm-panel--light {
   background: #fff;
   color: var(--text);
+}
+
+.about-pvm-panel-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: opacity 0.4s ease-out;
+}
+
+.about-pvm-panel[data-overlap='true'] .about-pvm-panel-overlay {
+  opacity: 1;
+}
+
+.about-pvm-panel-inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .about-pvm-grid {
@@ -715,12 +761,12 @@
   color: #01ACA6;
 }
 
-.about-pvm--dark .about-pvm-body {
+.about-pvm-panel--dark .about-pvm-body {
   color: rgba(255, 255, 255, 0.75);
   max-width: none;
 }
 
-.about-pvm--light .about-pvm-body {
+.about-pvm-panel--light .about-pvm-body {
   color: #4a5060;
   max-width: none;
 }
@@ -735,6 +781,34 @@
   color: #8b8b94;
   font-weight: 600;
   font-size: 1rem;
+}
+
+/* ── PVM mobile fallback ── */
+@media (max-width: 767px) {
+  .about-pvm-stage {
+    height: auto;
+    overflow: visible;
+    display: block;
+  }
+
+  .about-pvm-panel {
+    position: relative;
+    inset: auto;
+    height: auto;
+    overflow: visible;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .about-pvm-panel-overlay {
+    display: none;
+  }
+
+  .about-pvm-panel-inner {
+    min-height: 100vh;
+    padding: 80px 0;
+  }
 }
 
 @media (max-width: 860px) {
@@ -759,6 +833,25 @@
     aspect-ratio: 4 / 5;
     border-radius: 12px;
   }
+}
+
+/* ── PVM reduced motion ── */
+.about-pvm-scroll.reduced-motion .about-pvm-stage {
+  height: auto;
+}
+
+.about-pvm-scroll.reduced-motion .about-pvm-panel {
+  position: relative;
+  height: auto;
+}
+
+.about-pvm-scroll.reduced-motion .about-pvm-panel-overlay {
+  display: none;
+}
+
+.about-pvm-scroll.reduced-motion .about-pvm-panel-inner {
+  min-height: 100vh;
+  padding: 80px 0;
 }
 
 @media (max-width: 1140px) {
