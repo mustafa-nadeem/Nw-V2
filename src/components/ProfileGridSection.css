@@ -47,7 +47,7 @@
 
 .profile-grid-section__intro p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.74);
+  color: rgb(255, 255, 255);
   font-size: 0.98rem;
   line-height: 1.6;
 }
@@ -134,7 +134,7 @@
 
 .profile-grid-section__role {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255, 255, 255);
   font-size: 0.9rem;
   line-height: 1.35;
 }

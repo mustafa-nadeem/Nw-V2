@@ -15,12 +15,27 @@
 }
 
 .learn-section {
-  padding: 144px 0;
+  padding: 176px 0;
   background: #F2FFFF;
 }
 
 .learn-section--usage {
   background: #FFEDDE;
+  padding-top: 212px;
+  padding-bottom: 212px;
+}
+
+.learn-section--role {
+  padding-top: 212px;
+  padding-bottom: 212px;
+}
+
+.learn-section--policies {
+  padding-bottom: 128px;
+}
+
+.learn-section--videos {
+  padding-top: 128px;
 }
 
 .learn-section--reports,
@@ -446,7 +461,7 @@
 }
 
 .learn-workshop-form input::placeholder {
-  color: rgba(255, 255, 255, 0.48);
+  color: rgb(255, 255, 255);
 }
 
 .learn-workshop-form button {
@@ -470,7 +485,8 @@
 
 .learn-workshop-fineprint {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.78);
+  color: #cfd5e2 !important;
+  opacity: 1;
   margin-top: 2px;
 }
 
@@ -961,7 +977,7 @@
 
 @media (max-width: 640px) {
   .learn-section {
-    padding: 72px 0;
+    padding: 92px 0;
   }
 
   .learn-faq-heading {

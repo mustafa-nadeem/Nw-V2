@@ -1,0 +1,238 @@
+.funding-diagram {
+  --ring: clamp(320px, 36vw, 500px);
+  --arrow-width: clamp(220px, 24vw, 340px);
+  --arrow-height: clamp(50px, 5.1vw, 72px);
+  --arrow-tip: clamp(36px, 4.2vw, 56px);
+  width: min(100%, 1080px);
+  margin: 48px auto 0;
+}
+
+.funding-orbit {
+  position: relative;
+  width: 100%;
+  min-height: var(--ring);
+}
+
+.funding-circle-stage {
+  position: relative;
+  width: var(--ring);
+  aspect-ratio: 1 / 1;
+}
+
+.funding-ring {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+.funding-ring--outer {
+  inset: 0;
+  background: #D7DEEF;
+}
+
+.funding-ring--mid {
+  inset: 12%;
+  background: #F4DDD1;
+}
+
+.funding-ring--inner {
+  inset: 23%;
+  background: #BFE3E1;
+}
+
+.funding-center {
+  position: absolute;
+  inset: 23%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+  padding: 0 clamp(8px, 1.5vw, 20px);
+}
+
+.funding-center h3 {
+  margin: 0 0 clamp(6px, 0.8vw, 12px);
+  max-width: 11ch;
+  margin-inline: auto;
+  font-size: clamp(1.15rem, 2.1vw, 2.45rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  color: #0f1720;
+}
+
+.funding-center p {
+  margin: 0 auto;
+  max-width: 16ch;
+  font-size: clamp(0.76rem, 1.15vw, 1.38rem);
+  line-height: 1.28;
+  color: #6c737e;
+}
+
+.funding-streams {
+  position: absolute;
+  left: calc(var(--ring) * 0.6);
+  top: 0;
+  width: calc(100% - (var(--ring) * 0.6));
+  height: var(--ring);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.funding-stream {
+  position: absolute;
+  left: var(--stream-start);
+  top: var(--stream-top);
+  transform: translateY(-50%);
+  width: calc(100% - var(--stream-start));
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.8vw, 28px);
+  will-change: transform, opacity;
+}
+
+.funding-arrow {
+  position: relative;
+  width: var(--arrow-width);
+  height: var(--arrow-height);
+  background: var(--arrow-bg);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: calc(var(--arrow-tip) * 0.55);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--arrow-tip)) 0,
+    100% 50%,
+    calc(100% - var(--arrow-tip)) 100%,
+    0 100%
+  );
+  border-radius: 10px;
+  transition: transform 0.28s ease, filter 0.28s ease;
+}
+
+.funding-stream:hover .funding-arrow,
+.funding-stream:focus-within .funding-arrow {
+  transform: translateX(5px);
+  filter: brightness(0.98);
+}
+
+.funding-icon {
+  width: clamp(24px, 2.55vw, 40px);
+  height: clamp(24px, 2.55vw, 40px);
+  color: var(--arrow-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.28s ease;
+}
+
+.funding-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.funding-stream:hover .funding-icon {
+  transform: scale(1.08);
+}
+
+.funding-label {
+  flex: 0 1 clamp(130px, 20vw, 260px);
+  color: var(--arrow-color);
+  font-size: clamp(1rem, 1.62vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+@keyframes fundingRingBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.012);
+  }
+}
+
+.funding-ring--outer {
+  animation: fundingRingBreathe 7s ease-in-out infinite;
+}
+
+.funding-ring--mid {
+  animation: fundingRingBreathe 6.4s ease-in-out infinite 0.24s;
+}
+
+@media (max-width: 920px) {
+  .funding-diagram {
+    --ring: min(370px, 82vw);
+    --arrow-width: clamp(190px, 40vw, 280px);
+    --arrow-height: clamp(48px, 9vw, 62px);
+    --arrow-tip: clamp(34px, 6vw, 52px);
+    margin-top: 34px;
+  }
+
+  .funding-orbit {
+    display: grid;
+    justify-items: center;
+    gap: 28px;
+  }
+
+  .funding-streams {
+    position: static;
+    width: min(100%, 620px);
+    height: auto;
+    display: grid;
+    gap: 12px;
+  }
+
+  .funding-stream {
+    position: static;
+    transform: none;
+    width: 100%;
+    left: auto;
+  }
+
+  .funding-center p {
+    line-height: 1.38;
+  }
+
+  .funding-label {
+    flex: 1 1 0;
+    font-size: clamp(1rem, 3.7vw, 1.65rem);
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 580px) {
+  .funding-diagram {
+    --ring: min(320px, 92vw);
+    margin-top: 28px;
+  }
+
+  .funding-center h3 {
+    font-size: clamp(1.15rem, 5.5vw, 1.55rem);
+  }
+
+  .funding-center p {
+    font-size: clamp(0.84rem, 3.5vw, 1.02rem);
+  }
+
+  .funding-stream {
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .funding-ring--outer,
+  .funding-ring--mid {
+    animation: none;
+  }
+
+  .funding-arrow,
+  .funding-icon {
+    transition: none;
+  }
+}

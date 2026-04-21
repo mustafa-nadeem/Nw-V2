@@ -150,7 +150,7 @@
 }
 
 .about-hero.about-section p {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgb(255, 255, 255);
 }
 
 .about-section h2 {
@@ -211,7 +211,7 @@
 /* ── Cycle Diagram ── */
 .about-section.about-works-pinned {
   background: #f2f2f2;
-  padding: 0;
+  padding: 96px 0;
 }
 
 .about-works-pin-stage {
@@ -256,11 +256,11 @@
 
 .cycle-group {
   cursor: pointer;
-  opacity: 0.1;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(24px) scale(0.94);
   transform-origin: 350px 350px;
-  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -268,13 +268,13 @@
 .cycle-svg.is-step-2 .cycle-group:nth-of-type(-n + 2),
 .cycle-svg.is-step-3 .cycle-group:nth-of-type(-n + 3),
 .cycle-svg.is-step-4 .cycle-group:nth-of-type(-n + 4) {
-  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0) scale(1);
 }
 
 .cycle-svg.has-hover .cycle-group {
-  opacity: 0.35;
-  filter: saturate(0.5);
+  filter: saturate(0.5) brightness(0.8);
 }
 
 .cycle-svg.has-hover .cycle-group.is-active {
@@ -293,7 +293,7 @@
 .cycle-slice--4 { fill: #01ACA6; }
 
 .cycle-label-num {
-  fill: rgba(255, 255, 255, 0.22);
+  fill: rgb(215, 221, 239);
   font-size: 52px;
   font-weight: 500;
   pointer-events: none;
@@ -348,7 +348,7 @@
   font-size: clamp(3.5rem, 5vw, 5.5rem);
   font-weight: 600;
   line-height: 1;
-  opacity: 0.18;
+  opacity: 1;
   transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -447,7 +447,7 @@
 
 @media (max-width: 520px) {
   .about-section.about-works-pinned {
-    padding: 64px 0;
+    padding: 88px 0;
   }
 
   .about-works-pin-stage {
@@ -628,14 +628,14 @@
 
 .about-principle-content p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgb(255, 255, 255);
   font-weight: 600;
   max-width: none;
   transition: color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .about-principle-card:hover .about-principle-content p {
-  color: rgba(255, 255, 255, 0.92);
+  color: rgb(255, 255, 255);
 }
 
 @media (max-width: 860px) {
@@ -761,7 +761,7 @@
 }
 
 .about-pvm-panel--dark .about-pvm-body {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgb(255, 255, 255);
   max-width: none;
 }
 

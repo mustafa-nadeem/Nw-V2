@@ -130,14 +130,14 @@ const supportedLogos = [
 
 const impactStats = [
   {
-    value: '£1,000,000',
-    text: 'More than 150 organisations requested over £1 million in funding, showing strong demand for impact-led investment.',
+    value: '£270,000',
+    text: 'Awarded in strategic grants to strengthen high-impact organisations and sustainable initiatives.',
     layout: 'left-tall',
     tone: 'donors',
   },
   {
-    value: '£270,000',
-    text: 'Awarded in strategic grants to strengthen high-impact organisations and sustainable initiatives.',
+    value: '£1,000,000',
+    text: 'More than 150 organisations requested over £1 million in funding, showing strong demand for impact-led investment.',
     layout: 'top-wide',
     tone: 'raised',
   },
@@ -499,15 +499,21 @@ function ImpactPage() {
 
         <div className="impact-shell">
           <div className="impact-stats-grid">
-            {impactStats.map((stat) => (
-              <article
-                key={stat.value}
-                className={`impact-stat-card impact-stat-card--${stat.layout} impact-stat-card--${stat.tone}`}
-              >
-                <p className="impact-stat-value"><DigitalReelNumber value={stat.value} /></p>
-                <p className="impact-stat-text">{stat.text}</p>
-              </article>
-            ))}
+            {impactStats.map((stat) => {
+              const compactValue = String(stat.value).replace(/\s+/g, '').length >= 9;
+
+              return (
+                <article
+                  key={stat.value}
+                  className={`impact-stat-card impact-stat-card--${stat.layout} impact-stat-card--${stat.tone}`}
+                >
+                  <p className={`impact-stat-value${compactValue ? ' impact-stat-value--compact' : ''}`}>
+                    <DigitalReelNumber value={stat.value} />
+                  </p>
+                  <p className="impact-stat-text">{stat.text}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

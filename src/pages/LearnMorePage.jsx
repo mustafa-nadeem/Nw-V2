@@ -156,7 +156,7 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section" aria-labelledby="learn-role-title">
+      <section className="learn-section learn-section--role" aria-labelledby="learn-role-title">
         <div className="learn-shell">
           <h2 id="learn-role-title" className="learn-role-title">The role of Zakaat, Sadaqah and Waqf in Islam</h2>
           <div className="learn-role-accordion">
@@ -279,7 +279,7 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section" aria-labelledby="learn-policies-title">
+      <section className="learn-section learn-section--policies" aria-labelledby="learn-policies-title">
         <div className="learn-shell learn-shell-narrow">
           <h2 id="learn-policies-title">Our policies</h2>
           <p className="learn-lead">Download and learn more about our policies in this thorough document.</p>
@@ -310,7 +310,7 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section" aria-labelledby="learn-content-title">
+      <section className="learn-section learn-section--videos" aria-labelledby="learn-content-title">
         <div className="learn-shell">
           <h2 id="learn-content-title" className="learn-content-heading">Watch our video walkthroughs</h2>
           <div className="learn-video-grid">

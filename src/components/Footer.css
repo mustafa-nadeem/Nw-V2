@@ -33,7 +33,7 @@
 .footer-copy {
   margin: 0;
   max-width: 30ch;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgb(255, 255, 255);
   font-size: 1rem;
   line-height: 1.62;
 }
@@ -62,7 +62,7 @@
 .footer-regulator-text {
   display: grid;
   gap: 2px;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgb(255, 255, 255);
   font-size: 0.85rem;
 }
 
@@ -147,7 +147,7 @@
 }
 
 .footer-link {
-  color: rgba(255, 255, 255, 0.84);
+  color: rgb(255, 255, 255);
   text-decoration: none;
   font-size: clamp(0.92rem, 0.94vw, 1rem);
   line-height: 1.42;

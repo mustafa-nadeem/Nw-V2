@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
+import FundingDiagram from '../components/FundingDiagram';
 import ProfileGridSection from '../components/ProfileGridSection';
 import { shariaBoard, trustees } from '../data/peopleData';
 
@@ -18,10 +19,10 @@ const floatingCards = [
 ];
 
 const steps = [
-  { num: '01', title: 'DONATE', desc: 'We receive your donation to the National Waqf', color: '#E27D50' },
-  { num: '02', title: 'INVEST', desc: 'Our investment committee invests your donation to generate long-term returns', color: '#C7366B' },
-  { num: '03', title: 'DISTRIBUTE', desc: '50% of the returns are given as grants to verified UK causes and charities', color: '#2B346C' },
-  { num: '04', title: 'GROW', desc: 'The other 50% is re-invested so your donation continues to grow year after year', color: '#01ACA6' },
+  { num: '01', title: 'DONATE', desc: 'We receive your donation to the National Waqf', color: '#E27D50', numColor: '#EEC8B6' },
+  { num: '02', title: 'INVEST', desc: 'Our investment committee invests your donation to generate long-term returns', color: '#C7366B', numColor: '#E6BED0' },
+  { num: '03', title: 'DISTRIBUTE', desc: '50% of the returns are given as grants to verified UK causes and charities', color: '#2B346C', numColor: '#B8C2E6' },
+  { num: '04', title: 'GROW', desc: 'The other 50% is re-invested so your donation continues to grow year after year', color: '#01ACA6', numColor: '#9FE1DE' },
 ];
 
 const principles = [
@@ -315,7 +316,7 @@ function AboutPage() {
                   className={`cycle-info-card cycle-info-${direction}`}
                   key={activeStep}
                 >
-                  <span className="cycle-info-num" style={{ color: activeData.color }}>
+                  <span className="cycle-info-num" style={{ color: activeData.numColor }}>
                     {activeData.num}
                   </span>
                   <h3 className="cycle-info-title">{activeData.title}</h3>
@@ -335,7 +336,7 @@ function AboutPage() {
             business contributions. These funds support operational costs and ensure the
             organisation remains effective while maintaining financial sustainability.
           </p>
-          <div className="about-diagram-placeholder" aria-hidden="true" />
+          <FundingDiagram />
         </div>
       </section>
 
