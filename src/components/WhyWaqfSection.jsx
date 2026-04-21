@@ -6,6 +6,7 @@ import './WhyWaqfSection.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_PACING = 1.28;
+const LAST_SLIDE_HOLD = 0.3;
 
 const slides = [
   {
@@ -136,10 +137,13 @@ function WhyWaqfSection() {
             pin: true,
             pinSpacing: true,
             scrub: 0.8,
-            end: () => '+=' + (panels.length - 1) * window.innerHeight * SCROLL_PACING,
+            end: () =>
+              '+=' +
+              (panels.length - 1 + LAST_SLIDE_HOLD) * window.innerHeight * SCROLL_PACING,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              const progress = self.progress * (panels.length - 1);
+              const totalSteps = panels.length - 1 + LAST_SLIDE_HOLD;
+              const progress = self.progress * totalSteps;
 
               panels.forEach((panel) => {
                 panel.setAttribute('data-overlap', 'false');
@@ -165,6 +169,8 @@ function WhyWaqfSection() {
             index - 1
           );
         }
+
+        timeline.to({}, { duration: LAST_SLIDE_HOLD });
       }, sectionRef);
 
       return () => {
