@@ -1,6 +1,6 @@
 .impact-page {
   background: #f3f3f4;
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .impact-shell {
@@ -15,7 +15,7 @@
 }
 
 .impact-section {
-  padding: 92px 0;
+  padding: 144px 0;
 }
 
 .impact-section h1,
@@ -272,8 +272,8 @@
 
 .impact-funded {
   background: #eaf6f8;
-  padding-top: 108px;
-  padding-bottom: 108px;
+  padding-top: 144px;
+  padding-bottom: 144px;
 }
 
 .impact-funded .impact-shell-narrow h2 {
@@ -324,7 +324,7 @@
   width: fit-content;
   border: 0;
   background: transparent;
-  color: #1d2230;
+  color: #2B346C;
   font: inherit;
   font-weight: 600;
   padding: 0;
@@ -394,23 +394,29 @@
 
 .impact-stats-grid {
   margin-top: 38px;
-  position: relative;
   width: min(100%, 1110px);
-  height: 570px;
   margin-left: auto;
   margin-right: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.7fr) minmax(0, 1.3fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "left-tall    top-wide     top-wide"
+    "left-tall    middle-tall  bottom-right"
+    "bottom-left  middle-tall  bottom-right";
+  gap: 14px;
 }
 
 .impact-stat-card {
-  position: absolute;
   border-radius: 12px;
-  padding: 22px;
+  padding: 44px;
   display: grid;
   align-content: start;
   gap: 12px;
   min-height: 220px;
   overflow: hidden;
   isolation: isolate;
+  position: relative;
 }
 
 .impact-stat-card::before {
@@ -480,44 +486,28 @@
 .impact-stat-card--focus .impact-stat-text { color: rgba(255, 243, 231, 0.76); }
 
 .impact-stat-card--left-tall {
-  left: 0;
-  top: 0;
-  width: 430px;
-  height: 378px;
+  grid-area: left-tall;
 }
 
 .impact-stat-card--top-wide {
-  left: 444px;
-  top: 0;
-  width: 666px;
-  height: 278px;
+  grid-area: top-wide;
 }
 
 .impact-stat-card--middle-tall {
-  left: 444px;
-  top: 292px;
-  width: 228px;
-  height: 278px;
+  grid-area: middle-tall;
 }
 
 .impact-stat-card--bottom-right {
-  left: 686px;
-  top: 292px;
-  width: 424px;
-  height: 278px;
+  grid-area: bottom-right;
 }
 
 .impact-stat-card--bottom-left {
-  left: 0;
-  top: 390px;
-  bottom: auto;
-  width: 430px;
-  height: 180px;
-  min-height: 0;
+  grid-area: bottom-left;
+  min-height: 180px;
 }
 
 .impact-stat-value {
-  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-size: clamp(2.7rem, 4.5vw, 4.5rem);
   font-weight: 600;
   color: #ffffff;
   letter-spacing: -0.02em;
@@ -536,6 +526,7 @@
 .impact-stat-text {
   line-height: 1.6;
   font-size: 1.02rem;
+  font-weight: 600;
   max-width: 42ch;
 }
 
@@ -729,7 +720,7 @@
   bottom: 0;
   width: min(480px, 92vw);
   background: #ffffff;
-  color: #1d2230;
+  color: #2B346C;
   z-index: 1020;
   padding: 88px 40px 40px;
   overflow-y: auto;
@@ -753,7 +744,7 @@
   border: 1px solid rgba(29, 34, 48, 0.2);
   border-radius: 999px;
   background: transparent;
-  color: #1d2230;
+  color: #2B346C;
   font: inherit;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
@@ -764,7 +755,7 @@
 }
 
 .impact-cause-panel__close:hover {
-  background: #1d2230;
+  background: #2B346C;
   color: #ffffff;
 }
 
@@ -780,7 +771,7 @@
   margin: 0;
   font-size: clamp(1.55rem, 2.4vw, 2rem);
   line-height: 1.2;
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .impact-cause-panel__subtitle {
@@ -819,46 +810,10 @@
 
   .impact-stats-grid {
     width: 100%;
-    height: 500px;
   }
 
   .impact-stat-card {
-    padding: 20px;
-  }
-
-  .impact-stat-card--left-tall {
-    left: 0;
-    top: 0;
-    width: calc(42% - 7px);
-    height: 252px;
-  }
-
-  .impact-stat-card--top-wide {
-    left: calc(42% + 7px);
-    top: 0;
-    width: calc(58% - 7px);
-    height: 220px;
-  }
-
-  .impact-stat-card--bottom-left {
-    left: 0;
-    top: 258px;
-    width: calc(42% - 7px);
-    height: 224px;
-  }
-
-  .impact-stat-card--middle-tall {
-    left: calc(42% + 7px);
-    top: 234px;
-    width: calc(20% - 7px);
-    height: 266px;
-  }
-
-  .impact-stat-card--bottom-right {
-    left: calc(62% + 7px);
-    top: 234px;
-    width: calc(38% - 7px);
-    height: 266px;
+    padding: 28px;
   }
 }
 
@@ -983,31 +938,22 @@
 
   .impact-stats-grid {
     width: 100%;
-    height: auto;
-    display: grid;
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "left-tall"
+      "top-wide"
+      "middle-tall"
+      "bottom-right"
+      "bottom-left";
     gap: 10px;
   }
 
   .impact-stat-card {
-    position: relative;
     min-height: unset;
   }
 
-  .impact-stat-card--left-tall,
-  .impact-stat-card--top-wide,
-  .impact-stat-card--bottom-left,
-  .impact-stat-card--middle-tall,
-  .impact-stat-card--bottom-right {
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    width: auto;
-    height: auto;
+  .impact-stat-card--bottom-left {
     min-height: unset;
-    grid-column: 1 / -1;
-    grid-row: auto;
   }
 
   .impact-cause-grid {

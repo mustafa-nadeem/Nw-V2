@@ -243,6 +243,10 @@
     font-size: clamp(2.4rem, 10vw, 4rem);
   }
 
+  .waqf-word + .waqf-word {
+    margin-left: 0.25em;
+  }
+
   .waqf-stack-description {
     margin: 18px auto 0;
     max-width: 100%;

@@ -132,7 +132,7 @@ function AuroraTimeline() {
 
   const leftMilestones = milestones.filter((_, index) => index % 2 === 0);
   const rightMilestones = milestones.filter((_, index) => index % 2 !== 0);
-  const displayYear = milestones[activeIndex].year === 2026 ? 'TODAY' : String(milestones[activeIndex].year);
+  const displayYear = String(milestones[activeIndex].year);
 
   return (
     <section className="aurora-timeline-section" ref={containerRef} aria-labelledby="aurora-timeline-title">
@@ -159,7 +159,7 @@ function AuroraTimeline() {
                 <span className="aurora-timeline__progress-dot aurora-timeline__progress-dot--end" />
               </div>
 
-              <p className="aurora-timeline__progress-end">TODAY</p>
+              <p className="aurora-timeline__progress-end">2026</p>
             </div>
           </div>
         </aside>

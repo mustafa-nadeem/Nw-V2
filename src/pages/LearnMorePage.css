@@ -1,6 +1,6 @@
 .learn-page {
   background: #F2FFFF;
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-shell {
@@ -78,7 +78,7 @@
 
 .learn-hero {
   min-height: auto;
-  padding: 300px 0 120px 0 !important;
+  padding: 510px 0 204px 0 !important;
   background: linear-gradient(135deg, #2B346C 0%, #3a4284 100%);
   animation: gradientShift 8s ease infinite;
   display: grid;
@@ -193,7 +193,7 @@
 }
 
 .learn-role-tab-trigger:hover {
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-role-tab-marker {
@@ -214,7 +214,7 @@
 }
 
 .learn-role-tab.is-active .learn-role-tab-trigger {
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-role-tab.is-active .learn-role-tab-marker {
@@ -248,7 +248,7 @@
 .learn-role-tab-subtitle {
   font-size: 0.92rem;
   font-weight: 600;
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-role-tab-panel p {
@@ -379,7 +379,7 @@
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 1.2;
-  color: #1d2230;
+  color: #2B346C;
   margin: 0;
 }
 
@@ -593,7 +593,7 @@
 .learn-policies-text h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #1d2230;
+  color: #2B346C;
   margin-bottom: 4px;
 }
 
@@ -652,7 +652,7 @@
   aspect-ratio: 16 / 10;
   border: 0;
   border-radius: 10px;
-  background: #1d2230;
+  background: #2B346C;
   cursor: pointer;
   overflow: hidden;
   padding: 0;
@@ -673,7 +673,7 @@
   height: 52px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
-  color: #1d2230;
+  color: #2B346C;
   display: grid;
   place-items: center;
   padding-left: 3px;
@@ -683,7 +683,7 @@
 .learn-video-title {
   font-size: 0.98rem;
   font-weight: 600;
-  color: #1d2230;
+  color: #2B346C;
   margin: 0;
 }
 
@@ -718,7 +718,7 @@
   border-radius: 50%;
   border: 1px solid #c8c9cc;
   background: transparent;
-  color: #1d2230;
+  color: #2B346C;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -726,8 +726,8 @@
 }
 
 .learn-reports-nav-btn:hover {
-  background: #1d2230;
-  border-color: #1d2230;
+  background: #2B346C;
+  border-color: #2B346C;
   color: #fff;
 }
 
@@ -774,7 +774,7 @@
 .learn-report-title {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #1d2230;
+  color: #2B346C;
   margin: 0;
 }
 
@@ -814,7 +814,7 @@
 }
 
 .learn-faq-tab:hover {
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-faq-tab.is-active {
@@ -869,7 +869,7 @@
 }
 
 .learn-faq-item.is-open .learn-faq-trigger {
-  color: #1d2230;
+  color: #2B346C;
   padding-bottom: 12px;
 }
 
@@ -889,7 +889,7 @@
 
 .learn-faq-item.is-open .learn-faq-icon {
   transform: rotate(180deg);
-  color: #1d2230;
+  color: #2B346C;
 }
 
 .learn-faq-panel {
@@ -913,7 +913,7 @@
 .learn-faq-panel-inner p {
   max-width: 70ch;
   font-size: 0.95rem;
-  color: #1d2230;
+  color: #2B346C;
   line-height: 1.65;
   padding: 0 28px 24px;
 }

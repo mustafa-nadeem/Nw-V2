@@ -1,20 +1,36 @@
 .profile-grid-section {
   width: 100%;
-  padding: 80px 0;
+  padding: 144px 40px;
 }
 
 .profile-grid-section--trustees {
-  background: #2B346C;
+  background: #EDF1FF;
+}
+
+.profile-grid-section--trustees .profile-grid-section__intro h2 {
+  color: #2B346C;
+}
+
+.profile-grid-section--trustees .profile-grid-section__intro p {
+  color: #3f4654;
 }
 
 .profile-grid-section--sharia {
-  background: #1F5E7A;
+  background: #EDF1FF;
+}
+
+.profile-grid-section--sharia .profile-grid-section__intro h2 {
+  color: #2B346C;
+}
+
+.profile-grid-section--sharia .profile-grid-section__intro p {
+  color: #2B346C;
 }
 
 .profile-grid-section__container {
-  width: min(100%, 1600px);
+  width: min(100%, 1200px);
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0;
 }
 
 .profile-grid-section__intro {
@@ -53,6 +69,11 @@
 .profile-grid-section__image-link {
   display: block;
   width: 100%;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
   aspect-ratio: 3 / 4;
   border-radius: 14px;
   overflow: hidden;
@@ -85,7 +106,7 @@
 .profile-grid-section__info-container {
   position: static;
   z-index: auto;
-  padding: 14px 2px 0;
+  padding: 28px 2px 0;
   background: transparent;
   display: grid;
   grid-template-rows: auto auto;
@@ -106,11 +127,21 @@
   -webkit-box-orient: vertical;
 }
 
+.profile-grid-section--trustees .profile-grid-section__name,
+.profile-grid-section--sharia .profile-grid-section__name {
+  color: #2B346C;
+}
+
 .profile-grid-section__role {
   margin: 0;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   line-height: 1.35;
+}
+
+.profile-grid-section--trustees .profile-grid-section__role,
+.profile-grid-section--sharia .profile-grid-section__role {
+  color: #2B346C;
 }
 
 @media (max-width: 1200px) {
@@ -195,6 +226,112 @@
   }
 }
 
+.profile-grid-section__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1010;
+  border: 0;
+  padding: 0;
+  background: rgba(6, 12, 24, 0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.profile-grid-section__backdrop--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile-grid-section__dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1020;
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  padding: 40px 44px;
+  background: #ffffff;
+  color: #2B346C;
+  border-radius: 20px;
+  box-shadow: 0 40px 80px rgba(12, 22, 44, 0.35);
+  transform: translate(-50%, -50%) scale(0.94);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease;
+}
+
+.profile-grid-section__dialog--open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile-grid-section__dialog-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: #2B346C;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.profile-grid-section__dialog-close:hover {
+  background: #1e265a;
+}
+
+.profile-grid-section__dialog-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.profile-grid-section__dialog-name {
+  margin: 0 0 6px;
+  padding-right: 40px;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  line-height: 1.2;
+  font-weight: 600;
+  color: #2B346C;
+}
+
+.profile-grid-section__dialog-role {
+  margin: 0 0 18px;
+  color: #01ACA6;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.profile-grid-section__dialog-bio {
+  margin: 0;
+  color: #3f4654;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 640px) {
+  .profile-grid-section__dialog {
+    padding: 36px 24px 28px;
+    width: calc(100% - 24px);
+  }
+
+  .profile-grid-section__dialog-close {
+    top: 14px;
+    right: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .profile-grid-section__image-link {
     transition: none;
@@ -203,5 +340,9 @@
   .profile-grid-section__image-link:hover,
   .profile-grid-section__image-link:focus-visible {
     transform: none;
+  }
+
+  .profile-grid-section__dialog {
+    transition: none;
   }
 }
