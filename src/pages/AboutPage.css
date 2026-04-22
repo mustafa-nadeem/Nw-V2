@@ -211,7 +211,7 @@
 /* ── Cycle Diagram ── */
 .about-section.about-works-pinned {
   background: #f2f2f2;
-  padding: 96px 0;
+  padding: 0;
 }
 
 .about-works-pin-stage {
@@ -255,26 +255,30 @@
 }
 
 .cycle-group {
-  cursor: pointer;
-  visibility: hidden;
-  pointer-events: none;
+  cursor: default;
+  opacity: 0.1;
   transform: translateY(24px) scale(0.94);
   transform-origin: 350px 350px;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cycle-svg.hover-ready .cycle-group {
+  cursor: pointer;
 }
 
 .cycle-svg.is-step-1 .cycle-group:nth-of-type(-n + 1),
 .cycle-svg.is-step-2 .cycle-group:nth-of-type(-n + 2),
 .cycle-svg.is-step-3 .cycle-group:nth-of-type(-n + 3),
 .cycle-svg.is-step-4 .cycle-group:nth-of-type(-n + 4) {
-  visibility: visible;
-  pointer-events: auto;
+  opacity: 1;
   transform: translateY(0) scale(1);
 }
 
 .cycle-svg.has-hover .cycle-group {
-  filter: saturate(0.5) brightness(0.8);
+  opacity: 0.35;
+  filter: saturate(0.5);
 }
 
 .cycle-svg.has-hover .cycle-group.is-active {
@@ -293,7 +297,7 @@
 .cycle-slice--4 { fill: #01ACA6; }
 
 .cycle-label-num {
-  fill: rgb(215, 221, 239);
+  fill: rgba(255, 255, 255, 0.22);
   font-size: 52px;
   font-weight: 500;
   pointer-events: none;
@@ -348,7 +352,7 @@
   font-size: clamp(3.5rem, 5vw, 5.5rem);
   font-weight: 600;
   line-height: 1;
-  opacity: 1;
+  opacity: 0.18;
   transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 

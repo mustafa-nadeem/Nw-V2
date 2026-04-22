@@ -47,7 +47,7 @@
 
 .profile-grid-section__intro p {
   margin: 0;
-  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.74);
   font-size: 0.98rem;
   line-height: 1.6;
 }
@@ -134,7 +134,7 @@
 
 .profile-grid-section__role {
   margin: 0;
-  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   line-height: 1.35;
 }
@@ -335,21 +335,68 @@
 }
 
 .profile-grid-section__dialog-name {
-  margin: 0 0 6px;
+  margin: 0;
   font-size: clamp(1.4rem, 2.2vw, 1.9rem);
   line-height: 1.2;
   font-weight: 600;
   color: #2B346C;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .profile-grid-section__dialog-role {
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   color: #01ACA6;
   font-size: 0.98rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
+
+.profile-grid-section__dialog-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 6px;
+}
+
+.profile-grid-section__dialog-linkedin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2B346C;
+  color: #ffffff;
+  text-decoration: none;
+  flex: none;
+  box-shadow: 0 4px 12px rgba(43, 52, 108, 0.22);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s ease;
+}
+
+.profile-grid-section__dialog-linkedin svg {
+  width: 18px;
+  height: 18px;
+}
+
+.profile-grid-section__dialog-linkedin:hover,
+.profile-grid-section__dialog-linkedin:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(43, 52, 108, 0.32);
+  background: #1f275a;
+  outline: none;
+}
+
+.profile-grid-section__dialog-linkedin:focus-visible {
+  outline: 2px solid #2B346C;
+  outline-offset: 3px;
+}
+
 
 .profile-grid-section__dialog-divider {
   height: 2px;

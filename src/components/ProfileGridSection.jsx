@@ -92,7 +92,29 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
             </div>
 
             <div className="profile-grid-section__dialog-body">
-              <h3 className="profile-grid-section__dialog-name">{selectedProfile.name}</h3>
+              <div className="profile-grid-section__dialog-heading">
+                <h3 className="profile-grid-section__dialog-name">{selectedProfile.name}</h3>
+                <a
+                  className="profile-grid-section__dialog-linkedin"
+                  href={selectedProfile.linkedinUrl || '#'}
+                  target={selectedProfile.linkedinUrl ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={`Visit ${selectedProfile.name}'s LinkedIn profile`}
+                  title={`View ${selectedProfile.name} on LinkedIn`}
+                  onClick={(e) => {
+                    if (!selectedProfile.linkedinUrl) e.preventDefault();
+                  }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.63 0 4.3 2.39 4.3 5.5v6.24zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+                  </svg>
+                </a>
+              </div>
               <p className="profile-grid-section__dialog-role">{selectedProfile.role}</p>
               <div className="profile-grid-section__dialog-divider" aria-hidden="true" />
               <p className="profile-grid-section__dialog-bio">{selectedProfile.bio}</p>

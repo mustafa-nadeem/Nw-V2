@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
@@ -19,10 +19,10 @@ const floatingCards = [
 ];
 
 const steps = [
-  { num: '01', title: 'DONATE', desc: 'We receive your donation to the National Waqf', color: '#E27D50', numColor: '#EEC8B6' },
-  { num: '02', title: 'INVEST', desc: 'Our investment committee invests your donation to generate long-term returns', color: '#C7366B', numColor: '#E6BED0' },
-  { num: '03', title: 'DISTRIBUTE', desc: '50% of the returns are given as grants to verified UK causes and charities', color: '#2B346C', numColor: '#B8C2E6' },
-  { num: '04', title: 'GROW', desc: 'The other 50% is re-invested so your donation continues to grow year after year', color: '#01ACA6', numColor: '#9FE1DE' },
+  { num: '01', title: 'DONATE', desc: 'We receive your donation to the National Waqf', color: '#E27D50' },
+  { num: '02', title: 'INVEST', desc: 'Our investment committee invests your donation to generate long-term returns', color: '#C7366B' },
+  { num: '03', title: 'DISTRIBUTE', desc: '50% of the returns are given as grants to verified UK causes and charities', color: '#2B346C' },
+  { num: '04', title: 'GROW', desc: 'The other 50% is re-invested so your donation continues to grow year after year', color: '#01ACA6' },
 ];
 
 const principles = [
@@ -85,12 +85,28 @@ function AboutPage() {
 
   const activeStep = hoverStep ?? cycleStep;
   const activeData = steps[activeStep - 1];
-  const isHovering = hoverStep !== null;
+  const canHoverCycle = cycleStep === steps.length;
+  const isHovering = canHoverCycle && hoverStep !== null;
 
   const direction = activeStep >= prevStepRef.current ? 'down' : 'up';
   if (activeStep !== prevStepRef.current) {
     prevStepRef.current = activeStep;
   }
+
+  useEffect(() => {
+    if (!canHoverCycle && hoverStep !== null) {
+      setHoverStep(null);
+    }
+  }, [canHoverCycle, hoverStep]);
+
+  const onCycleGroupEnter = useCallback((step) => {
+    if (!canHoverCycle) return;
+    setHoverStep(step);
+  }, [canHoverCycle]);
+
+  const onCycleGroupLeave = useCallback(() => {
+    setHoverStep(null);
+  }, []);
 
   useLayoutEffect(() => {
     const stageEl = worksStageRef.current;
@@ -253,7 +269,7 @@ function AboutPage() {
             <div className="cycle-split">
               <div className="cycle-diagram-col">
                 <svg
-                  className={`cycle-svg is-step-${cycleStep}${isHovering ? ' has-hover' : ''}`}
+                  className={`cycle-svg is-step-${cycleStep}${isHovering ? ' has-hover' : ''}${canHoverCycle ? ' hover-ready' : ''}`}
                   viewBox="0 0 700 700"
                   aria-label="National Waqf funding cycle"
                 >
@@ -268,8 +284,8 @@ function AboutPage() {
                   </defs>
                   <g
                     className={`cycle-group${activeStep === 1 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(1)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(1)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--1" d="M350,350 L350,20 A330,330 0 0,1 680,350 Z" />
                     <text x="515" y="160" className="cycle-label-num" textAnchor="middle">01</text>
@@ -277,8 +293,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 2 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(2)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(2)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--2" d="M350,350 L680,350 A330,330 0 0,1 350,680 Z" />
                     <text x="515" y="480" className="cycle-label-num" textAnchor="middle">02</text>
@@ -286,8 +302,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 3 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(3)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(3)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--3" d="M350,350 L350,680 A330,330 0 0,1 20,350 Z" />
                     <text x="185" y="480" className="cycle-label-num" textAnchor="middle">03</text>
@@ -295,8 +311,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 4 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(4)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(4)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--4" d="M350,350 L20,350 A330,330 0 0,1 350,20 Z" />
                     <text x="185" y="160" className="cycle-label-num" textAnchor="middle">04</text>
@@ -316,7 +332,7 @@ function AboutPage() {
                   className={`cycle-info-card cycle-info-${direction}`}
                   key={activeStep}
                 >
-                  <span className="cycle-info-num" style={{ color: activeData.numColor }}>
+                  <span className="cycle-info-num" style={{ color: activeData.color }}>
                     {activeData.num}
                   </span>
                   <h3 className="cycle-info-title">{activeData.title}</h3>
