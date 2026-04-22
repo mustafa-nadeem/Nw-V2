@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { GeoJSON, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -40,6 +40,45 @@ const ukViewBounds = [
   [49.75, -8.9],
   [59.35, 2.2],
 ];
+
+const OSM_SEA_COLOR = '#aad3df';
+
+const CONTINENTAL_EUROPE_MASK = {
+  type: 'Feature',
+  properties: { name: 'continental-europe-mask' },
+  geometry: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [-180, -85],
+        [180, -85],
+        [180, 85],
+        [-180, 85],
+        [-180, -85],
+      ],
+      [
+        [-12, 59.5],
+        [2.5, 59.5],
+        [2.5, 53],
+        [2.38, 52.3],
+        [2.35, 51.82],
+        [2.26, 51.34],
+        [2.12, 51.02],
+        [1.6, 50.74],
+        [0.42, 50.5],
+        [-0.9, 50.3],
+        [-2, 50.22],
+        [-3.3, 50.02],
+        [-4.98, 49.76],
+        [-6.65, 49.58],
+        [-8.12, 49.54],
+        [-10, 49.58],
+        [-12, 49.7],
+        [-12, 59.5],
+      ],
+    ],
+  },
+};
 
 const checkpointIcon = L.divIcon({
   className: 'impact-checkpoint-marker',
@@ -370,6 +409,19 @@ function ImpactPage() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               noWrap
+            />
+
+            <GeoJSON
+              key={isMobileMap ? 'europe-mask-mobile' : 'europe-mask-desktop'}
+              data={CONTINENTAL_EUROPE_MASK}
+              style={{
+                fillColor: OSM_SEA_COLOR,
+                fillOpacity: 1,
+                color: OSM_SEA_COLOR,
+                weight: 0,
+                stroke: false,
+              }}
+              interactive={false}
             />
 
             <MapCameraController
