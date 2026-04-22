@@ -103,9 +103,20 @@ h3 {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-              url('./assets/hero.png') center 30% / cover no-repeat;
+  background: url('./assets/hero.png') center 30% / cover no-repeat;
   color: #fff;
+}
+
+.hero-content h1 {
+  text-shadow: none;
+}
+
+.hero-content p {
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 1),
+    0 1px 8px rgba(0, 0, 0, 1),
+    0 4px 20px rgba(0, 0, 0, 0.92),
+    0 8px 36px rgba(0, 0, 0, 0.8);
 }
 
 .hero-content {
