@@ -470,12 +470,6 @@
     max-width: 100%;
   }
 
-  .cycle-group {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
   .cycle-label-num { font-size: 36px; }
   .cycle-label-title { font-size: 16px; }
 

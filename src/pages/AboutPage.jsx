@@ -112,14 +112,10 @@ function AboutPage() {
     const stageEl = worksStageRef.current;
     if (!stageEl) return undefined;
 
-    const isMobile = window.matchMedia('(max-width: 520px)').matches;
-    if (isMobile) {
-      setCycleStep(4);
-      return undefined;
-    }
-
     const triggerId = 'about-works-cycle-pin';
     const earlyTriggerId = 'about-works-cycle-early';
+    const isMobile = window.matchMedia('(max-width: 520px)').matches;
+    const pinStart = isMobile ? 'bottom bottom-=120' : 'bottom bottom';
 
     ScrollTrigger.create({
       id: earlyTriggerId,
@@ -133,7 +129,7 @@ function AboutPage() {
     const trigger = ScrollTrigger.create({
       id: triggerId,
       trigger: stageEl,
-      start: 'bottom bottom',
+      start: pinStart,
       end: () => '+=' + window.innerHeight * 3,
       pin: true,
       pinSpacing: true,

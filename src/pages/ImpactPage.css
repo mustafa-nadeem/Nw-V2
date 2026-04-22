@@ -106,15 +106,15 @@
 }
 
 .impact-project-panel {
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
   bottom: 0;
   width: min(420px, 34vw);
   background: rgba(12, 22, 44, 0.9);
   color: #eef4ff;
-  z-index: 4;
-  padding: 140px 34px 40px;
+  z-index: 1100;
+  padding: 40px 34px 40px;
   transform: translateX(108%);
   transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
   display: grid;
@@ -823,7 +823,7 @@
 
   .impact-project-panel {
     width: min(390px, 42vw);
-    padding-top: 118px;
+    padding-top: 40px;
   }
 
   .impact-model-content,
