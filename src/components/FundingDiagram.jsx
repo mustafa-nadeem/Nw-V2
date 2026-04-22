@@ -37,7 +37,7 @@ const streams = [
     color: '#01ACA6',
     bg: '#BFE3E1',
     top: '44%',
-    start: '18px',
+    factor: 0.72,
     label: 'Internal Private Waqf',
     Icon: PersonLockIcon,
   },
@@ -46,7 +46,7 @@ const streams = [
     color: '#E27D50',
     bg: '#F4DDD1',
     top: '66%',
-    start: '42px',
+    factor: 0.8,
     label: 'Monthly Business Donations',
     Icon: HandsExchangeIcon,
   },
@@ -55,7 +55,7 @@ const streams = [
     color: '#2B346C',
     bg: '#D7DEEF',
     top: '88%',
-    start: '72px',
+    factor: 0.72,
     label: 'Gift Aid',
     Icon: GiftIcon,
   },
@@ -123,7 +123,7 @@ function FundingDiagram() {
         </div>
 
         <ul className="funding-streams">
-          {streams.map(({ key, color, bg, top, start, label, Icon }) => (
+          {streams.map(({ key, color, bg, top, factor, label, Icon }) => (
             <li
               key={key}
               className={`funding-stream funding-stream--${key}`}
@@ -131,7 +131,7 @@ function FundingDiagram() {
                 '--arrow-bg': bg,
                 '--arrow-color': color,
                 '--stream-top': top,
-                '--stream-start': start,
+                '--stream-factor': factor,
               }}
             >
               <div className="funding-arrow" aria-hidden="true">

@@ -3,6 +3,10 @@
   --arrow-width: clamp(220px, 24vw, 340px);
   --arrow-height: clamp(50px, 5.1vw, 72px);
   --arrow-tip: clamp(36px, 4.2vw, 56px);
+  --label-column: clamp(120px, 16vw, 210px);
+  --stream-gap: clamp(10px, 1.2vw, 18px);
+  --arrow-end-pad: clamp(2px, 0.5vw, 8px);
+  --stream-embed: clamp(8px, 1.1vw, 14px);
   width: min(100%, 1080px);
   margin: 48px auto 0;
 }
@@ -17,11 +21,15 @@
   position: relative;
   width: var(--ring);
   aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .funding-ring {
   position: absolute;
   border-radius: 50%;
+  transform: translateZ(0);
   will-change: transform, opacity;
 }
 
@@ -33,11 +41,13 @@
 .funding-ring--mid {
   inset: 12%;
   background: #F4DDD1;
+  box-shadow: 0 0 0 1.5px #D7DEEF;
 }
 
 .funding-ring--inner {
   inset: 23%;
   background: #BFE3E1;
+  box-shadow: 0 0 0 1.5px #F4DDD1;
 }
 
 .funding-center {
@@ -72,9 +82,7 @@
 
 .funding-streams {
   position: absolute;
-  left: calc(var(--ring) * 0.6);
-  top: 0;
-  width: calc(100% - (var(--ring) * 0.6));
+  inset: 0;
   height: var(--ring);
   list-style: none;
   margin: 0;
@@ -83,25 +91,26 @@
 
 .funding-stream {
   position: absolute;
-  left: var(--stream-start);
+  left: calc((var(--ring) * var(--stream-factor)) - var(--stream-embed));
+  right: var(--arrow-end-pad);
   top: var(--stream-top);
   transform: translateY(-50%);
-  width: calc(100% - var(--stream-start));
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--label-column);
   align-items: center;
-  gap: clamp(14px, 1.8vw, 28px);
+  column-gap: var(--stream-gap);
   will-change: transform, opacity;
 }
 
 .funding-arrow {
   position: relative;
-  width: var(--arrow-width);
+  width: 100%;
   height: var(--arrow-height);
   background: var(--arrow-bg);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-right: calc(var(--arrow-tip) * 0.55);
+  justify-content: flex-start;
+  padding-left: clamp(14px, 1.4vw, 20px);
   clip-path: polygon(
     0 0,
     calc(100% - var(--arrow-tip)) 0,
@@ -142,12 +151,12 @@
 }
 
 .funding-label {
-  flex: 0 1 clamp(130px, 20vw, 260px);
   color: var(--arrow-color);
   font-size: clamp(1rem, 1.62vw, 2rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
   font-weight: 700;
+  text-align: left;
 }
 
 @keyframes fundingRingBreathe {

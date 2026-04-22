@@ -55,6 +55,18 @@ function AuroraTimeline() {
   const milestoneRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isMobileLayout, setIsMobileLayout] = useState(
+    () => (typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+  );
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsMobileLayout(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   useEffect(() => {
     let frameId = null;
@@ -72,10 +84,6 @@ function AuroraTimeline() {
       const navbarBottom = navbarElement ? navbarElement.getBoundingClientRect().bottom : 0;
       const triggerPoint = Math.max(windowHeight * 0.38, navbarBottom + 16);
 
-      const denominator = Math.max(containerRect.height, 1);
-      const rawProgress = (triggerPoint - containerRect.top) / denominator;
-      const scrollProgress = clamp(rawProgress, 0, 1);
-
       const visualOrder = milestoneRefs.current
         .map((node, index) => ({ node, index }))
         .filter(({ node }) => Boolean(node))
@@ -90,21 +98,22 @@ function AuroraTimeline() {
           return aTop - bTop;
         });
 
-      let reachedIndex = visualOrder.length > 0 ? visualOrder[0].index : 0;
+      let reachedOrderIndex = 0;
 
       for (let i = 0; i < visualOrder.length; i += 1) {
         const item = visualOrder[i];
         const yearElementTop = item.yearElement.getBoundingClientRect().top;
 
         if (yearElementTop <= triggerPoint) {
-          reachedIndex = item.index;
+          reachedOrderIndex = i;
         } else {
           break;
         }
       }
 
-      const finalMilestoneIndex = milestones.length - 1;
-      const timelineProgress = reachedIndex >= finalMilestoneIndex ? 1 : scrollProgress;
+      const reachedIndex = visualOrder[reachedOrderIndex]?.index ?? 0;
+      const maxOrderIndex = Math.max(visualOrder.length - 1, 1);
+      const timelineProgress = clamp(reachedOrderIndex / maxOrderIndex, 0, 1);
 
       setProgress(timelineProgress);
       setActiveIndex((previousIndex) => (previousIndex === reachedIndex ? previousIndex : reachedIndex));
@@ -167,10 +176,9 @@ function AuroraTimeline() {
         </aside>
 
         <div className="aurora-timeline__content">
-          <div className="aurora-timeline__columns">
-            <div className="aurora-timeline__column--left">
-              {leftMilestones.map((milestone, leftIndex) => {
-                const index = leftIndex * 2;
+          {isMobileLayout ? (
+            <div className="aurora-timeline__mobile-list">
+              {milestones.map((milestone, index) => {
                 const isActive = activeIndex === index;
 
                 return (
@@ -191,31 +199,57 @@ function AuroraTimeline() {
                 );
               })}
             </div>
+          ) : (
+            <div className="aurora-timeline__columns">
+              <div className="aurora-timeline__column--left">
+                {leftMilestones.map((milestone, leftIndex) => {
+                  const index = leftIndex * 2;
+                  const isActive = activeIndex === index;
 
-            <div className="aurora-timeline__column--right">
-              {rightMilestones.map((milestone, rightIndex) => {
-                const index = rightIndex * 2 + 1;
-                const isActive = activeIndex === index;
+                  return (
+                    <article
+                      key={milestone.monthYear}
+                      ref={(node) => {
+                        milestoneRefs.current[index] = node;
+                      }}
+                      className="aurora-timeline__milestone"
+                    >
+                      <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
+                        {milestone.monthYear}
+                      </p>
+                      <div className="aurora-timeline__image-placeholder" />
+                      <h3 className="aurora-timeline__title">{milestone.title}</h3>
+                      <p className="aurora-timeline__body">{milestone.body}</p>
+                    </article>
+                  );
+                })}
+              </div>
 
-                return (
-                  <article
-                    key={milestone.monthYear}
-                    ref={(node) => {
-                      milestoneRefs.current[index] = node;
-                    }}
-                    className="aurora-timeline__milestone"
-                  >
-                    <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
-                      {milestone.monthYear}
-                    </p>
-                    <div className="aurora-timeline__image-placeholder" />
-                    <h3 className="aurora-timeline__title">{milestone.title}</h3>
-                    <p className="aurora-timeline__body">{milestone.body}</p>
-                  </article>
-                );
-              })}
+              <div className="aurora-timeline__column--right">
+                {rightMilestones.map((milestone, rightIndex) => {
+                  const index = rightIndex * 2 + 1;
+                  const isActive = activeIndex === index;
+
+                  return (
+                    <article
+                      key={milestone.monthYear}
+                      ref={(node) => {
+                        milestoneRefs.current[index] = node;
+                      }}
+                      className="aurora-timeline__milestone"
+                    >
+                      <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
+                        {milestone.monthYear}
+                      </p>
+                      <div className="aurora-timeline__image-placeholder" />
+                      <h3 className="aurora-timeline__title">{milestone.title}</h3>
+                      <p className="aurora-timeline__body">{milestone.body}</p>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

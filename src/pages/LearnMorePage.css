@@ -1,12 +1,14 @@
 .learn-page {
+  --learn-shell-pad: clamp(16px, 4vw, 44px);
   background: #F2FFFF;
   color: #2B346C;
+  overflow-x: clip;
 }
 
 .learn-shell {
   width: min(100%, 1280px);
   margin: 0 auto;
-  padding: 0 44px;
+  padding: 0 var(--learn-shell-pad);
 }
 
 .learn-shell-narrow {
@@ -92,13 +94,13 @@
 }
 
 .learn-hero {
-  min-height: auto;
-  padding: 510px 0 204px 0 !important;
+  min-height: 100svh;
+  padding: clamp(160px, 24vw, 380px) 0 clamp(64px, 9vw, 180px);
   background: linear-gradient(135deg, #2B346C 0%, #3a4284 100%);
   animation: gradientShift 8s ease infinite;
   display: grid;
   align-items: center;
-  margin-top: -100px;
+  margin-top: 0;
   position: relative;
   z-index: 1;
 }
@@ -749,16 +751,16 @@
 
 .learn-reports-rail {
   margin-top: 64px;
-  margin-left: -44px;
-  margin-right: -44px;
-  padding-left: 44px;
+  margin-left: calc(-1 * var(--learn-shell-pad));
+  margin-right: calc(-1 * var(--learn-shell-pad));
+  padding-left: var(--learn-shell-pad);
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(280px, 300px);
   gap: 24px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scroll-padding-left: 44px;
+  scroll-padding-left: var(--learn-shell-pad);
   padding-bottom: 6px;
   scrollbar-width: none;
 }
@@ -808,7 +810,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  scroll-padding: 0 22px;
+  scroll-padding: 0 var(--learn-shell-pad);
 }
 
 .learn-faq-tabs::-webkit-scrollbar {
@@ -935,8 +937,10 @@
 }
 
 @media (max-width: 1080px) {
-  .learn-shell {
-    padding: 0 22px;
+  .learn-hero {
+    min-height: 100svh;
+    padding: clamp(132px, 20vw, 220px) 0 clamp(56px, 9vw, 88px);
+    margin-top: 0;
   }
 
   .learn-hero-grid,
@@ -980,6 +984,28 @@
     padding: 92px 0;
   }
 
+  .learn-hero {
+    min-height: 100svh;
+    padding: clamp(96px, 22vw, 120px) 0 clamp(52px, 12vw, 68px);
+    align-items: center;
+  }
+
+  .learn-hero-copy {
+    gap: 12px;
+    max-width: 36rem;
+  }
+
+  .learn-hero-copy h1 {
+    font-size: clamp(1.9rem, 8.6vw, 2.45rem);
+    line-height: 1.1;
+  }
+
+  .learn-hero-copy p {
+    font-size: 0.9rem;
+    line-height: 1.48;
+    max-width: 34ch;
+  }
+
   .learn-faq-heading {
     text-align: left;
   }
@@ -987,9 +1013,9 @@
   .learn-faq-tabs {
     gap: 22px;
     justify-content: flex-start;
-    padding: 0 22px;
-    margin-left: -22px;
-    margin-right: -22px;
+    padding: 0 var(--learn-shell-pad);
+    margin-left: calc(-1 * var(--learn-shell-pad));
+    margin-right: calc(-1 * var(--learn-shell-pad));
     margin-bottom: 28px;
   }
 
@@ -1028,7 +1054,16 @@
   }
 
   .learn-hero-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+    width: min(100%, 320px);
+  }
+
+  .learn-hero-actions button {
+    width: 100%;
+    padding: 9px 14px;
+    font-size: 0.9rem;
   }
 
   .learn-policies-card {
@@ -1044,5 +1079,23 @@
 
   .learn-policies-button {
     justify-self: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .learn-page {
+    --learn-shell-pad: 14px;
+  }
+
+  .learn-hero {
+    padding: 88px 0 52px;
+  }
+
+  .learn-hero-copy p {
+    max-width: 100%;
+  }
+
+  .learn-hero-actions {
+    width: min(100%, 300px);
   }
 }

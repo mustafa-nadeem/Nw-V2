@@ -20,8 +20,8 @@ const ukOverview = {
 };
 
 const ukOverviewMobile = {
-  center: [54.2, -3.2],
-  zoom: 4.85,
+  center: [54.55, -3.35],
+  zoom: 5.35,
 };
 
 const mapZoom = {
@@ -31,9 +31,9 @@ const mapZoom = {
 };
 
 const mapZoomMobile = {
-  min: 4.4,
+  min: 5.1,
   max: 9.4,
-  projectFocus: 7.6,
+  projectFocus: 8,
 };
 
 const ukViewBounds = [

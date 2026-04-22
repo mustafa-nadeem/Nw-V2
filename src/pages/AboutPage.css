@@ -644,27 +644,42 @@
 
 @media (max-width: 860px) {
   .about-section.about-principles {
-    height: 100vh;
-    min-height: 100vh;
+    height: auto;
+    min-height: 0;
     padding-top: 72px;
-    padding-bottom: 24px;
+    padding-bottom: 72px;
+    display: block;
+  }
+
+  .about-principles .about-shell {
+    height: auto;
   }
 
   .about-principles .about-principles-subhead {
-    margin: 4px 0 14px;
+    margin: 6px 0 20px;
   }
 
   .about-principles-list {
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .about-principle-card {
-    padding: 14px 20px;
+    padding: 20px 18px;
     border-radius: 14px;
+    overflow: visible;
   }
 
   .about-principle-content h3 {
-    margin: 0 0 4px;
+    margin: 0 0 8px;
+    font-size: clamp(1.18rem, 4.9vw, 1.52rem);
+    line-height: 1.12;
+  }
+
+  .about-principle-content p {
+    font-size: clamp(0.96rem, 3.9vw, 1.08rem);
+    line-height: 1.45;
   }
 }
 
