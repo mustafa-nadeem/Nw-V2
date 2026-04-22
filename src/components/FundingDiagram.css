@@ -1,0 +1,27 @@
+.funding-diagram {
+  width: min(100%, 920px);
+  margin: 44px auto 0;
+}
+
+.funding-diagram__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  will-change: transform, opacity, clip-path, filter;
+  transform-origin: 30% 50%;
+}
+
+@media (max-width: 640px) {
+  .funding-diagram {
+    margin-top: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .funding-diagram__image {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,8 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
+import FundingDiagram from '../components/FundingDiagram';
 import ProfileGridSection from '../components/ProfileGridSection';
 import { shariaBoard, trustees } from '../data/peopleData';
 
@@ -72,6 +73,8 @@ const pvmSlides = [
 function AboutPage() {
   const worksSectionRef = useRef(null);
   const worksStageRef = useRef(null);
+  const worksMobileListRef = useRef(null);
+  const principlesListRef = useRef(null);
   const pvmSectionRef = useRef(null);
   const pvmStageRef = useRef(null);
   const [cycleStep, setCycleStep] = useState(1);
@@ -84,12 +87,28 @@ function AboutPage() {
 
   const activeStep = hoverStep ?? cycleStep;
   const activeData = steps[activeStep - 1];
-  const isHovering = hoverStep !== null;
+  const canHoverCycle = cycleStep === steps.length;
+  const isHovering = canHoverCycle && hoverStep !== null;
 
   const direction = activeStep >= prevStepRef.current ? 'down' : 'up';
   if (activeStep !== prevStepRef.current) {
     prevStepRef.current = activeStep;
   }
+
+  useEffect(() => {
+    if (!canHoverCycle && hoverStep !== null) {
+      setHoverStep(null);
+    }
+  }, [canHoverCycle, hoverStep]);
+
+  const onCycleGroupEnter = useCallback((step) => {
+    if (!canHoverCycle) return;
+    setHoverStep(step);
+  }, [canHoverCycle]);
+
+  const onCycleGroupLeave = useCallback(() => {
+    setHoverStep(null);
+  }, []);
 
   useLayoutEffect(() => {
     const stageEl = worksStageRef.current;
@@ -158,6 +177,31 @@ function AboutPage() {
     mq.addListener(update);
     return () => mq.removeListener(update);
   }, []);
+
+  useEffect(() => {
+    const targets = [worksMobileListRef.current, principlesListRef.current].filter(Boolean);
+    if (targets.length === 0) return undefined;
+
+    if (prefersReducedMotion) {
+      targets.forEach((el) => el.classList.add('is-visible'));
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+    );
+
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
 
   useLayoutEffect(() => {
     if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion || isPvmMobile) {
@@ -252,7 +296,7 @@ function AboutPage() {
             <div className="cycle-split">
               <div className="cycle-diagram-col">
                 <svg
-                  className={`cycle-svg is-step-${cycleStep}${isHovering ? ' has-hover' : ''}`}
+                  className={`cycle-svg is-step-${cycleStep}${isHovering ? ' has-hover' : ''}${canHoverCycle ? ' hover-ready' : ''}`}
                   viewBox="0 0 700 700"
                   aria-label="National Waqf funding cycle"
                 >
@@ -267,8 +311,8 @@ function AboutPage() {
                   </defs>
                   <g
                     className={`cycle-group${activeStep === 1 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(1)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(1)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--1" d="M350,350 L350,20 A330,330 0 0,1 680,350 Z" />
                     <text x="515" y="160" className="cycle-label-num" textAnchor="middle">01</text>
@@ -276,8 +320,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 2 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(2)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(2)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--2" d="M350,350 L680,350 A330,330 0 0,1 350,680 Z" />
                     <text x="515" y="480" className="cycle-label-num" textAnchor="middle">02</text>
@@ -285,8 +329,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 3 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(3)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(3)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--3" d="M350,350 L350,680 A330,330 0 0,1 20,350 Z" />
                     <text x="185" y="480" className="cycle-label-num" textAnchor="middle">03</text>
@@ -294,8 +338,8 @@ function AboutPage() {
                   </g>
                   <g
                     className={`cycle-group${activeStep === 4 ? ' is-active' : ''}`}
-                    onMouseEnter={() => setHoverStep(4)}
-                    onMouseLeave={() => setHoverStep(null)}
+                    onMouseEnter={() => onCycleGroupEnter(4)}
+                    onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--4" d="M350,350 L20,350 A330,330 0 0,1 350,20 Z" />
                     <text x="185" y="160" className="cycle-label-num" textAnchor="middle">04</text>
@@ -323,6 +367,25 @@ function AboutPage() {
                 </div>
               </div>
             </div>
+            <ul
+              ref={worksMobileListRef}
+              className="cycle-mobile-list"
+              aria-label="Funding cycle steps"
+            >
+              {steps.map((step, index) => (
+                <li
+                  key={step.num}
+                  className="cycle-mobile-item"
+                  style={{ '--accent': step.color, '--delay': `${index * 120}ms` }}
+                >
+                  <span className="cycle-mobile-item__num">{step.num}</span>
+                  <div className="cycle-mobile-item__body">
+                    <h3 className="cycle-mobile-item__title">{step.title}</h3>
+                    <p className="cycle-mobile-item__desc">{step.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -335,7 +398,7 @@ function AboutPage() {
             business contributions. These funds support operational costs and ensure the
             organisation remains effective while maintaining financial sustainability.
           </p>
-          <div className="about-diagram-placeholder" aria-hidden="true" />
+          <FundingDiagram />
         </div>
       </section>
 
@@ -395,9 +458,13 @@ function AboutPage() {
             We focus on practical impact through values that guide every decision we make.
           </p>
 
-          <div className="about-principles-list">
-            {principles.map((principle) => (
-              <article className="about-principle-card" key={principle.title}>
+          <div ref={principlesListRef} className="about-principles-list">
+            {principles.map((principle, index) => (
+              <article
+                className="about-principle-card"
+                key={principle.title}
+                style={{ '--delay': `${index * 120}ms` }}
+              >
                 <div className="about-principle-content">
                   <h3>{principle.title}</h3>
                   <p>{principle.text}</p>
