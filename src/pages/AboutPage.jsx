@@ -114,7 +114,7 @@ function AboutPage() {
     const stageEl = worksStageRef.current;
     if (!stageEl) return undefined;
 
-    const isMobile = window.matchMedia('(max-width: 520px)').matches;
+    const isMobile = window.matchMedia('(max-width: 860px)').matches;
     if (isMobile) {
       setCycleStep(4);
       return undefined;
