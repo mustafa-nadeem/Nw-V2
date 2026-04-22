@@ -45,6 +45,8 @@ const principles = [
 ];
 
 const PVM_SCROLL_PACING = 1.28;
+const PVM_LAST_PANEL_HOLD_SCROLL = 260;
+const PVM_LAST_PANEL_HOLD_STEP = 0.36;
 
 const pvmSlides = [
   {
@@ -185,12 +187,16 @@ function AboutPage() {
             pin: true,
             pinSpacing: true,
             scrub: 0.8,
-            end: () => '+=' + (panels.length - 1) * window.innerHeight * PVM_SCROLL_PACING,
+            end: () => '+=' + (
+              (panels.length - 1) * window.innerHeight * PVM_SCROLL_PACING + PVM_LAST_PANEL_HOLD_SCROLL
+            ),
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              const progress = self.progress * (panels.length - 1);
+              const panelTransitionSteps = panels.length - 1;
+              const totalSteps = panelTransitionSteps + PVM_LAST_PANEL_HOLD_STEP;
+              const progress = self.progress * totalSteps;
               panels.forEach((p) => p.setAttribute('data-overlap', 'false'));
-              for (let idx = 0; idx < panels.length - 1; idx += 1) {
+              for (let idx = 0; idx < panelTransitionSteps; idx += 1) {
                 if (progress > idx && progress < idx + 1) {
                   panels[idx].setAttribute('data-overlap', 'true');
                   break;
@@ -203,6 +209,8 @@ function AboutPage() {
         for (let idx = 1; idx < panels.length; idx += 1) {
           tl.to(panels[idx], { yPercent: 0, duration: 1 }, idx - 1);
         }
+
+        tl.to({}, { duration: PVM_LAST_PANEL_HOLD_STEP }, panels.length - 1);
       }, pvmSectionRef);
 
       return () => ctx.revert();
