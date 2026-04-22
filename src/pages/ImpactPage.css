@@ -471,20 +471,15 @@
   }
 }
 
-.impact-stat-card--donors { background: #2B346C; color: #f6fbff; }
-.impact-stat-card--donors .impact-stat-text { color: rgb(235, 242, 255); }
+.impact-stat-card--donors { background: #2B346C; color: #ffffff; }
 
-.impact-stat-card--raised { background: #00ACA6; color: #f6fbff; }
-.impact-stat-card--raised .impact-stat-text { color: rgb(220, 255, 252); }
+.impact-stat-card--raised { background: #00ACA6; color: #ffffff; }
 
-.impact-stat-card--monthly { background: #2B346C; color: #f6fbff; }
-.impact-stat-card--monthly .impact-stat-text { color: rgb(235, 242, 255); }
+.impact-stat-card--monthly { background: #2B346C; color: #ffffff; }
 
-.impact-stat-card--direct-debit { background: #00ACA6; color: #f6fbff; }
-.impact-stat-card--direct-debit .impact-stat-text { color: rgb(220, 255, 252); }
+.impact-stat-card--direct-debit { background: #00ACA6; color: #ffffff; }
 
-.impact-stat-card--focus { background: #FF8E54; color: #fefaf6; }
-.impact-stat-card--focus .impact-stat-text { color: rgb(255, 243, 231); }
+.impact-stat-card--focus { background: #FF8E54; color: #ffffff; }
 
 .impact-stat-card--left-tall {
   grid-area: left-tall;
@@ -534,10 +529,11 @@
   max-width: 100%;
 }
 
-.impact-stat-text {
+.impact-stat-card .impact-stat-text {
   margin: 0;
+  color: #ffffff;
   line-height: 1.6;
-  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  font-size: 0.92rem;
   font-weight: 600;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -553,7 +549,7 @@
   }
 
   .impact-stat-text {
-    font-size: clamp(0.95rem, 3.8cqw, 1.08rem);
+    font-size: 0.92rem;
   }
 }
 

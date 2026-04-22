@@ -120,18 +120,21 @@
 }
 
 .funding-icon {
-  width: clamp(24px, 2.55vw, 40px);
-  height: clamp(24px, 2.55vw, 40px);
+  width: clamp(30px, 2.8vw, 44px);
+  height: clamp(30px, 2.8vw, 44px);
   color: var(--arrow-color);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   transition: transform 0.28s ease;
 }
 
 .funding-icon svg {
-  width: 100%;
-  height: 100%;
+  width: 72%;
+  height: 72%;
 }
 
 .funding-stream:hover .funding-icon {

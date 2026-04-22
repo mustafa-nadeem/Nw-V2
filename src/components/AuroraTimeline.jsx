@@ -76,8 +76,6 @@ function AuroraTimeline() {
       const rawProgress = (triggerPoint - containerRect.top) / denominator;
       const scrollProgress = clamp(rawProgress, 0, 1);
 
-      setProgress(scrollProgress);
-
       const visualOrder = milestoneRefs.current
         .map((node, index) => ({ node, index }))
         .filter(({ node }) => Boolean(node))
@@ -105,6 +103,10 @@ function AuroraTimeline() {
         }
       }
 
+      const finalMilestoneIndex = milestones.length - 1;
+      const timelineProgress = reachedIndex >= finalMilestoneIndex ? 1 : scrollProgress;
+
+      setProgress(timelineProgress);
       setActiveIndex((previousIndex) => (previousIndex === reachedIndex ? previousIndex : reachedIndex));
     };
 
