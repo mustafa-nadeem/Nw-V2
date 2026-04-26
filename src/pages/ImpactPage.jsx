@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import placeholderImg from '../assets/placeholder.jpg';
 import 'leaflet/dist/leaflet.css';
 import { GeoJSON, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -80,6 +81,7 @@ const CONTINENTAL_EUROPE_MASK = {
   },
 };
 
+
 const checkpointIcon = L.divIcon({
   className: 'impact-checkpoint-marker',
   html: '<span class="impact-checkpoint-core" aria-hidden="true"></span>',
@@ -94,48 +96,258 @@ const checkpointIconActive = L.divIcon({
   iconAnchor: [9, 9],
 });
 
-const projects = [
+const locations = [
   {
-    name: 'Muslim Scout Scholarship',
+    id: 'manchester',
     city: 'Manchester',
-    category: 'Youth Development',
-    summary: 'Funding to expand access and leadership opportunities for young people.',
     position: [53.4808, -2.2426],
+    projects: [
+      {
+        name: 'Muslim Scout Scholarship',
+        category: 'Youth Development',
+        summary: 'Funding to expand access and leadership opportunities for young people across the North West.',
+        grant: '£24,000',
+        year: '2024',
+      },
+      {
+        name: 'Youth Leadership Academy',
+        category: 'Education',
+        summary: 'A twelve-week leadership programme equipping young people with mentoring, coaching, and civic engagement skills.',
+        grant: '£18,000',
+        year: '2023',
+      },
+      {
+        name: 'Community Outreach Initiative',
+        category: 'Community Support',
+        summary: 'Grassroots programme connecting youth with mentors and local organisations for holistic development.',
+        grant: '£16,500',
+        year: '2024',
+      },
+      {
+        name: 'Skills for Tomorrow',
+        category: 'Education',
+        summary: 'Vocational training and employability workshops for underrepresented communities in Greater Manchester.',
+        grant: '£14,200',
+        year: '2023',
+      },
+      {
+        name: 'Community Wellbeing Hub',
+        category: 'Health and Wellbeing',
+        summary: 'Integrated support services providing mental health resources and wellness programmes for families.',
+        grant: '£12,800',
+        year: '2024',
+      },
+    ],
   },
   {
-    name: 'Supporting Humanity',
+    id: 'birmingham',
     city: 'Birmingham',
-    category: 'Community Support',
-    summary: 'Support for practical welfare and community outreach delivery.',
     position: [52.4862, -1.8904],
+    projects: [
+      {
+        name: 'Supporting Humanity',
+        category: 'Community Support',
+        summary: 'Support for practical welfare and community outreach delivery across the Midlands.',
+        grant: '£32,000',
+        year: '2024',
+      },
+      {
+        name: 'Community Kitchen',
+        category: 'Welfare',
+        summary: 'Weekly hot-meal programme supporting low-income families and rough sleepers through local community centres.',
+        grant: '£12,500',
+        year: '2023',
+      },
+      {
+        name: 'Neighbourhood Mentoring',
+        category: 'Youth Development',
+        summary: 'One-to-one mentoring for teenagers in underserved areas, pairing them with trained community volunteers.',
+        grant: '£9,000',
+        year: '2023',
+      },
+      {
+        name: 'Education Excellence Programme',
+        category: 'Education',
+        summary: 'Comprehensive support for students pursuing higher education with scholarships and guidance.',
+        grant: '£15,300',
+        year: '2024',
+      },
+      {
+        name: 'Health Access Initiative',
+        category: 'Health and Wellbeing',
+        summary: 'Removing barriers to healthcare access for vulnerable populations through community partnerships.',
+        grant: '£11,200',
+        year: '2023',
+      },
+    ],
   },
   {
-    name: 'Sacred',
+    id: 'london',
     city: 'London',
-    category: 'Spiritual Programmes',
-    summary: 'Support for guided programmes focused on faith and reflection.',
     position: [51.5072, -0.1276],
+    projects: [
+      {
+        name: 'Sacred',
+        category: 'Spiritual Programmes',
+        summary: 'Support for guided programmes focused on faith, reflection, and rites of passage.',
+        grant: '£28,000',
+        year: '2024',
+      },
+      {
+        name: 'Urban Da\'wah Collective',
+        category: 'Outreach',
+        summary: 'Community-led outreach initiatives connecting diverse audiences through open days, talks, and shared meals.',
+        grant: '£15,000',
+        year: '2024',
+      },
+      {
+        name: 'London Youth Empowerment',
+        category: 'Youth Development',
+        summary: 'Leadership development and career mentoring for young people from disadvantaged backgrounds.',
+        grant: '£19,500',
+        year: '2024',
+      },
+      {
+        name: 'Community Centre Support',
+        category: 'Community Support',
+        summary: 'Funding for community spaces providing safe environments and services across London neighbourhoods.',
+        grant: '£13,800',
+        year: '2023',
+      },
+      {
+        name: 'Digital Inclusion Project',
+        category: 'Education',
+        summary: 'Digital literacy and tech skills training for underrepresented communities in East London.',
+        grant: '£10,700',
+        year: '2024',
+      },
+    ],
   },
   {
-    name: 'Community Forum Policy',
+    id: 'leicester',
     city: 'Leicester',
-    category: 'Civic Engagement',
-    summary: 'Investment in dialogue and policy participation for local communities.',
     position: [52.6369, -1.1398],
+    projects: [
+      {
+        name: 'Community Forum Policy',
+        category: 'Civic Engagement',
+        summary: 'Investment in dialogue and policy participation for local communities across the East Midlands.',
+        grant: '£22,000',
+        year: '2024',
+      },
+      {
+        name: 'Leicester Welfare Alliance',
+        category: 'Welfare',
+        summary: 'Multi-agency approach to addressing poverty and providing emergency relief for families in crisis.',
+        grant: '£17,600',
+        year: '2024',
+      },
+      {
+        name: 'Youth Aspiration Project',
+        category: 'Youth Development',
+        summary: 'Mentoring and career guidance helping young people achieve their educational and professional goals.',
+        grant: '£14,400',
+        year: '2023',
+      },
+      {
+        name: 'Cultural Integration Initiative',
+        category: 'Community Support',
+        summary: 'Programmes fostering understanding and cohesion between diverse communities in Leicester.',
+        grant: '£11,900',
+        year: '2024',
+      },
+      {
+        name: 'Refugee Support Services',
+        category: 'Welfare',
+        summary: 'Comprehensive support for asylum seekers and refugees including language classes and job training.',
+        grant: '£16,200',
+        year: '2023',
+      },
+    ],
   },
   {
-    name: 'Sapience Institute',
+    id: 'cardiff',
     city: 'Cardiff',
-    category: 'Research',
-    summary: 'Research-led initiatives supporting informed community development.',
     position: [51.4816, -3.1791],
+    projects: [
+      {
+        name: 'Sapience Institute',
+        category: 'Research',
+        summary: 'Research-led initiatives supporting informed community development and evidence-based policy work.',
+        grant: '£36,000',
+        year: '2024',
+      },
+      {
+        name: 'Civic Voices',
+        category: 'Civic Engagement',
+        summary: 'A dedicated strand funding local roundtables and policy briefings on issues affecting Welsh Muslim communities.',
+        grant: '£11,500',
+        year: '2023',
+      },
+      {
+        name: 'Cardiff Youth Services',
+        category: 'Youth Development',
+        summary: 'Comprehensive youth programmes providing support, activities, and pathways to employment.',
+        grant: '£18,700',
+        year: '2024',
+      },
+      {
+        name: 'Community Health Programme',
+        category: 'Health and Wellbeing',
+        summary: 'Health awareness campaigns and fitness initiatives for underserved populations in Wales.',
+        grant: '£13,400',
+        year: '2023',
+      },
+      {
+        name: 'Education Support Fund',
+        category: 'Education',
+        summary: 'Scholarships and tutoring support helping disadvantaged students achieve educational excellence.',
+        grant: '£9,600',
+        year: '2024',
+      },
+    ],
   },
   {
-    name: 'Spinney Hill Recovery',
+    id: 'glasgow',
     city: 'Glasgow',
-    category: 'Health and Recovery',
-    summary: 'Targeted support for addiction recovery and resilience services.',
     position: [55.8642, -4.2518],
+    projects: [
+      {
+        name: 'Spinney Hill Recovery',
+        category: 'Health and Recovery',
+        summary: 'Targeted support for addiction recovery and resilience services across Scotland.',
+        grant: '£26,500',
+        year: '2024',
+      },
+      {
+        name: 'Resilience Outreach',
+        category: 'Welfare',
+        summary: 'Community outreach focused on mental-health first-aid and crisis referral pathways in Glasgow city.',
+        grant: '£14,000',
+        year: '2023',
+      },
+      {
+        name: 'Scottish Youth Initiative',
+        category: 'Youth Development',
+        summary: 'Holistic support for young people including mentoring, training, and community engagement.',
+        grant: '£16,300',
+        year: '2024',
+      },
+      {
+        name: 'Community Cohesion Project',
+        category: 'Community Support',
+        summary: 'Building stronger communities through cultural events, dialogue, and shared activities.',
+        grant: '£12,100',
+        year: '2023',
+      },
+      {
+        name: 'Learning and Skills Hub',
+        category: 'Education',
+        summary: 'Adult education and skills development programmes for workforce development and career progression.',
+        grant: '£15,800',
+        year: '2024',
+      },
+    ],
   },
 ];
 
@@ -240,7 +452,7 @@ const causeAreas = [
 ];
 
 function MapCameraController({
-  selectedProject,
+  selectedLocation,
   onZoomSettled,
   overviewCenter,
   overviewZoom,
@@ -255,8 +467,8 @@ function MapCameraController({
       timerRef.current = null;
     }
 
-    if (selectedProject) {
-      map.flyTo(selectedProject.position, projectFocusZoom, {
+    if (selectedLocation) {
+      map.flyTo(selectedLocation.position, projectFocusZoom, {
         animate: true,
         duration: 1.25,
       });
@@ -281,15 +493,16 @@ function MapCameraController({
     overviewCenter,
     overviewZoom,
     projectFocusZoom,
-    selectedProject,
+    selectedLocation,
   ]);
 
   return null;
 }
 
 function ImpactPage() {
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
+  const projectPanelBodyRef = useRef(null);
   const [selectedCause, setSelectedCause] = useState(null);
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
   const impactAreasRef = useRef(null);
@@ -318,21 +531,24 @@ function ImpactPage() {
 
   useEffect(() => {
     setIsProjectPanelOpen(false);
-    setSelectedProject(null);
+    setSelectedLocation(null);
   }, [isMobileMap]);
 
   const onZoomSettled = useCallback(() => {
     setIsProjectPanelOpen(true);
+    if (projectPanelBodyRef.current) {
+      projectPanelBodyRef.current.scrollTop = 0;
+    }
   }, []);
 
-  const onSelectProject = useCallback((project) => {
+  const onSelectLocation = useCallback((location) => {
     setIsProjectPanelOpen(false);
-    setSelectedProject(project);
+    setSelectedLocation(location);
   }, []);
 
   const onCloseProjectPanel = useCallback(() => {
     setIsProjectPanelOpen(false);
-    setSelectedProject(null);
+    setSelectedLocation(null);
   }, []);
 
   const onSelectCause = useCallback((cause) => {
@@ -343,6 +559,24 @@ function ImpactPage() {
   const onCloseCausePanel = useCallback(() => {
     setIsCausePanelOpen(false);
   }, []);
+
+  // Lock body scroll when project panel is open
+  useEffect(() => {
+    if (isProjectPanelOpen) {
+      const previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('impact-project-panel-open');
+
+      return () => {
+        document.body.style.overflow = previousOverflow;
+        document.body.classList.remove('impact-project-panel-open');
+      };
+    }
+
+    document.body.classList.remove('impact-project-panel-open');
+
+    return undefined;
+  }, [isProjectPanelOpen]);
 
   useEffect(() => {
     if (!isCausePanelOpen) {
@@ -425,20 +659,20 @@ function ImpactPage() {
             />
 
             <MapCameraController
-              selectedProject={selectedProject}
+              selectedLocation={selectedLocation}
               onZoomSettled={onZoomSettled}
               overviewCenter={activeOverview.center}
               overviewZoom={activeOverview.zoom}
               projectFocusZoom={activeZoom.projectFocus}
             />
 
-            {projects.map((project) => (
+            {locations.map((location) => (
               <Marker
-                key={project.name}
-                position={project.position}
-                icon={selectedProject?.name === project.name ? checkpointIconActive : checkpointIcon}
+                key={location.id}
+                position={location.position}
+                icon={selectedLocation?.id === location.id ? checkpointIconActive : checkpointIcon}
                 eventHandlers={{
-                  click: () => onSelectProject(project),
+                  click: () => onSelectLocation(location),
                 }}
               />
             ))}
@@ -466,7 +700,7 @@ function ImpactPage() {
             role="dialog"
             aria-modal="true"
           >
-            {selectedProject && (
+            {selectedLocation && (
               <>
                 <button
                   type="button"
@@ -476,10 +710,36 @@ function ImpactPage() {
                 >
                   Close
                 </button>
-                <p className="impact-project-panel__eyebrow">{selectedProject.city}</p>
-                <h2>{selectedProject.name}</h2>
-                <p className="impact-project-panel__tag">{selectedProject.category}</p>
-                <p>{selectedProject.summary}</p>
+
+                <header className="impact-project-panel__header">
+                  <p className="impact-project-panel__eyebrow">{selectedLocation.city}</p>
+                  <h2>Projects in {selectedLocation.city}</h2>
+                  <p className="impact-project-panel__count">
+                    {selectedLocation.projects.length}
+                    {' '}
+                    {selectedLocation.projects.length === 1 ? 'funded project' : 'funded projects'}
+                  </p>
+                </header>
+
+                <div className="impact-project-panel__body" ref={projectPanelBodyRef}>
+                  {selectedLocation.projects.map((project) => (
+                    <article key={project.name} className="impact-project-card">
+                      <span className="impact-project-card__tag">{project.category}</span>
+                      <h3 className="impact-project-card__title">{project.name}</h3>
+                      <p className="impact-project-card__summary">{project.summary}</p>
+                      <dl className="impact-project-card__meta">
+                        <div>
+                          <dt>Grant</dt>
+                          <dd>{project.grant}</dd>
+                        </div>
+                        <div>
+                          <dt>Year</dt>
+                          <dd>{project.year}</dd>
+                        </div>
+                      </dl>
+                    </article>
+                  ))}
+                </div>
               </>
             )}
           </aside>
@@ -496,7 +756,7 @@ function ImpactPage() {
             </p>
             <button type="button" className="impact-btn">Download Now</button>
           </div>
-          <div className="impact-placeholder impact-eligibility-image" aria-hidden="true">Image</div>
+          <img className="impact-placeholder impact-eligibility-image" src={placeholderImg} alt="" aria-hidden="true" />
         </div>
       </section>
 
@@ -513,7 +773,7 @@ function ImpactPage() {
                 key={project.title}
                 className={`impact-funded-row ${index % 2 !== 0 ? 'impact-funded-row--reverse' : ''}`}
               >
-                <div className="impact-placeholder impact-funded-image" aria-hidden="true">Image</div>
+                <img className="impact-placeholder impact-funded-image" src={placeholderImg} alt="" aria-hidden="true" />
                 <div className="impact-funded-copy">
                   <h3>{project.title}</h3>
                   <p>{project.text}</p>

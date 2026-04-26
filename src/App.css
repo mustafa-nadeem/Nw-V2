@@ -30,7 +30,7 @@ body {
 }
 
 .section {
-  padding: 120px 28px;
+  padding: 160px 28px 240px 28px;
 }
 
 #learn,
@@ -429,8 +429,6 @@ h3 {
 }
 
 .impact {
-  padding-top: 120px;
-  padding-bottom: 140px;
   background: #FFF9F3;
 }
 

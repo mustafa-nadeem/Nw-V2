@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './AuroraTimeline.css';
+import placeholderImg from '../assets/placeholder.jpg';
 
 const milestones = [
   {
@@ -192,7 +193,7 @@ function AuroraTimeline() {
                     <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                       {milestone.monthYear}
                     </p>
-                    <div className="aurora-timeline__image-placeholder" />
+                    <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
                     <h3 className="aurora-timeline__title">{milestone.title}</h3>
                     <p className="aurora-timeline__body">{milestone.body}</p>
                   </article>
@@ -217,7 +218,7 @@ function AuroraTimeline() {
                       <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                         {milestone.monthYear}
                       </p>
-                      <div className="aurora-timeline__image-placeholder" />
+                      <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
                       <h3 className="aurora-timeline__title">{milestone.title}</h3>
                       <p className="aurora-timeline__body">{milestone.body}</p>
                     </article>
@@ -241,7 +242,7 @@ function AuroraTimeline() {
                       <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                         {milestone.monthYear}
                       </p>
-                      <div className="aurora-timeline__image-placeholder" />
+                      <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
                       <h3 className="aurora-timeline__title">{milestone.title}</h3>
                       <p className="aurora-timeline__body">{milestone.body}</p>
                     </article>

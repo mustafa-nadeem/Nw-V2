@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ImpactPage from './pages/ImpactPage';
-import LearnMorePage from './pages/LearnMorePage';
+import { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import ImpactPage from "./pages/ImpactPage";
+import LearnMorePage from "./pages/LearnMorePage";
+import ConnectPage from "./pages/ConnectPage";
 
 function App() {
   const location = useLocation();
@@ -17,13 +18,13 @@ function App() {
       return;
     }
 
-    const id = location.hash.replace('#', '');
+    const id = location.hash.replace("#", "");
 
     const scrollToHash = (retries = 40) => {
       const target = document.getElementById(id);
 
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/impact" element={<ImpactPage />} />
         <Route path="/learn-more" element={<LearnMorePage />} />
+        <Route path="/connect" element={<ConnectPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './WhyWaqfSection.css';
+import placeholderImg from '../assets/placeholder.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -206,7 +207,9 @@ function WhyWaqfSection() {
             <div className="why-waqf-panel-overlay" aria-hidden="true" />
 
             <div className="why-waqf-panel-inner">
-              <div className="why-waqf-panel-media" aria-label={slide.alt} />
+              <div className="why-waqf-panel-media" aria-hidden="true">
+                <img src={placeholderImg} alt="" />
+              </div>
 
               <div className="why-waqf-panel-content">
                 <h3>{slide.title}</h3>

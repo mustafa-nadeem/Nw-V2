@@ -81,7 +81,7 @@ function Navbar() {
           <Link to="/about" className="navbar-link" onClick={closeMenu}>About Us</Link>
           <Link to="/impact" className="navbar-link" onClick={closeMenu}>Our Impact</Link>
           <Link to="/learn-more" className="navbar-link" onClick={closeMenu}>Learn More</Link>
-          <a href="#connect" className="navbar-link" onClick={navigateToHomeSection('connect')}>Connect With Us</a>
+          <Link to="/connect" className="navbar-link" onClick={closeMenu}>Connect With Us</Link>
         </div>
 
         <div className="navbar-actions">

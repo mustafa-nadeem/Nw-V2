@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import placeholderImg from '../assets/placeholder.jpg';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
@@ -114,14 +115,10 @@ function AboutPage() {
     const stageEl = worksStageRef.current;
     if (!stageEl) return undefined;
 
-    const isMobile = window.matchMedia('(max-width: 520px)').matches;
-    if (isMobile) {
-      setCycleStep(4);
-      return undefined;
-    }
-
     const triggerId = 'about-works-cycle-pin';
     const earlyTriggerId = 'about-works-cycle-early';
+    const isMobile = window.matchMedia('(max-width: 520px)').matches;
+    const pinStart = isMobile ? 'bottom bottom-=120' : 'bottom bottom';
 
     ScrollTrigger.create({
       id: earlyTriggerId,
@@ -135,7 +132,7 @@ function AboutPage() {
     const trigger = ScrollTrigger.create({
       id: triggerId,
       trigger: stageEl,
-      start: 'bottom bottom',
+      start: pinStart,
       end: () => '+=' + window.innerHeight * 3,
       pin: true,
       pinSpacing: true,
@@ -385,7 +382,7 @@ function AboutPage() {
                     </h2>
                     <p className="about-pvm-body">{slide.body}</p>
                     <div className="about-pvm-img">
-                      <span>Image</span>
+                      <img src={placeholderImg} alt="" aria-hidden="true" />
                     </div>
                   </div>
                 </div>

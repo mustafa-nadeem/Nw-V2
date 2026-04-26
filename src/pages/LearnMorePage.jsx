@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import './LearnMorePage.css';
+import placeholderImg from '../assets/placeholder.jpg';
 
 const roleCards = [
   {
@@ -205,7 +206,7 @@ function LearnMorePage() {
                   className={`learn-role-media-item ${activeRole === index ? 'is-active' : ''}`}
                   aria-hidden={activeRole !== index}
                 >
-                  <span>{card.mediaLabel}</span>
+                  <img src={placeholderImg} alt="" aria-hidden="true" />
                 </div>
               ))}
             </div>
@@ -262,20 +263,7 @@ function LearnMorePage() {
               <p className="learn-workshop-fineprint">Unsubscribe anytime</p>
             </form>
           </div>
-          <div className="learn-workshop-media" aria-hidden="true">
-            <svg className="learn-workshop-lines" viewBox="0 0 520 340" preserveAspectRatio="none">
-              <path d="M60 70 L220 110 L330 60 L470 150" />
-              <path d="M80 210 L230 250 L360 290" />
-              <path d="M330 60 L360 290" />
-            </svg>
-            <span className="learn-workshop-tile learn-workshop-tile--main" />
-            <span className="learn-workshop-tile learn-workshop-tile--sub-a" />
-            <span className="learn-workshop-tile learn-workshop-tile--sub-b" />
-            <span className="learn-workshop-accent learn-workshop-accent--1" />
-            <span className="learn-workshop-accent learn-workshop-accent--2" />
-            <span className="learn-workshop-dot learn-workshop-dot--1" />
-            <span className="learn-workshop-dot learn-workshop-dot--2" />
-          </div>
+          <img className="learn-workshop-media" src={placeholderImg} alt="" aria-hidden="true" />
         </div>
       </section>
 

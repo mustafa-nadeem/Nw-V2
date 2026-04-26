@@ -5,7 +5,7 @@
   width: 100%;
   min-height: 100vh;
   background: #ffffff;
-  padding: 144px 40px;
+  padding: 160px 40px;
   position: relative;
   overflow: visible;
 }
@@ -146,7 +146,7 @@
   width: min(100%, 860px);
   display: grid;
   grid-template-columns: minmax(220px, 420px) minmax(220px, 420px);
-  gap: 28px;
+  gap: 16px;
 }
 
 .aurora-timeline__column--left,
@@ -159,7 +159,7 @@
 }
 
 .aurora-timeline__milestone {
-  margin-bottom: 80px;
+  margin-bottom: 140px;
 }
 
 .about-page .aurora-timeline__year {
@@ -179,8 +179,10 @@
 .aurora-timeline__image-placeholder {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: #dfe1e6;
   margin-bottom: 16px;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px;
 }
 
 .about-page .aurora-timeline__title {
