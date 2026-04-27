@@ -72,7 +72,7 @@
 }
 
 .learn-page p {
-  color: #3f4654;
+  color: #2B346C;
   line-height: 1.62;
 }
 
@@ -199,7 +199,7 @@
   border: 0;
   background: transparent;
   font: inherit;
-  color: #6b7280;
+  color: #2B346C;
   padding: 0;
   display: flex;
   align-items: center;
@@ -270,7 +270,7 @@
 
 .learn-role-tab-panel p {
   font-size: 0.9rem;
-  color: #454d59;
+  color: #2B346C;
   max-width: 46ch;
 }
 
@@ -487,7 +487,7 @@
 
 .learn-workshop-fineprint {
   font-size: 0.8rem;
-  color: #cfd5e2 !important;
+  color: #ffffff !important;
   opacity: 1;
   margin-top: 2px;
 }
@@ -540,7 +540,7 @@
 
 .learn-policies-text p {
   font-size: 0.88rem;
-  color: #6b7280;
+  color: #2B346C;
   margin: 0;
 }
 
@@ -633,7 +633,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: #2B346C;
 }
 
 .learn-reports-header {
@@ -745,7 +745,7 @@
   background: transparent;
   font: inherit;
   font-size: 1rem;
-  color: #7a8290;
+  color: #2B346C;
   padding: 10px 2px;
   cursor: pointer;
   position: relative;
@@ -797,8 +797,8 @@
   background: transparent;
   font: inherit;
   font-size: 1rem;
-  font-weight: 500;
-  color: #6b7280;
+  font-weight: 600;
+  color: #2B346C;
   padding: 22px 28px;
   display: grid;
   grid-template-columns: 1fr auto;
