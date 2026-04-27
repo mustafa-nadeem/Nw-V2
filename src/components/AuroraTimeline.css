@@ -145,8 +145,8 @@
 .aurora-timeline__columns {
   width: min(100%, 860px);
   display: grid;
-  grid-template-columns: minmax(220px, 420px) minmax(220px, 420px);
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 72px;
 }
 
 .aurora-timeline__column--left,
@@ -212,7 +212,8 @@
   }
 
   .aurora-timeline__columns {
-    grid-template-columns: minmax(240px, 440px) minmax(240px, 440px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px;
   }
 }
 

@@ -80,7 +80,7 @@
 
 .why-waqf-panel-media {
   width: 100%;
-  height: min(65vh, 680px);
+  height: min(52vh, 520px);
   border-radius: 20px;
   overflow: hidden;
 }
@@ -94,6 +94,24 @@
 
 .why-waqf-panel-content {
   max-width: 520px;
+}
+
+.why-waqf-panel-kicker {
+  margin: 0 0 12px;
+  color: rgba(43, 52, 108, 0.78);
+  font-size: 0.76rem;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.why-waqf-scroll--show-kicker .why-waqf-panel-kicker {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .why-waqf-panel-content h3 {
@@ -205,6 +223,13 @@
 
   .why-waqf-panel-content p {
     order: 3;
+  }
+
+  .why-waqf-panel-kicker {
+    order: 0;
+    margin-bottom: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.13em;
   }
 
   .why-waqf-panel-media {

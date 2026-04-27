@@ -1,9 +1,4 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './FundingDiagram.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const PersonLockIcon = () => (
   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -35,82 +30,32 @@ const streams = [
   {
     key: 'private',
     color: '#01ACA6',
-    bg: '#BFE3E1',
     top: '44%',
-    factor: 0.72,
+    factor: 0.7,
     label: 'Internal Private Waqf',
     Icon: PersonLockIcon,
   },
   {
     key: 'business',
     color: '#E27D50',
-    bg: '#F4DDD1',
     top: '66%',
-    factor: 0.8,
+    factor: 0.76,
     label: 'Monthly Business Donations',
     Icon: HandsExchangeIcon,
   },
   {
     key: 'gift',
     color: '#2B346C',
-    bg: '#D7DEEF',
     top: '88%',
-    factor: 0.72,
+    factor: 0.7,
     label: 'Gift Aid',
     Icon: GiftIcon,
   },
 ];
 
-function FundingDiagram() {
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    const node = rootRef.current;
-    if (!node) return undefined;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return undefined;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: node,
-          start: 'top 80%',
-          once: true,
-        },
-        defaults: { ease: 'power3.out' },
-      });
-
-      tl.from('.funding-ring', {
-        scale: 0.4,
-        opacity: 0,
-        duration: 0.75,
-        stagger: 0.12,
-        ease: 'back.out(1.4)',
-        transformOrigin: '50% 50%',
-      })
-        .from(
-          '.funding-center',
-          { y: 14, opacity: 0, duration: 0.5 },
-          '-=0.25'
-        )
-        .from(
-          '.funding-stream',
-          { x: -40, opacity: 0, duration: 0.6, stagger: 0.14 },
-          '-=0.35'
-        )
-        .from(
-          '.funding-icon svg',
-          { scale: 0, opacity: 0, duration: 0.4, stagger: 0.1, ease: 'back.out(2)' },
-          '-=0.5'
-        );
-    }, node);
-
-    return () => ctx.revert();
-  }, []);
-
+function FundingDiagram({ step = 0 }) {
   return (
-    <div className="funding-diagram" ref={rootRef}>
+    <div className={`funding-diagram is-step-${step}`}>
       <div className="funding-orbit">
         <div className="funding-circle-stage">
           <div className="funding-ring funding-ring--outer" aria-hidden="true" />
@@ -123,18 +68,18 @@ function FundingDiagram() {
         </div>
 
         <ul className="funding-streams">
-          {streams.map(({ key, color, bg, top, factor, label, Icon }) => (
+          {streams.map(({ key, color, top, factor, label, Icon }, index) => (
             <li
               key={key}
-              className={`funding-stream funding-stream--${key}`}
+              className={`funding-stream funding-stream--${key}${step === index + 1 ? ' is-active' : ''}`}
               style={{
-                '--arrow-bg': bg,
                 '--arrow-color': color,
                 '--stream-top': top,
                 '--stream-factor': factor,
               }}
             >
-              <div className="funding-arrow" aria-hidden="true">
+              <div className="funding-stream-track" aria-hidden="true">
+                <span className="funding-stream-line" />
                 <span className="funding-icon">
                   <Icon />
                 </span>

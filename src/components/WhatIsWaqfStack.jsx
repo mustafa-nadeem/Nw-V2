@@ -5,10 +5,10 @@ import './WhatIsWaqfStack.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SCROLL_PER_CARD = 400;
+const SCROLL_PER_CARD = 560;
 const HEADING_SCROLL = 500;
-const LAST_CARD_HOLD_SCROLL = 200;
-const MOBILE_LAST_CARD_HOLD_SCROLL = 160;
+const LAST_CARD_HOLD_SCROLL = 340;
+const MOBILE_LAST_CARD_HOLD_SCROLL = 280;
 
 const cards = [
   {
@@ -140,7 +140,7 @@ function WhatIsWaqfStack() {
         gsap.set(headingWords, { autoAlpha: 1, y: 0 });
         gsap.set(descriptionEl, { autoAlpha: 1, y: 0 });
 
-        const totalScroll = (cardEls.length - 1) * 360 + MOBILE_LAST_CARD_HOLD_SCROLL;
+        const totalScroll = (cardEls.length - 1) * 460 + MOBILE_LAST_CARD_HOLD_SCROLL;
 
         const navbarOffset = 140;
 
@@ -166,7 +166,7 @@ function WhatIsWaqfStack() {
           mobileTimeline.to(card, { y: 0, duration: 1 });
         });
 
-        mobileTimeline.to({}, { duration: 0.45 });
+        mobileTimeline.to({}, { duration: 0.7 });
 
         return;
       }
@@ -299,7 +299,7 @@ function WhatIsWaqfStack() {
         timeline.to(cardEl, { y: 0, duration: 1 });
       });
 
-      timeline.to({}, { duration: 0.5 });
+      timeline.to({}, { duration: 0.85 });
     }, sectionEl);
 
     return () => {

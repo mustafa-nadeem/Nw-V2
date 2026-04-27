@@ -1,100 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
 import placeholderImg from '../assets/placeholder.jpg';
-import 'leaflet/dist/leaflet.css';
-import { GeoJSON, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import ukMapImage from '../assets/uk.jpg';
 import DigitalReelNumber from '../components/DigitalReelNumber';
 import './ImpactPage.css';
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
-
-const ukOverview = {
-  center: [50.5, -2.75],
-  zoom: 5.95,
+const UK_IMAGE_BOUNDS = {
+  north: 59.35,
+  south: 49.75,
+  west: -8.9,
+  east: 2.2,
 };
 
-const ukOverviewMobile = {
-  center: [54.55, -3.35],
-  zoom: 5.35,
-};
+function projectLatLngToImagePercent([lat, lng]) {
+  const x = ((lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west)) * 100;
+  const y = ((UK_IMAGE_BOUNDS.north - lat) / (UK_IMAGE_BOUNDS.north - UK_IMAGE_BOUNDS.south)) * 100;
+  return {
+    x: Math.min(100, Math.max(0, x)),
+    y: Math.min(100, Math.max(0, y)),
+  };
+}
 
-const mapZoom = {
-  min: 5.2,
-  max: 9.4,
-  projectFocus: 8.2,
-};
-
-const mapZoomMobile = {
-  min: 5.1,
-  max: 9.4,
-  projectFocus: 8,
-};
-
-const ukViewBounds = [
-  [49.75, -8.9],
-  [59.35, 2.2],
-];
-
-const OSM_SEA_COLOR = '#aad3df';
-
-const CONTINENTAL_EUROPE_MASK = {
-  type: 'Feature',
-  properties: { name: 'continental-europe-mask' },
-  geometry: {
-    type: 'Polygon',
-    coordinates: [
-      [
-        [-180, -85],
-        [180, -85],
-        [180, 85],
-        [-180, 85],
-        [-180, -85],
-      ],
-      [
-        [-12, 59.5],
-        [2.5, 59.5],
-        [2.5, 53],
-        [2.38, 52.3],
-        [2.35, 51.82],
-        [2.26, 51.34],
-        [2.12, 51.02],
-        [1.6, 50.74],
-        [0.42, 50.5],
-        [-0.9, 50.3],
-        [-2, 50.22],
-        [-3.3, 50.02],
-        [-4.98, 49.76],
-        [-6.65, 49.58],
-        [-8.12, 49.54],
-        [-10, 49.58],
-        [-12, 49.7],
-        [-12, 59.5],
-      ],
-    ],
-  },
-};
-
-
-const checkpointIcon = L.divIcon({
-  className: 'impact-checkpoint-marker',
-  html: '<span class="impact-checkpoint-core" aria-hidden="true"></span>',
-  iconSize: [18, 18],
-  iconAnchor: [9, 9],
-});
-
-const checkpointIconActive = L.divIcon({
-  className: 'impact-checkpoint-marker impact-checkpoint-marker--active',
-  html: '<span class="impact-checkpoint-core" aria-hidden="true"></span>',
-  iconSize: [18, 18],
-  iconAnchor: [9, 9],
-});
 
 const locations = [
   {
@@ -451,54 +376,6 @@ const causeAreas = [
   },
 ];
 
-function MapCameraController({
-  selectedLocation,
-  onZoomSettled,
-  overviewCenter,
-  overviewZoom,
-  projectFocusZoom,
-}) {
-  const map = useMap();
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    if (timerRef.current) {
-      window.clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-
-    if (selectedLocation) {
-      map.flyTo(selectedLocation.position, projectFocusZoom, {
-        animate: true,
-        duration: 1.25,
-      });
-
-      timerRef.current = window.setTimeout(() => {
-        onZoomSettled();
-      }, 860);
-    } else {
-      map.setView(overviewCenter, overviewZoom, {
-        animate: false,
-      });
-    }
-
-    return () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-    };
-  }, [
-    map,
-    onZoomSettled,
-    overviewCenter,
-    overviewZoom,
-    projectFocusZoom,
-    selectedLocation,
-  ]);
-
-  return null;
-}
-
 function ImpactPage() {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
@@ -507,6 +384,8 @@ function ImpactPage() {
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
   const impactAreasRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
+  const zoomTimerRef = useRef(null);
+  const [staticMapView, setStaticMapView] = useState({ scale: 1, tx: 0, ty: 0 });
   const [isMobileMap, setIsMobileMap] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches,
   );
@@ -526,20 +405,51 @@ function ImpactPage() {
     return () => media.removeListener(update);
   }, []);
 
-  const activeOverview = isMobileMap ? ukOverviewMobile : ukOverview;
-  const activeZoom = isMobileMap ? mapZoomMobile : mapZoom;
-
-  useEffect(() => {
-    setIsProjectPanelOpen(false);
-    setSelectedLocation(null);
-  }, [isMobileMap]);
-
   const onZoomSettled = useCallback(() => {
     setIsProjectPanelOpen(true);
     if (projectPanelBodyRef.current) {
       projectPanelBodyRef.current.scrollTop = 0;
     }
   }, []);
+
+  useEffect(() => {
+    if (zoomTimerRef.current) {
+      window.clearTimeout(zoomTimerRef.current);
+      zoomTimerRef.current = null;
+    }
+    return () => {
+      if (zoomTimerRef.current) {
+        window.clearTimeout(zoomTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsProjectPanelOpen(false);
+    setSelectedLocation(null);
+    setStaticMapView({ scale: 1, tx: 0, ty: 0 });
+  }, [isMobileMap]);
+
+  useEffect(() => {
+    if (zoomTimerRef.current) {
+      window.clearTimeout(zoomTimerRef.current);
+      zoomTimerRef.current = null;
+    }
+
+    if (selectedLocation) {
+      const point = projectLatLngToImagePercent(selectedLocation.position);
+      const scale = isMobileMap ? 1.72 : 2.1;
+      const tx = (50 - point.x) * scale;
+      const ty = (53 - point.y) * scale;
+      setStaticMapView({ scale, tx, ty });
+
+      zoomTimerRef.current = window.setTimeout(() => {
+        onZoomSettled();
+      }, 860);
+    } else {
+      setStaticMapView({ scale: 1, tx: 0, ty: 0 });
+    }
+  }, [isMobileMap, onZoomSettled, selectedLocation]);
 
   const onSelectLocation = useCallback((location) => {
     setIsProjectPanelOpen(false);
@@ -620,63 +530,36 @@ function ImpactPage() {
     <div className="impact-page" id="impact-page">
       <section className="impact-section impact-map" aria-labelledby="impact-map-title">
         <div className="impact-map-stage" role="region" aria-label="UK projects map">
-          <MapContainer
-            key={isMobileMap ? 'mobile' : 'desktop'}
-            center={activeOverview.center}
-            zoom={activeOverview.zoom}
-            minZoom={activeZoom.min}
-            maxZoom={activeZoom.max}
-            scrollWheelZoom={false}
-            dragging={false}
-            doubleClickZoom={false}
-            boxZoom={false}
-            keyboard={false}
-            touchZoom={false}
-            zoomControl={false}
-            attributionControl={false}
-            maxBounds={ukViewBounds}
-            maxBoundsViscosity={1}
-            zoomSnap={0.05}
-            className="impact-map-canvas"
+          <div
+            className="impact-static-map"
+            style={{
+              '--static-map-scale': staticMapView.scale,
+              '--static-map-tx': `${staticMapView.tx}%`,
+              '--static-map-ty': `${staticMapView.ty}%`,
+            }}
           >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              noWrap
-            />
-
-            <GeoJSON
-              key={isMobileMap ? 'europe-mask-mobile' : 'europe-mask-desktop'}
-              data={CONTINENTAL_EUROPE_MASK}
-              style={{
-                fillColor: OSM_SEA_COLOR,
-                fillOpacity: 1,
-                color: OSM_SEA_COLOR,
-                weight: 0,
-                stroke: false,
-              }}
-              interactive={false}
-            />
-
-            <MapCameraController
-              selectedLocation={selectedLocation}
-              onZoomSettled={onZoomSettled}
-              overviewCenter={activeOverview.center}
-              overviewZoom={activeOverview.zoom}
-              projectFocusZoom={activeZoom.projectFocus}
-            />
-
-            {locations.map((location) => (
-              <Marker
-                key={location.id}
-                position={location.position}
-                icon={selectedLocation?.id === location.id ? checkpointIconActive : checkpointIcon}
-                eventHandlers={{
-                  click: () => onSelectLocation(location),
-                }}
-              />
-            ))}
-          </MapContainer>
+            <div className="impact-static-map__inner">
+              <img src={ukMapImage} alt="" aria-hidden="true" className="impact-static-map__image" />
+              <div className="impact-static-map__markers" aria-hidden="false">
+                {locations.map((location) => {
+                  const point = projectLatLngToImagePercent(location.position);
+                  const isActive = selectedLocation?.id === location.id;
+                  return (
+                    <button
+                      key={location.id}
+                      type="button"
+                      className={`impact-checkpoint-marker impact-checkpoint-marker--static${isActive ? ' impact-checkpoint-marker--active' : ''}`}
+                      style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                      onClick={() => onSelectLocation(location)}
+                      aria-label={`View projects in ${location.city}`}
+                    >
+                      <span className="impact-checkpoint-core" aria-hidden="true" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
 
           <div className="impact-map-overlay">
             <div className="impact-shell impact-shell-narrow">

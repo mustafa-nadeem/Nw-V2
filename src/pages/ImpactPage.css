@@ -60,16 +60,35 @@
   overflow: hidden;
 }
 
-.impact-map-canvas {
+.impact-static-map {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
-.impact-map-canvas.leaflet-container {
+.impact-static-map__inner {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  transform-origin: 50% 50%;
+  transform: translate(var(--static-map-tx, 0), var(--static-map-ty, 0)) scale(var(--static-map-scale, 1));
+  transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.impact-static-map__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   filter: saturate(1.08) contrast(1.06);
+}
+
+.impact-static-map__markers {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .impact-map-stage::before {
@@ -299,8 +318,20 @@
 }
 
 .impact-checkpoint-marker {
-  background: transparent;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  padding: 0;
   border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.impact-checkpoint-marker--static {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
 }
 
 .impact-checkpoint-core {
@@ -584,19 +615,19 @@
 }
 
 .impact-stat-card--donors { background: #2B346C; color: #f6fbff; }
-.impact-stat-card--donors .impact-stat-text { color: rgba(235, 242, 255, 0.72); }
+.impact-stat-card--donors .impact-stat-text { color: #ffffff; }
 
 .impact-stat-card--raised { background: #00ACA6; color: #f6fbff; }
-.impact-stat-card--raised .impact-stat-text { color: rgba(220, 255, 252, 0.72); }
+.impact-stat-card--raised .impact-stat-text { color: #ffffff; }
 
 .impact-stat-card--monthly { background: #2B346C; color: #f6fbff; }
-.impact-stat-card--monthly .impact-stat-text { color: rgba(235, 242, 255, 0.72); }
+.impact-stat-card--monthly .impact-stat-text { color: #ffffff; }
 
 .impact-stat-card--direct-debit { background: #00ACA6; color: #f6fbff; }
-.impact-stat-card--direct-debit .impact-stat-text { color: rgba(220, 255, 252, 0.72); }
+.impact-stat-card--direct-debit .impact-stat-text { color: #ffffff; }
 
 .impact-stat-card--focus { background: #FF8E54; color: #fefaf6; }
-.impact-stat-card--focus .impact-stat-text { color: rgba(255, 243, 231, 0.76); }
+.impact-stat-card--focus .impact-stat-text { color: #ffffff; }
 
 .impact-stat-card--left-tall {
   left: 0;
@@ -654,7 +685,9 @@
 
 .impact-stat-text {
   line-height: 1.6;
-  font-size: 1.02rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #ffffff;
   max-width: 42ch;
 }
 

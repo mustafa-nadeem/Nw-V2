@@ -211,6 +211,32 @@
   background: transparent;
 }
 
+.about-section.about-fullscreen[aria-labelledby="about-funding-title"] {
+  padding-top: 110px;
+  box-sizing: border-box;
+  display: block;
+  min-height: 0;
+}
+
+.about-funding-pin-stage {
+  min-height: calc(100vh - 12px);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 96px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.about-section.about-fullscreen[aria-labelledby="about-funding-title"] .about-shell-narrow {
+  max-width: 980px;
+}
+
+.about-section.about-fullscreen[aria-labelledby="about-funding-title"] .about-shell-narrow p {
+  max-width: 62ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .about-diagram-placeholder {
   margin: 36px auto 0;
   border-radius: 14px;
@@ -235,24 +261,28 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding-top: 56px;
+  box-sizing: border-box;
 }
 
 .cycle-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 30px;
 }
 
 .cycle-header p {
-  max-width: 68ch;
+  max-width: 64ch;
   margin: 0 auto;
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
 
 .cycle-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: 34px;
   align-items: center;
-  max-width: 1100px;
+  max-width: 980px;
   margin: 0 auto;
 }
 
@@ -263,7 +293,7 @@
 
 .cycle-svg {
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   height: auto;
   display: block;
   overflow: visible;
@@ -340,8 +370,8 @@
 /* ── Info Panel ── */
 .cycle-info-panel {
   position: relative;
-  padding-left: 32px;
-  min-height: 260px;
+  padding-left: 24px;
+  min-height: 216px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -360,11 +390,11 @@
 .cycle-info-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .cycle-info-num {
-  font-size: clamp(3.5rem, 5vw, 5.5rem);
+  font-size: clamp(3rem, 4.4vw, 4.4rem);
   font-weight: 600;
   line-height: 1;
   opacity: 0.18;
@@ -372,18 +402,18 @@
 }
 
 .cycle-info-title {
-  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-size: clamp(1.2rem, 1.7vw, 1.58rem);
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #1a1e2e;
-  line-height: 1.15;
+  line-height: 1.12;
 }
 
 .cycle-info-desc {
-  font-size: 1.05rem;
-  line-height: 1.65;
+  font-size: 0.92rem;
+  line-height: 1.42;
   color: #4a5060;
-  max-width: 38ch;
+  max-width: 33ch;
 }
 
 @keyframes cycleSlideUp {
@@ -548,9 +578,9 @@
 }
 
 .about-section.about-principles {
-  height: 100vh;
-  padding-top: 160px;
-  padding-bottom: 200px;
+  min-height: calc(100vh + 120px);
+  padding-top: 210px;
+  padding-bottom: 52px;
   align-items: stretch;
   background: #E9F6F8;
 }
@@ -569,7 +599,7 @@
 }
 
 .about-principles .about-principles-subhead {
-  margin: 6px 0 56px;
+  margin: 4px 0 26px;
   text-align: left;
   color: #5a6070;
   max-width: none;
@@ -578,8 +608,8 @@
 
 .about-principles-list {
   display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-rows: repeat(4, minmax(94px, 1fr));
+  gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
 }
@@ -590,7 +620,7 @@
   color: #fff;
   border: none;
   border-radius: 18px;
-  padding: 24px 36px;
+  padding: 14px 28px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -598,7 +628,7 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: 0;
+  min-height: 94px;
   overflow: hidden;
   will-change: transform;
 }
@@ -632,9 +662,11 @@
 }
 
 .about-principle-content h3 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   color: #fff;
   font-weight: 600;
+  font-size: clamp(1.2rem, 1.45vw, 1.48rem);
+  line-height: 1.16;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -642,6 +674,8 @@
   margin: 0;
   color: rgb(255, 255, 255);
   font-weight: 600;
+  font-size: clamp(0.94rem, 1.05vw, 1.02rem);
+  line-height: 1.42;
   max-width: none;
   transition: color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -688,6 +722,11 @@
   .about-principle-content p {
     font-size: clamp(0.96rem, 3.9vw, 1.08rem);
     line-height: 1.45;
+  }
+
+  .about-funding-pin-stage {
+    min-height: 0;
+    display: block;
   }
 }
 

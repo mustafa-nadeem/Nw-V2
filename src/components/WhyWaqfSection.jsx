@@ -47,6 +47,7 @@ const slides = [
 function WhyWaqfSection() {
   const sectionRef = useRef(null);
   const stageRef = useRef(null);
+  const headerBlockRef = useRef(null);
   const triggerIdsRef = useRef({
     pin: 'why-waqf-stage-pin',
     heading: 'why-waqf-heading-reveal',
@@ -55,6 +56,7 @@ function WhyWaqfSection() {
   const [isMobileLayout, setIsMobileLayout] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   );
+  const [showPanelKicker, setShowPanelKicker] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -84,6 +86,26 @@ function WhyWaqfSection() {
 
     media.addListener(update);
     return () => media.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    const headerBlock = headerBlockRef.current;
+    if (!headerBlock) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowPanelKicker(!entry.isIntersecting);
+      },
+      {
+        threshold: 0,
+        rootMargin: '-90px 0px 0px 0px',
+      }
+    );
+
+    observer.observe(headerBlock);
+    return () => observer.disconnect();
   }, []);
 
   useLayoutEffect(() => {
@@ -194,10 +216,10 @@ function WhyWaqfSection() {
   return (
     <section
       ref={sectionRef}
-      className={`why-waqf-scroll${prefersReducedMotion ? ' reduced-motion' : ''}`}
+      className={`why-waqf-scroll${prefersReducedMotion ? ' reduced-motion' : ''}${showPanelKicker ? ' why-waqf-scroll--show-kicker' : ''}`}
       aria-labelledby="why-waqf-scroll-title"
     >
-      <div className="why-waqf-header-block">
+      <div ref={headerBlockRef} className="why-waqf-header-block">
         <h2 id="why-waqf-scroll-title" className="why-waqf-heading">Why <span style={{color: '#01ACA6'}}>Waqf?</span></h2>
       </div>
 
@@ -212,6 +234,7 @@ function WhyWaqfSection() {
               </div>
 
               <div className="why-waqf-panel-content">
+                <p className="why-waqf-panel-kicker">Why Waqf?</p>
                 <h3>{slide.title}</h3>
                 <p>{slide.description}</p>
               </div>

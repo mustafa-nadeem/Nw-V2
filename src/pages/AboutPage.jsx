@@ -45,9 +45,13 @@ const principles = [
   },
 ];
 
-const PVM_SCROLL_PACING = 1.28;
-const PVM_LAST_PANEL_HOLD_SCROLL = 260;
-const PVM_LAST_PANEL_HOLD_STEP = 0.36;
+const PVM_SCROLL_PACING = 1.75;
+const PVM_LAST_PANEL_HOLD_SCROLL = 340;
+const PVM_INITIAL_HOLD_STEP = 0.42;
+const PVM_BETWEEN_PANEL_HOLD_STEP = 0.34;
+const PVM_LAST_PANEL_HOLD_STEP = 0.52;
+const FUNDING_SCROLL_PACING = 2.9;
+const FUNDING_LAST_STEP_HOLD = 0.45;
 
 const pvmSlides = [
   {
@@ -76,10 +80,13 @@ const pvmSlides = [
 function AboutPage() {
   const worksSectionRef = useRef(null);
   const worksStageRef = useRef(null);
+  const fundingSectionRef = useRef(null);
+  const fundingStageRef = useRef(null);
   const pvmSectionRef = useRef(null);
   const pvmStageRef = useRef(null);
   const [cycleStep, setCycleStep] = useState(1);
   const [hoverStep, setHoverStep] = useState(null);
+  const [fundingStep, setFundingStep] = useState(0);
   const prevStepRef = useRef(1);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isPvmMobile, setIsPvmMobile] = useState(
@@ -176,6 +183,59 @@ function AboutPage() {
   }, []);
 
   useLayoutEffect(() => {
+    if (!fundingSectionRef.current || !fundingStageRef.current) {
+      return undefined;
+    }
+
+    if (prefersReducedMotion) {
+      setFundingStep(3);
+      return undefined;
+    }
+
+    const fundingTriggerId = 'about-funding-stage-pin';
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 921px)', () => {
+      setFundingStep(0);
+      const totalSteps = 3 + FUNDING_LAST_STEP_HOLD;
+
+      const trigger = ScrollTrigger.create({
+        id: fundingTriggerId,
+        trigger: fundingStageRef.current,
+        start: 'top top',
+        end: () => '+=' + window.innerHeight * FUNDING_SCROLL_PACING,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.9,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const progress = self.progress * totalSteps;
+          let nextStep = 0;
+          if (progress >= 0.9) nextStep = 1;
+          if (progress >= 1.9) nextStep = 2;
+          if (progress >= 2.9) nextStep = 3;
+          setFundingStep((prev) => (prev === nextStep ? prev : nextStep));
+        },
+        onLeaveBack: () => setFundingStep(0),
+      });
+
+      return () => trigger.kill();
+    });
+
+    mm.add('(max-width: 920px)', () => {
+      setFundingStep(3);
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => {
+        if (t.vars?.id === fundingTriggerId) t.kill();
+      });
+      mm.revert();
+    };
+  }, [prefersReducedMotion]);
+
+  useLayoutEffect(() => {
     if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion || isPvmMobile) {
       return undefined;
     }
@@ -206,24 +266,41 @@ function AboutPage() {
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               const panelTransitionSteps = panels.length - 1;
-              const totalSteps = panelTransitionSteps + PVM_LAST_PANEL_HOLD_STEP;
+              const betweenHoldCount = Math.max(0, panelTransitionSteps - 1);
+              const totalSteps =
+                PVM_INITIAL_HOLD_STEP
+                + panelTransitionSteps
+                + (betweenHoldCount * PVM_BETWEEN_PANEL_HOLD_STEP)
+                + PVM_LAST_PANEL_HOLD_STEP;
               const progress = self.progress * totalSteps;
               panels.forEach((p) => p.setAttribute('data-overlap', 'false'));
+              let cursor = PVM_INITIAL_HOLD_STEP;
               for (let idx = 0; idx < panelTransitionSteps; idx += 1) {
-                if (progress > idx && progress < idx + 1) {
+                const start = cursor;
+                const end = start + 1;
+                if (progress > start && progress < end) {
                   panels[idx].setAttribute('data-overlap', 'true');
                   break;
                 }
+                cursor = end + (idx < panelTransitionSteps - 1 ? PVM_BETWEEN_PANEL_HOLD_STEP : 0);
               }
             },
           },
         });
 
+        tl.to({}, { duration: PVM_INITIAL_HOLD_STEP }, 0);
+
+        let cursor = PVM_INITIAL_HOLD_STEP;
         for (let idx = 1; idx < panels.length; idx += 1) {
-          tl.to(panels[idx], { yPercent: 0, duration: 1 }, idx - 1);
+          tl.to(panels[idx], { yPercent: 0, duration: 1 }, cursor);
+          cursor += 1;
+          if (idx < panels.length - 1) {
+            tl.to({}, { duration: PVM_BETWEEN_PANEL_HOLD_STEP }, cursor);
+            cursor += PVM_BETWEEN_PANEL_HOLD_STEP;
+          }
         }
 
-        tl.to({}, { duration: PVM_LAST_PANEL_HOLD_STEP }, panels.length - 1);
+        tl.to({}, { duration: PVM_LAST_PANEL_HOLD_STEP }, cursor);
       }, pvmSectionRef);
 
       return () => ctx.revert();
@@ -349,15 +426,21 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="about-section about-fullscreen" aria-labelledby="about-funding-title">
-        <div className="about-shell about-shell-narrow">
-          <h2 id="about-funding-title">How we fund the organisation - Private Waqf</h2>
-          <p>
-            National Waqf sustains its operations through private waqf assets and aligned
-            business contributions. These funds support operational costs and ensure the
-            organisation remains effective while maintaining financial sustainability.
-          </p>
-          <FundingDiagram />
+      <section
+        ref={fundingSectionRef}
+        className="about-section about-fullscreen"
+        aria-labelledby="about-funding-title"
+      >
+        <div ref={fundingStageRef} className="about-funding-pin-stage">
+          <div className="about-shell about-shell-narrow">
+            <h2 id="about-funding-title">How we fund the organisation - Private Waqf</h2>
+            <p>
+              National Waqf sustains its operations through private waqf assets and aligned
+              business contributions. These funds support operational costs and ensure the
+              organisation remains effective while maintaining financial sustainability.
+            </p>
+            <FundingDiagram step={fundingStep} />
+          </div>
         </div>
       </section>
 

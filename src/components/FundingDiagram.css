@@ -1,14 +1,13 @@
 .funding-diagram {
-  --ring: clamp(320px, 36vw, 500px);
-  --arrow-width: clamp(220px, 24vw, 340px);
-  --arrow-height: clamp(50px, 5.1vw, 72px);
-  --arrow-tip: clamp(36px, 4.2vw, 56px);
-  --label-column: clamp(120px, 16vw, 210px);
-  --stream-gap: clamp(10px, 1.2vw, 18px);
+  --ring: clamp(270px, 31vw, 430px);
+  --label-column: clamp(150px, 20vw, 270px);
+  --stream-gap: clamp(12px, 1.4vw, 22px);
   --arrow-end-pad: clamp(2px, 0.5vw, 8px);
   --stream-embed: clamp(8px, 1.1vw, 14px);
-  width: min(100%, 1080px);
-  margin: 48px auto 0;
+  --icon-outset: clamp(18px, 2vw, 34px);
+  --diagram-left-offset: clamp(0px, calc(25% - (var(--ring) / 2)), 120px);
+  width: min(100%, 980px);
+  margin: 28px auto 0;
 }
 
 .funding-orbit {
@@ -24,6 +23,7 @@
   border-radius: 50%;
   overflow: hidden;
   isolation: isolate;
+  margin-left: var(--diagram-left-offset);
 }
 
 .funding-ring {
@@ -91,54 +91,50 @@
 
 .funding-stream {
   position: absolute;
-  left: calc((var(--ring) * var(--stream-factor)) - var(--stream-embed));
-  right: var(--arrow-end-pad);
+  left: calc(var(--diagram-left-offset) + (var(--ring) * var(--stream-factor)) - var(--stream-embed));
+  right: calc(var(--arrow-end-pad) - var(--icon-outset));
   top: var(--stream-top);
   transform: translateY(-50%);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--label-column);
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--label-column));
   align-items: center;
   column-gap: var(--stream-gap);
   will-change: transform, opacity;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-18px);
 }
 
-.funding-arrow {
+.funding-stream-track {
   position: relative;
   width: 100%;
-  height: var(--arrow-height);
-  background: var(--arrow-bg);
+  min-height: clamp(34px, 3.2vw, 48px);
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: clamp(14px, 1.4vw, 20px);
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--arrow-tip)) 0,
-    100% 50%,
-    calc(100% - var(--arrow-tip)) 100%,
-    0 100%
-  );
-  border-radius: 10px;
-  transition: transform 0.28s ease, filter 0.28s ease;
+  gap: clamp(8px, 0.9vw, 14px);
+  color: var(--arrow-color);
 }
 
-.funding-stream:hover .funding-arrow,
-.funding-stream:focus-within .funding-arrow {
-  transform: translateX(5px);
-  filter: brightness(0.98);
+.funding-stream-line {
+  flex: 1 1 auto;
+  height: 0;
+  border-top: 3px dotted currentColor;
+  opacity: 0.82;
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
 .funding-icon {
-  width: clamp(30px, 2.8vw, 44px);
-  height: clamp(30px, 2.8vw, 44px);
+  width: clamp(34px, 3.1vw, 46px);
+  height: clamp(34px, 3.1vw, 46px);
   color: var(--arrow-color);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: transform 0.28s ease;
+  background: rgba(255, 255, 255, 0.68);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  opacity: 0;
+  transform: scale(0.82);
 }
 
 .funding-icon svg {
@@ -146,17 +142,93 @@
   height: 72%;
 }
 
-.funding-stream:hover .funding-icon {
-  transform: scale(1.08);
-}
-
 .funding-label {
   color: var(--arrow-color);
-  font-size: clamp(1rem, 1.62vw, 2rem);
-  line-height: 1.05;
+  font-size: clamp(0.96rem, 1.45vw, 1.72rem);
+  line-height: 1.04;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 600;
   text-align: left;
+  opacity: 0;
+  transform: translateX(16px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  width: fit-content;
+}
+
+.funding-diagram.is-step-1 .funding-stream--private,
+.funding-diagram.is-step-2 .funding-stream--private,
+.funding-diagram.is-step-3 .funding-stream--private,
+.funding-diagram.is-step-2 .funding-stream--business,
+.funding-diagram.is-step-3 .funding-stream--business,
+.funding-diagram.is-step-3 .funding-stream--gift {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.funding-diagram.is-step-1 .funding-stream--private .funding-stream-line,
+.funding-diagram.is-step-2 .funding-stream--private .funding-stream-line,
+.funding-diagram.is-step-3 .funding-stream--private .funding-stream-line,
+.funding-diagram.is-step-2 .funding-stream--business .funding-stream-line,
+.funding-diagram.is-step-3 .funding-stream--business .funding-stream-line,
+.funding-diagram.is-step-3 .funding-stream--gift .funding-stream-line {
+  transform: scaleX(1);
+}
+
+.funding-diagram.is-step-1 .funding-stream--private .funding-icon,
+.funding-diagram.is-step-2 .funding-stream--private .funding-icon,
+.funding-diagram.is-step-3 .funding-stream--private .funding-icon,
+.funding-diagram.is-step-2 .funding-stream--business .funding-icon,
+.funding-diagram.is-step-3 .funding-stream--business .funding-icon,
+.funding-diagram.is-step-3 .funding-stream--gift .funding-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.funding-diagram.is-step-1 .funding-stream--private .funding-label,
+.funding-diagram.is-step-2 .funding-stream--private .funding-label,
+.funding-diagram.is-step-3 .funding-stream--private .funding-label,
+.funding-diagram.is-step-2 .funding-stream--business .funding-label,
+.funding-diagram.is-step-3 .funding-stream--business .funding-label,
+.funding-diagram.is-step-3 .funding-stream--gift .funding-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.funding-diagram.is-step-2 .funding-stream--private,
+.funding-diagram.is-step-3 .funding-stream--private,
+.funding-diagram.is-step-3 .funding-stream--business {
+  opacity: 0.62;
+}
+
+.funding-stream.is-active {
+  opacity: 1 !important;
+}
+
+.funding-stream.is-active .funding-stream-line {
+  border-top-width: 4px;
+  opacity: 1;
+}
+
+.funding-stream.is-active .funding-icon {
+  transform: scale(1.08) !important;
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.22);
+}
+
+.funding-stream.is-active .funding-label {
+  transform: translateX(0) !important;
+  opacity: 1;
+  background: transparent;
+}
+
+.funding-stream,
+.funding-stream-line,
+.funding-label,
+.funding-icon {
+  transition:
+    opacity 0.32s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes fundingRingBreathe {
@@ -179,11 +251,9 @@
 
 @media (max-width: 920px) {
   .funding-diagram {
-    --ring: min(370px, 82vw);
-    --arrow-width: clamp(190px, 40vw, 280px);
-    --arrow-height: clamp(48px, 9vw, 62px);
-    --arrow-tip: clamp(34px, 6vw, 52px);
-    margin-top: 34px;
+    --ring: min(340px, 82vw);
+    --diagram-left-offset: 0px;
+    margin-top: 22px;
   }
 
   .funding-orbit {
@@ -205,23 +275,38 @@
     transform: none;
     width: 100%;
     left: auto;
+    right: auto;
+    grid-template-columns: minmax(120px, 1fr) minmax(0, 1fr);
+    column-gap: 10px;
+    opacity: 1;
   }
 
   .funding-center p {
     line-height: 1.38;
   }
 
+  .funding-stream-line {
+    border-top-width: 2px;
+    transform: scaleX(1);
+  }
+
   .funding-label {
-    flex: 1 1 0;
     font-size: clamp(1rem, 3.7vw, 1.65rem);
     line-height: 1.1;
+    opacity: 1;
+    transform: none;
+  }
+
+  .funding-icon {
+    opacity: 1;
+    transform: none;
   }
 }
 
 @media (max-width: 580px) {
   .funding-diagram {
-    --ring: min(320px, 92vw);
-    margin-top: 28px;
+    --ring: min(300px, 92vw);
+    margin-top: 18px;
   }
 
   .funding-center h3 {
@@ -233,7 +318,13 @@
   }
 
   .funding-stream {
-    gap: 10px;
+    grid-template-columns: minmax(100px, 1fr) minmax(0, 1fr);
+    column-gap: 8px;
+  }
+
+  .funding-icon {
+    width: 34px;
+    height: 34px;
   }
 }
 
@@ -243,8 +334,12 @@
     animation: none;
   }
 
-  .funding-arrow,
+  .funding-stream,
+  .funding-stream-line,
+  .funding-label,
   .funding-icon {
     transition: none;
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
