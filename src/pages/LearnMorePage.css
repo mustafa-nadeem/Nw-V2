@@ -22,9 +22,9 @@
 }
 
 .learn-section--usage {
-  background: #FFEDDE;
-  padding-top: 212px;
-  padding-bottom: 212px;
+  background: #FFF9F3;
+  padding-top: 176px;
+  padding-bottom: 176px;
 }
 
 .learn-section--role {
@@ -308,96 +308,93 @@
 
 .learn-usage-heading {
   text-align: left;
+  margin-bottom: 0 !important;
+  font-size: clamp(3.1rem, 6.3vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.learn-usage-word {
+  display: inline-block;
+}
+
+.learn-usage-word + .learn-usage-word {
+  margin-left: 0.28ch;
+}
+
+.learn-usage-word--accent {
+  color: #01ACA6;
+}
+
+.learn-usage-stack .waqf-stack-card h3,
+.learn-usage-stack .waqf-stack-card p,
+.learn-usage-stack .waqf-stack-card .waqf-stack-intro,
+.learn-usage-stack .waqf-stack-card .waqf-stack-detail-heading {
+  color: #ffffff;
 }
 
 .learn-usage-grid {
-  margin-top: 64px;
+  margin-top: 52px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
 }
 
 .learn-usage-card {
-  position: relative;
-  background: #eeeeef;
-  min-height: 440px;
-  border-radius: 14px;
-  padding: 32px;
-  overflow: hidden;
-  cursor: default;
-  isolation: isolate;
-  --usage-mx: 50%;
-  --usage-my: 50%;
-  transition: background 0.35s ease;
-}
-
-.learn-usage-card:hover,
-.learn-usage-card:focus-within {
-  background: #ececee;
-}
-
-.learn-usage-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+  min-height: 420px;
+  border-radius: 20px;
+  padding: 36px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  color: #ffffff;
   opacity: 0;
-  background: radial-gradient(
-    circle 280px at var(--usage-mx) var(--usage-my),
-    rgba(255, 142, 83, 0.55) 0%,
-    rgba(255, 142, 83, 0.2) 35%,
-    rgba(255, 142, 83, 0) 75%
-  );
-  transition: opacity 0.5s ease;
+  transform: translateY(48px) scale(0.97);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.learn-usage-card:hover .learn-usage-glow,
-.learn-usage-card:focus-within .learn-usage-glow {
+.learn-section--usage.is-visible .learn-usage-card {
   opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-.learn-usage-icon {
-  position: relative;
-  z-index: 1;
-  display: inline-grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  font-size: 0.72rem;
-  color: #454b57;
-  border: 1px dashed #b9bec6;
-  border-radius: 8px;
+.learn-section--usage.is-visible .learn-usage-card:nth-child(2) {
+  transition-delay: 0.16s;
+}
+
+.learn-section--usage.is-visible .learn-usage-card:nth-child(3) {
+  transition-delay: 0.32s;
 }
 
 .learn-usage-description {
-  position: relative;
-  z-index: 1;
-  margin-top: 20px;
-  font-size: 0.98rem;
-  color: #454d59;
-  line-height: 1.55;
-  max-width: 32ch;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.learn-usage-card:hover .learn-usage-description,
-.learn-usage-card:focus-within .learn-usage-description {
-  opacity: 1;
-  transform: translateY(0);
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.46;
+  letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
 .learn-usage-title {
-  position: absolute;
-  left: 32px;
-  bottom: 32px;
-  z-index: 1;
-  font-size: 1.4rem;
-  font-weight: 600;
-  line-height: 1.2;
-  color: #2B346C;
   margin: 0;
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.learn-usage-card:nth-child(1) {
+  background: #2B346C;
+}
+
+.learn-usage-card:nth-child(2) {
+  background: #00ACA6;
+}
+
+.learn-usage-card:nth-child(3) {
+  background: #FF8E54;
 }
 
 .learn-workshop {
@@ -899,6 +896,11 @@
     gap: 20px;
   }
 
+  .learn-usage-card {
+    min-height: 360px;
+    padding: 28px;
+  }
+
   .learn-video-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px 20px;
@@ -954,20 +956,12 @@
   }
 
   .learn-usage-card {
-    min-height: 360px;
+    min-height: 0;
+    padding: 24px;
   }
 
   .learn-video-grid {
     grid-template-columns: 1fr;
-  }
-
-  .learn-usage-description {
-    opacity: 1;
-    transform: none;
-  }
-
-  .learn-usage-glow {
-    display: none;
   }
 
   .learn-role-media,
@@ -1005,6 +999,14 @@
 
   .learn-policies-button {
     justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learn-usage-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

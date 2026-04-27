@@ -1,8 +1,15 @@
 import { useRef, useState } from 'react';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
+import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
 
 const roleCards = [
+  {
+    title: 'Waqf',
+    subtitle: 'Eternal reward for building community infrastructure',
+    text: 'A perpetual endowment that preserves capital and generates sustainable income to fund long-term charitable, educational, and community initiatives.',
+    mediaLabel: 'Image',
+  },
   {
     title: 'Zakat',
     subtitle: 'A pillar of our faith',
@@ -15,26 +22,20 @@ const roleCards = [
     text: 'Voluntary charitable giving that supports immediate relief, community needs, and ongoing good causes for spiritual and social benefit.',
     mediaLabel: 'Image',
   },
-  {
-    title: 'Waqf',
-    subtitle: 'Eternal reward for building community infrastructure',
-    text: 'A perpetual endowment that preserves capital and generates sustainable income to fund long-term charitable, educational, and community initiatives.',
-    mediaLabel: 'Image',
-  },
 ];
 
 const usageCards = [
   {
     title: 'Religious Waqf',
-    text: 'Endowments dedicated to supporting Islamic worship and sacred knowledge, such as mosques, Qur\'an distribution, and religious institutions.',
+    paragraphs: ['Endowments dedicated to supporting Islamic worship and sacred knowledge, such as mosques, Qur\'an distribution, and religious institutions.'],
   },
   {
     title: 'Philanthropic Waqf',
-    text: 'Endowments established for the public good, funding essential services such as education, social welfare, healthcare, and community development.',
+    paragraphs: ['Endowments established for the public good, funding essential services such as education, social welfare, healthcare, and community development.'],
   },
   {
     title: 'Family Waqf',
-    text: 'Endowments designed to support family members while preserving wealth, enabling Islamic estate planning and a legacy of financial security.',
+    paragraphs: ['Endowments designed to support family members while preserving wealth, enabling Islamic estate planning and a legacy of financial security.'],
   },
 ];
 
@@ -159,7 +160,7 @@ function LearnMorePage() {
 
       <section className="learn-section learn-section--role" aria-labelledby="learn-role-title">
         <div className="learn-shell">
-          <h2 id="learn-role-title" className="learn-role-title">The role of Zakaat, Sadaqah and Waqf in Islam</h2>
+          <h2 id="learn-role-title" className="learn-role-title">The role of Waqf, Zakaat and Sadaqah in Islam</h2>
           <div className="learn-role-accordion">
             <div className="learn-role-tabs" role="tablist" aria-label="Roles">
               {roleCards.map((card, index) => {
@@ -214,35 +215,19 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--usage" aria-labelledby="learn-usage-title">
-        <div className="learn-shell">
-          <h2 id="learn-usage-title" className="learn-usage-heading">Usages of Awqaf</h2>
-          <div className="learn-usage-grid">
-            {usageCards.map((card) => {
-              const handlePointerMove = (event) => {
-                const target = event.currentTarget;
-                const rect = target.getBoundingClientRect();
-                target.style.setProperty('--usage-mx', `${event.clientX - rect.left}px`);
-                target.style.setProperty('--usage-my', `${event.clientY - rect.top}px`);
-              };
-
-              return (
-                <article
-                  className="learn-usage-card"
-                  key={card.title}
-                  tabIndex={0}
-                  onPointerMove={handlePointerMove}
-                >
-                  <span className="learn-usage-glow" aria-hidden="true" />
-                  <span className="learn-usage-icon" aria-hidden="true">icon</span>
-                  <p className="learn-usage-description">{card.text}</p>
-                  <h3 className="learn-usage-title">{card.title}</h3>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <WhatIsWaqfStack
+        cardsData={usageCards}
+        headingWords={[
+          { text: 'Usages' },
+          { text: 'of' },
+          { text: 'Awqaf', accent: true },
+        ]}
+        descriptionParagraphs={[]}
+        headingId="learn-usage-title"
+        headingAriaLabel="Usages of Awqaf"
+        sectionClassName="learn-usage-stack"
+        includeBaseSectionClass={false}
+      />
 
       <section className="learn-section learn-workshop" aria-labelledby="learn-workshop-title">
         <div className="learn-shell learn-workshop-grid">

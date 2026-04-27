@@ -48,7 +48,27 @@ const cards = [
   },
 ];
 
-function WhatIsWaqfStack() {
+const defaultHeadingWords = [
+  { text: 'What' },
+  { text: 'is' },
+  { text: 'Waqf?', accent: true },
+];
+
+const defaultDescription = [
+  'Waqf is a sustainable way of giving to build communities and society.',
+  'A Waqf (plural Awqaf) is an Islamic charitable endowment made by an individual, organisation or institution. Assets such as land, buildings, or financial investments can be donated permanently for religious, educational or social benefit.',
+  'Once a Waqf is established, the donated assets cannot be sold, transferred, or inherited, ensuring their long-term benefit to the community and to society.',
+];
+
+function WhatIsWaqfStack({
+  cardsData = cards,
+  headingWords = defaultHeadingWords,
+  descriptionParagraphs = defaultDescription,
+  headingId = 'what-is-waqf-heading',
+  headingAriaLabel = 'What is Waqf?',
+  sectionClassName = '',
+  includeBaseSectionClass = true,
+}) {
   const sectionRef = useRef(null);
   const triggerIdsRef = useRef({
     pin: 'what-is-waqf-stack-pin-trigger',
@@ -316,42 +336,40 @@ function WhatIsWaqfStack() {
   return (
     <section
       ref={sectionRef}
-      className={`section waqf-stack-section${useStaticLayout ? ' reduced-motion' : ''}`}
-      aria-labelledby="what-is-waqf-heading"
+      className={`${includeBaseSectionClass ? 'section ' : ''}waqf-stack-section${useStaticLayout ? ' reduced-motion' : ''}${sectionClassName ? ` ${sectionClassName}` : ''}`}
+      aria-labelledby={headingId}
     >
       <div className="container waqf-stack-layout">
         <div className="waqf-stack-copy">
-          <h2 id="what-is-waqf-heading" className="waqf-heading" aria-label="What is Waqf?">
-            <span className="waqf-word" aria-hidden="true">What</span>
-            <span className="waqf-word" aria-hidden="true">is</span>
-            <span className="waqf-word" aria-hidden="true" style={{color: '#01ACA6'}}>Waqf?</span>
+          <h2 id={headingId} className="waqf-heading" aria-label={headingAriaLabel}>
+            {headingWords.map((word) => (
+              <span
+                key={word.text}
+                className="waqf-word"
+                aria-hidden="true"
+                style={word.accent ? { color: '#01ACA6' } : undefined}
+              >
+                {word.text}
+              </span>
+            ))}
           </h2>
 
-          <div className="waqf-stack-description" aria-label="What is Waqf description">
-            <p>
-              Waqf is a sustainable way of giving to build communities and society.
-            </p>
-            <p>
-              A Waqf (plural Awqaf) is an Islamic charitable endowment made by an
-              individual, organisation or institution. Assets such as land, buildings,
-              or financial investments can be donated permanently for religious,
-              educational or social benefit.
-            </p>
-            <p>
-              Once a Waqf is established, the donated assets cannot be sold,
-              transferred, or inherited, ensuring their long-term benefit to the
-              community and to society.
-            </p>
-          </div>
+          {descriptionParagraphs.length > 0 ? (
+            <div className="waqf-stack-description" aria-label={`${headingAriaLabel} description`}>
+              {descriptionParagraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         <div className="waqf-stack-cards" role="list" aria-label="What is Waqf key cards">
-          {cards.map((card, index) => (
+          {cardsData.map((card, index) => (
             <article
               className="waqf-stack-card"
               key={card.title}
               role="listitem"
-              aria-setsize={cards.length}
+              aria-setsize={cardsData.length}
               aria-posinset={index + 1}
             >
               <h3>{card.title}</h3>
