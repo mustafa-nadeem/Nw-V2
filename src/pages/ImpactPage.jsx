@@ -10,6 +10,9 @@ const UK_IMAGE_BOUNDS = {
   west: -8.9,
   east: 2.2,
 };
+const STATIC_OVERVIEW_SCALE = 0.97;
+const STATIC_OVERVIEW_TX = 0;
+const STATIC_OVERVIEW_TY = -3;
 
 function projectLatLngToImagePercent([lat, lng]) {
   const x = ((lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west)) * 100;
@@ -21,68 +24,316 @@ function projectLatLngToImagePercent([lat, lng]) {
 }
 
 
-const locations = [
+const rawProjects = [
   {
-    id: 'manchester',
-    name: 'Muslim Scout Scholarship',
-    city: 'Manchester',
-    category: 'Youth Development',
-    summary: 'Funding to expand access and leadership opportunities for young people across the North West.',
-    position: [53.4808, -2.2426],
-    grant: '£24,000',
-    year: '2024',
+    id: 1,
+    organisation: 'New Beginnings',
+    cause_area: 'Spiritual preservation and growth',
+    based_in: 'Oldham',
+    impact_area: 'Oldham, Greater Manchester',
+    description: 'New Beginnings is a registered UK charity dedicated to working with converts to Islam, new Muslims, and those exploring Islam, through education, social connections, wellbeing and facilitation.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: true,
   },
   {
-    id: 'birmingham',
-    name: 'Supporting Humanity',
-    city: 'Birmingham',
-    category: 'Community Support',
-    summary: 'Support for practical welfare and community outreach delivery across the Midlands.',
-    position: [52.4862, -1.8904],
-    grant: '£32,000',
-    year: '2024',
+    id: 2,
+    organisation: 'SREIslamic',
+    cause_area: null,
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Grassroots organisation supporting Muslim parents navigating sex education and related challenges.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
   },
   {
-    id: 'london',
-    name: 'Sacred',
-    city: 'London',
-    category: 'Spiritual Programmes',
-    summary: 'Support for guided programmes focused on faith, reflection, and rites of passage.',
-    position: [51.5072, -0.1276],
-    grant: '£28,000',
-    year: '2024',
+    id: 3,
+    organisation: 'Sacred BMS',
+    cause_area: 'Social and Economic Empowerment',
+    based_in: 'Dundee, Scotland',
+    impact_area: 'Glasgow',
+    description: 'Creates change for Muslim communities by building evidence on abuse survivors experiences.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: true,
   },
   {
-    id: 'leicester',
-    name: 'Community Forum Policy',
-    city: 'Leicester',
-    category: 'Civic Engagement',
-    summary: 'Investment in dialogue and policy participation for local communities across the East Midlands.',
-    position: [52.6369, -1.1398],
-    grant: '£22,000',
-    year: '2024',
+    id: 4,
+    organisation: 'Sapience',
+    cause_area: "Da'wah religious awareness and outreach",
+    based_in: 'London',
+    impact_area: 'London',
+    description: 'Supports individuals and organisations to intellectually share and defend Islam.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
   },
   {
-    id: 'cardiff',
-    name: 'Sapience Institute',
-    city: 'Cardiff',
-    category: 'Research',
-    summary: 'Research-led initiatives supporting informed community development and evidence-based policy work.',
-    position: [51.4816, -3.1791],
-    grant: '£36,000',
-    year: '2024',
+    id: 5,
+    organisation: 'Spinney Hill',
+    cause_area: 'Social and Economic Empowerment',
+    based_in: 'Leicester',
+    impact_area: 'Leicester',
+    description: 'Supports Muslims struggling with drug and alcohol addictions.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
   },
   {
-    id: 'glasgow',
-    name: 'Spinney Hill Recovery',
-    city: 'Glasgow',
-    category: 'Health and Recovery',
-    summary: 'Targeted support for addiction recovery and resilience services across Scotland.',
-    position: [55.8642, -4.2518],
-    grant: '£26,500',
-    year: '2024',
+    id: 6,
+    organisation: 'Zubeda Welcome',
+    cause_area: 'Educational Excellence and Development',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Addresses Islamic education for asylum seekers in the UK.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
+  },
+  {
+    id: 7,
+    organisation: 'Muslim Scouts Fellowship',
+    cause_area: 'Youth empowerment & leadership',
+    based_in: 'London',
+    impact_area: 'London',
+    description: 'Official UK body for Muslim adults in scouting, providing youth education.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: true,
+  },
+  {
+    id: 8,
+    organisation: 'Community Policy Forum',
+    cause_area: 'Civic, media & legal engagement',
+    based_in: 'Birmingham',
+    impact_area: 'Nationwide',
+    description: 'Promotes evidence-based policymaking addressing structural inequalities.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: true,
+  },
+  {
+    id: 9,
+    organisation: 'Muslim Friendly Employers',
+    cause_area: null,
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: null,
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: true,
+  },
+  {
+    id: 10,
+    organisation: 'Ibn Ashur',
+    cause_area: 'Spiritual preservation and growth',
+    based_in: 'Scotland',
+    impact_area: 'Scotland',
+    description: 'Healing Through the Quran podcast exploring faith, trauma, identity, and spirituality.',
+    key_outcomes: [
+      'Quran-centred podcast and media series',
+      'Accessible classical scholarship for modern audiences',
+      'National and global digital reach',
+    ],
+    total_grant: 5000,
+    logo_attached: true,
+  },
+  {
+    id: 11,
+    organisation: 'Ihsan Careers Network Ltd - FOSIS',
+    cause_area: 'Youth empowerment and leadership',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'National mentorship initiative connecting Muslim professionals with students for career support.',
+    key_outcomes: [
+      'One-to-one mentorship for Muslim students',
+      'Access to ethical careers and networks',
+      'National reach via universities',
+    ],
+    total_grant: 5000,
+    logo_attached: true,
+  },
+  {
+    id: 12,
+    organisation: 'Here for Youth - Islamic Network',
+    cause_area: 'Youth empowerment and leadership',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Supports mosques and organisations with safeguarding training, policy templates, and coaching.',
+    key_outcomes: [
+      'Training youth leaders nationwide',
+      'Embedding safeguarding practices',
+      'Creating safe youth spaces',
+    ],
+    total_grant: 5000,
+    logo_attached: true,
+  },
+  {
+    id: 13,
+    organisation: 'Muslim Census',
+    cause_area: 'Civic, Media & Legal Engagement',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Delivers a comprehensive State of the Nation study on Muslims in the UK.',
+    key_outcomes: [
+      'National report on Muslim life',
+      'Evidence for policy and funding',
+      'Community insight and advocacy',
+    ],
+    total_grant: 5000,
+    logo_attached: true,
+  },
+  {
+    id: 14,
+    organisation: 'Solace UK',
+    cause_area: 'Spiritual preservation and growth',
+    based_in: 'London',
+    impact_area: 'London',
+    description: 'Weekend spiritual programme supporting womens faith, resilience, and personal development.',
+    key_outcomes: [
+      'Faith-based spiritual courses',
+      'Support for revert women',
+      'Long-term wellbeing and resilience',
+    ],
+    total_grant: 5000,
+    logo_attached: true,
+  },
+  {
+    id: 15,
+    organisation: 'Supporting Humanity',
+    cause_area: 'Social and Economic Empowerment',
+    based_in: 'London',
+    impact_area: 'London',
+    description: 'Provides mental health, bereavement support, and funeral services.',
+    key_outcomes: [
+      'End-of-life care support',
+      'Bereavement services',
+      'Mental health outreach',
+    ],
+    total_grant: null,
+    logo_attached: false,
+  },
+  {
+    id: 16,
+    organisation: 'Muslim Family Initiative',
+    cause_area: null,
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Supports Muslim parents navigating sex education challenges in schools.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
+  },
+  {
+    id: 17,
+    organisation: 'Quran Revision Project',
+    cause_area: 'Spiritual preservation and growth',
+    based_in: 'National',
+    impact_area: 'Nationwide',
+    description: 'Supports individuals facing Islamophobia with reporting, legal guidance, and emotional support.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
+  },
+  {
+    id: 18,
+    organisation: 'Islamophobia Response Unit',
+    cause_area: 'Civic, Media & Legal Engagement',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Supports victims of Islamophobia.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
+  },
+  {
+    id: 19,
+    organisation: 'Muslim Council of Britain',
+    cause_area: 'Civic, Media & Legal Engagement',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Visionary Leadership Programme to strengthen Muslim civic participation.',
+    key_outcomes: [
+      'Train media and public affairs representatives',
+      'Support national engagement',
+      'Strengthen civic participation',
+    ],
+    total_grant: null,
+    logo_attached: true,
+  },
+  {
+    id: 20,
+    organisation: 'Muslim Legal Fund',
+    cause_area: 'Civic, Media & Legal Engagement',
+    based_in: 'London',
+    impact_area: 'Nationwide',
+    description: 'Protects Muslim rights through legal action, guidance, and policy work.',
+    key_outcomes: null,
+    total_grant: null,
+    logo_attached: false,
   },
 ];
+
+const locationCoordinates = {
+  oldham: [53.5409, -2.1114],
+  london: [51.5072, -0.1276],
+  'dundee-scotland': [56.462, -2.9707],
+  leicester: [52.6369, -1.1398],
+  birmingham: [52.4862, -1.8904],
+  scotland: [56.4907, -4.2026],
+  national: [54.55, -3.43],
+};
+
+function makeLocationId(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function formatGrant(totalGrant) {
+  if (typeof totalGrant !== 'number') {
+    return 'TBC';
+  }
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    maximumFractionDigits: 0,
+  }).format(totalGrant);
+}
+
+const projects = rawProjects.map((project) => ({
+  id: project.id,
+  organisation: project.organisation,
+  causeArea: project.cause_area,
+  basedIn: project.based_in,
+  impactArea: project.impact_area,
+  description: project.description,
+  totalGrant: project.total_grant,
+  keyOutcomes: project.key_outcomes,
+  logoAttached: project.logo_attached,
+  isNationwide: typeof project.impact_area === 'string' && project.impact_area.toLowerCase().includes('nationwide'),
+}));
+
+const locations = Object.values(
+  projects.reduce((acc, project) => {
+    const key = makeLocationId(project.basedIn || 'National');
+    const position = locationCoordinates[key] || locationCoordinates.national;
+
+    if (!acc[key]) {
+      acc[key] = {
+        id: key,
+        city: project.basedIn || 'National',
+        position,
+        projects: [],
+      };
+    }
+
+    acc[key].projects.push(project);
+    return acc;
+  }, {})
+).sort((a, b) => a.city.localeCompare(b.city));
 
 const fundedProjects = [
   {
@@ -193,7 +444,11 @@ function ImpactPage() {
   const impactAreasRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const zoomTimerRef = useRef(null);
-  const [staticMapView, setStaticMapView] = useState({ scale: 1, tx: 0, ty: 0 });
+  const [staticMapView, setStaticMapView] = useState({
+    scale: STATIC_OVERVIEW_SCALE,
+    tx: STATIC_OVERVIEW_TX,
+    ty: STATIC_OVERVIEW_TY,
+  });
   const [isMobileMap, setIsMobileMap] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches,
   );
@@ -235,7 +490,11 @@ function ImpactPage() {
   useEffect(() => {
     setIsProjectPanelOpen(false);
     setSelectedLocation(null);
-    setStaticMapView({ scale: 1, tx: 0, ty: 0 });
+    setStaticMapView({
+      scale: STATIC_OVERVIEW_SCALE,
+      tx: STATIC_OVERVIEW_TX,
+      ty: STATIC_OVERVIEW_TY,
+    });
   }, [isMobileMap]);
 
   useEffect(() => {
@@ -255,7 +514,11 @@ function ImpactPage() {
         onZoomSettled();
       }, 860);
     } else {
-      setStaticMapView({ scale: 1, tx: 0, ty: 0 });
+      setStaticMapView({
+        scale: STATIC_OVERVIEW_SCALE,
+        tx: STATIC_OVERVIEW_TX,
+        ty: STATIC_OVERVIEW_TY,
+      });
     }
   }, [isMobileMap, onZoomSettled, selectedLocation]);
 
@@ -347,24 +610,26 @@ function ImpactPage() {
             }}
           >
             <div className="impact-static-map__inner">
-              <img src={ukMapImage} alt="" aria-hidden="true" className="impact-static-map__image" />
-              <div className="impact-static-map__markers" aria-hidden="false">
-                {locations.map((location) => {
-                  const point = projectLatLngToImagePercent(location.position);
-                  const isActive = selectedLocation?.id === location.id;
-                  return (
-                    <button
-                      key={location.id}
-                      type="button"
-                      className={`impact-checkpoint-marker impact-checkpoint-marker--static${isActive ? ' impact-checkpoint-marker--active' : ''}`}
-                      style={{ left: `${point.x}%`, top: `${point.y}%` }}
-                      onClick={() => onSelectLocation(location)}
-                      aria-label={`View projects in ${location.city}`}
-                    >
-                      <span className="impact-checkpoint-core" aria-hidden="true" />
-                    </button>
-                  );
-                })}
+              <div className="impact-static-map__frame">
+                <img src={ukMapImage} alt="" aria-hidden="true" className="impact-static-map__image" />
+                <div className="impact-static-map__markers" aria-hidden="false">
+                  {locations.map((location) => {
+                    const point = projectLatLngToImagePercent(location.position);
+                    const isActive = selectedLocation?.id === location.id;
+                    return (
+                      <button
+                        key={location.id}
+                        type="button"
+                        className={`impact-checkpoint-marker impact-checkpoint-marker--static${isActive ? ' impact-checkpoint-marker--active' : ''}`}
+                        style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                        onClick={() => onSelectLocation(location)}
+                        aria-label={`View projects in ${location.city}`}
+                      >
+                        <span className="impact-checkpoint-core" aria-hidden="true" />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -405,25 +670,34 @@ function ImpactPage() {
                 <header className="impact-project-panel__header">
                   <p className="impact-project-panel__eyebrow">{selectedLocation.city}</p>
                   <h2>Projects in {selectedLocation.city}</h2>
-                  <p className="impact-project-panel__count">funded projects</p>
+                  <p className="impact-project-panel__count">
+                    {selectedLocation.projects.length} funded {selectedLocation.projects.length === 1 ? 'project' : 'projects'}
+                  </p>
                 </header>
 
                 <div className="impact-project-panel__body" ref={projectPanelBodyRef}>
-                  <article className="impact-project-card">
-                    <span className="impact-project-card__tag">{selectedLocation.category}</span>
-                    <h3 className="impact-project-card__title">{selectedLocation.name}</h3>
-                    <p className="impact-project-card__summary">{selectedLocation.summary}</p>
-                    <dl className="impact-project-card__meta">
-                      <div>
-                        <dt>Grant</dt>
-                        <dd>{selectedLocation.grant}</dd>
+                  {selectedLocation.projects.map((project) => (
+                    <article className="impact-project-card" key={project.id}>
+                      <div className="impact-project-card__tags">
+                        <span className="impact-project-card__tag">{project.causeArea || 'Funded Project'}</span>
+                        {project.isNationwide ? (
+                          <span className="impact-project-card__tag impact-project-card__tag--nationwide">Nationwide</span>
+                        ) : null}
                       </div>
-                      <div>
-                        <dt>Year</dt>
-                        <dd>{selectedLocation.year}</dd>
-                      </div>
-                    </dl>
-                  </article>
+                      <h3 className="impact-project-card__title">{project.organisation}</h3>
+                      <p className="impact-project-card__summary">{project.description || 'Project details coming soon.'}</p>
+                      <dl className="impact-project-card__meta">
+                        <div>
+                          <dt>Impact area</dt>
+                          <dd>{project.impactArea || 'TBC'}</dd>
+                        </div>
+                        <div>
+                          <dt>Grant</dt>
+                          <dd>{formatGrant(project.totalGrant)}</dd>
+                        </div>
+                      </dl>
+                    </article>
+                  ))}
                 </div>
               </>
             )}

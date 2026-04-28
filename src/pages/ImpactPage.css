@@ -55,7 +55,7 @@
 
 .impact-map-stage {
   position: relative;
-  min-height: 115vh;
+  min-height: 100vh;
   isolation: isolate;
   overflow: hidden;
 }
@@ -77,23 +77,36 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 14% 14%, rgba(180, 215, 240, 0.55) 0%, rgba(180, 215, 240, 0) 60%),
+    linear-gradient(135deg, #1a4a9a 0%, #0a2f7e 45%, #051d5e 100%);
 }
 
 .impact-static-map__inner {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
   transform-origin: 50% 50%;
   transform: translate(var(--static-map-tx, 0), var(--static-map-ty, 0)) scale(var(--static-map-scale, 1));
   transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.impact-static-map__frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(100%, 133.333vh);
+  aspect-ratio: 4 / 3;
+  transform: translate(-50%, -50%);
+}
+
 .impact-static-map__image {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: saturate(1.08) contrast(1.06);
+  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, #000 50%, rgba(0, 0, 0, 0.85) 70%, rgba(0, 0, 0, 0) 100%);
+  mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, #000 50%, rgba(0, 0, 0, 0.85) 70%, rgba(0, 0, 0, 0) 100%);
 }
 
 .impact-static-map__markers {
@@ -118,6 +131,7 @@
   position: relative;
   z-index: 3;
   padding-top: 130px;
+  pointer-events: none;
 }
 
 .impact-map-overlay .impact-shell {
@@ -232,6 +246,12 @@
   gap: 10px;
 }
 
+.impact-project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .impact-project-card__tag {
   display: inline-flex;
   width: fit-content;
@@ -243,6 +263,11 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+.impact-project-card__tag--nationwide {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 .impact-project-card__title {
@@ -953,7 +978,7 @@
 
 @media (max-width: 1080px) {
   .impact-map-stage {
-    min-height: 108vh;
+    min-height: 100vh;
   }
 
   .impact-project-panel {
