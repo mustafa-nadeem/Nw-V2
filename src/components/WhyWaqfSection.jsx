@@ -100,7 +100,7 @@ function WhyWaqfSection() {
       },
       {
         threshold: 0,
-        rootMargin: '-90px 0px 0px 0px',
+        rootMargin: '120px 0px 0px 0px',
       }
     );
 
