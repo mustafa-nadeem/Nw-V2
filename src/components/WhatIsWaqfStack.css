@@ -234,13 +234,15 @@
 
 @media (max-width: 768px) {
   .waqf-stack-section {
-    padding-top: 96px;
+    padding-top: 28px;
     padding-bottom: 0;
   }
 
   .waqf-stack-layout {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 10px;
+    min-height: 100vh;
+    align-content: start;
   }
 
   .waqf-stack-copy {
@@ -258,14 +260,15 @@
   }
 
   .waqf-stack-description {
-    margin: 18px auto 0;
+    margin: 10px 0 0;
     max-width: 100%;
     text-align: left;
+    gap: 10px;
   }
 
   .waqf-stack-description p {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.88rem;
+    line-height: 1.42;
   }
 
   .waqf-stack-cards {
@@ -275,12 +278,13 @@
     height: auto;
     margin-inline: 0;
     justify-self: stretch;
+    margin-top: -2px;
   }
 
   .waqf-stack-card {
     width: 100%;
     max-width: 100%;
-    height: 420px;
+    height: 400px;
     padding: 22px;
     gap: 10px;
   }

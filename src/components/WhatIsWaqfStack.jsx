@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 const SCROLL_PER_CARD = 560;
 const HEADING_SCROLL = 500;
 const LAST_CARD_HOLD_SCROLL = 340;
-const MOBILE_LAST_CARD_HOLD_SCROLL = 280;
 
 const cards = [
   {
@@ -137,11 +136,20 @@ function WhatIsWaqfStack({
       const headingWords = gsap.utils.toArray('.waqf-word');
 
       if (isMobileLayout) {
-        const MOBILE_PEEK_VH = 12;
-        const MOBILE_CARD_HEIGHT_VH = 52;
-        const stackHeightVh = MOBILE_CARD_HEIGHT_VH + (cardEls.length - 1) * MOBILE_PEEK_VH;
+        const navbarOffset = 92;
+        const viewportHeight = window.innerHeight;
+        const copyHeight = copyEl ? copyEl.getBoundingClientRect().height : 0;
+        const availableForCards = viewportHeight - navbarOffset - copyHeight - 34;
+        const mobileCardHeight = Math.max(220, Math.min(420, availableForCards));
+        const mobilePeek = Math.max(56, Math.min(110, Math.round(mobileCardHeight * 0.24)));
+        const stackHeight = mobileCardHeight + (cardEls.length - 1) * mobilePeek;
 
-        gsap.set(cardsWrap, { height: `${stackHeightVh}vh`, position: 'relative' });
+        gsap.set(copyEl, {
+          position: 'relative',
+          zIndex: 3,
+        });
+
+        gsap.set(cardsWrap, { height: `${stackHeight}px`, position: 'relative' });
 
         cardEls.forEach((card, index) => {
           gsap.set(card, {
@@ -149,26 +157,24 @@ function WhatIsWaqfStack({
             left: 0,
             right: 0,
             bottom: 'auto',
-            top: `${index * MOBILE_PEEK_VH}vh`,
+            top: `${index * mobilePeek}px`,
             width: '100%',
-            height: `${MOBILE_CARD_HEIGHT_VH}vh`,
+            height: `${mobileCardHeight}px`,
             zIndex: index + 1,
-            y: index === 0 ? 0 : '110vh',
+            y: index === 0 ? 0 : mobileCardHeight + 80,
           });
         });
 
         gsap.set(headingWords, { autoAlpha: 1, y: 0 });
         gsap.set(descriptionEl, { autoAlpha: 1, y: 0 });
 
-        const totalScroll = (cardEls.length - 1) * 460 + MOBILE_LAST_CARD_HOLD_SCROLL;
-
-        const navbarOffset = 140;
+        const totalScroll = viewportHeight;
 
         const mobileTimeline = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             id: pinTriggerId,
-            trigger: cardsWrap,
+            trigger: sectionEl,
             start: `top ${navbarOffset}px`,
             end: '+=' + totalScroll,
             pin: sectionEl,

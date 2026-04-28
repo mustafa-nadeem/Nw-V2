@@ -1,6 +1,6 @@
 .site-footer {
   background: #2B346C;
-  padding: 160px 28px 160px 28px;
+  padding: 200px 28px 200px 28px;
 }
 
 .site-footer-inner {
@@ -162,7 +162,7 @@
 
 @media (max-width: 1024px) {
   .site-footer {
-    padding: 68px 22px 52px;
+    padding: 96px 22px 80px;
   }
 
   .site-footer-inner {
@@ -207,6 +207,6 @@
 
 @media (max-width: 640px) {
   .site-footer {
-    padding: 56px 16px 40px;
+    padding: 80px 16px 64px;
   }
 }
