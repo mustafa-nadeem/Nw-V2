@@ -742,6 +742,8 @@
   height: 100vh;
   overflow: hidden;
   width: 100%;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .about-pvm-panel {
@@ -750,6 +752,8 @@
   height: 100vh;
   overflow: hidden;
   width: 100%;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .about-pvm-panel--dark {

@@ -259,7 +259,9 @@ function AboutPage() {
             start: 'top top',
             pin: true,
             pinSpacing: true,
+            anticipatePin: 1,
             scrub: 0.8,
+            fastScrollEnd: true,
             end: () => '+=' + (
               (panels.length - 1) * window.innerHeight * PVM_SCROLL_PACING + PVM_LAST_PANEL_HOLD_SCROLL
             ),
