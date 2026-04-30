@@ -4,6 +4,7 @@ import placeholderImg from '../assets/placeholder.jpg';
 
 function ConnectPage() {
   const heroRef = useRef(null);
+  const [formSlideOffset, setFormSlideOffset] = useState(0);
   const [showSectionHeading, setShowSectionHeading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -36,6 +37,30 @@ function ConnectPage() {
     return () => {
       window.removeEventListener('scroll', updateHeadingVisibility);
       window.removeEventListener('resize', updateHeadingVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) {
+      return undefined;
+    }
+
+    const updateFormSlideOffset = () => {
+      const start = heroEl.offsetTop;
+      const end = start + heroEl.offsetHeight;
+      const progress = (window.scrollY - start) / Math.max(end - start, 1);
+      const clamped = Math.max(0, Math.min(1, progress));
+      setFormSlideOffset(Math.round(clamped * 120));
+    };
+
+    updateFormSlideOffset();
+    window.addEventListener('scroll', updateFormSlideOffset, { passive: true });
+    window.addEventListener('resize', updateFormSlideOffset);
+
+    return () => {
+      window.removeEventListener('scroll', updateFormSlideOffset);
+      window.removeEventListener('resize', updateFormSlideOffset);
     };
   }, []);
 
@@ -97,7 +122,7 @@ function ConnectPage() {
         <h1>Connect with us</h1>
       </div>
 
-      <div className="connect-form-section">
+      <div className="connect-form-section" style={{ '--connect-form-slide': `${formSlideOffset}px` }}>
         <div className="connect-container">
           <div className={`connect-form-heading${showSectionHeading ? ' is-visible' : ''}`}>
             <h2>Connect with us</h2>

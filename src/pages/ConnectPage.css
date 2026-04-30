@@ -30,6 +30,12 @@
   padding: clamp(40px, 8vh, 90px) 28px;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 2;
+  border-radius: 32px 32px 0 0;
+  box-shadow: 0 -28px 60px rgba(16, 31, 56, 0.2);
+  transform: translateY(calc(-1 * var(--connect-form-slide, 0px)));
+  transition: transform 0.18s linear;
 }
 
 .connect-container {
@@ -406,6 +412,7 @@
 @media (max-width: 640px) {
   .connect-form-section {
     padding: 40px 28px 60px 28px;
+    border-radius: 24px 24px 0 0;
   }
 
   .connect-form-heading {

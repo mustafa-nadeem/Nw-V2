@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import placeholderImg from '../assets/placeholder.jpg';
-import ukMapImage from '../assets/uk.jpg';
 import logoMcb from '../assets/logosss/MCB 2 (1).png';
 import logoMsf from '../assets/logosss/MSF (1).png';
 import logoNewBeginnings from '../assets/logosss/New beginnings (1).png';
@@ -17,7 +16,7 @@ const UK_IMAGE_BOUNDS = {
   west: -8.9,
   east: 2.2,
 };
-const STATIC_OVERVIEW_SCALE = 0.97;
+const STATIC_OVERVIEW_SCALE = 0.84;
 const STATIC_OVERVIEW_TX = 0;
 const STATIC_OVERVIEW_TY = -3;
 
@@ -619,7 +618,7 @@ function ImpactPage() {
           >
             <div className="impact-static-map__inner">
               <div className="impact-static-map__frame">
-                <img src={ukMapImage} alt="" aria-hidden="true" className="impact-static-map__image" />
+                <img src="/uk.svg" alt="" aria-hidden="true" className="impact-static-map__image" />
                 <div className="impact-static-map__markers" aria-hidden="false">
                   {locations.map((location) => {
                     const point = projectLatLngToImagePercent(location.position);
