@@ -97,9 +97,9 @@
 }
 
 .why-waqf-panel-kicker {
-  margin: 0 0 12px;
-  color: rgba(43, 52, 108, 0.78);
-  font-size: 0.76rem;
+  margin: 0 0 22px;
+  color: #1F2A5F;
+  font-size: 1.2rem;
   line-height: 1.2;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -123,7 +123,7 @@
   color: #2B346C;
 }
 
-.why-waqf-panel-content p {
+.why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
   margin: 18px 0 0;
   font-size: 1.05rem;
   line-height: 1.7;
@@ -161,7 +161,7 @@
     font-size: clamp(1.6rem, 3vw, 2.2rem);
   }
 
-  .why-waqf-panel-content p {
+  .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
     font-size: 0.98rem;
     line-height: 1.6;
   }
@@ -221,14 +221,14 @@
     order: 2;
   }
 
-  .why-waqf-panel-content p {
+  .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
     order: 3;
   }
 
   .why-waqf-panel-kicker {
     order: 0;
-    margin-bottom: 10px;
-    font-size: 0.72rem;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
     letter-spacing: 0.13em;
   }
 
@@ -247,7 +247,7 @@
     margin: 0;
   }
 
-  .why-waqf-panel-content p {
+  .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
     margin-top: 18px;
     font-size: 1.08rem;
     line-height: 1.68;
@@ -280,7 +280,7 @@
     font-size: clamp(1.35rem, 6.8vw, 1.85rem);
   }
 
-  .why-waqf-panel-content p {
+  .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
     font-size: 1.02rem;
   }
 }

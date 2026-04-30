@@ -43,7 +43,7 @@
 }
 
 .impact-section p {
-  color: #4b5464;
+  color: #2B346C;
   line-height: 1.62;
 }
 
@@ -147,7 +147,7 @@
 .impact-map-overlay .impact-shell p {
   max-width: 52ch;
   margin-top: 10px;
-  color: #394b5f;
+  color: #2B346C;
 }
 
 .impact-project-panel {
@@ -422,7 +422,10 @@
 }
 
 .impact-eligibility-image {
-  min-height: 250px;
+  min-height: 320px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .impact-funded {
@@ -464,6 +467,9 @@
 .impact-funded-image {
   min-height: 360px;
   aspect-ratio: 16 / 10;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .impact-funded-copy {
@@ -487,7 +493,7 @@
 }
 
 .impact-supported {
-  background: #ffffff;
+  background: #EDF1FF;
 }
 
 .impact-supported .impact-shell-narrow h2 {
@@ -518,10 +524,14 @@
   min-height: 72px;
   display: grid;
   place-items: center;
-  font-weight: 600;
-  color: #2b346c;
-  text-align: center;
   padding: 10px;
+}
+
+.impact-supported-logo-image {
+  width: 100%;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
 
 .impact-supported-marquee:hover .impact-supported-track {
@@ -835,6 +845,17 @@
   isolation: isolate;
 }
 
+.impact-cause-card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.24;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .impact-cause-card::before {
   content: '';
   position: absolute;
@@ -855,7 +876,7 @@
   margin: 0;
   font-size: clamp(1rem, 1.25vw, 1.22rem);
   line-height: 1.2;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.008em;
   max-width: 16ch;
   margin-top: auto;
@@ -958,6 +979,7 @@
   margin: 0;
   font-size: clamp(1.55rem, 2.4vw, 2rem);
   line-height: 1.2;
+  font-weight: 600;
   color: #2B346C;
 }
 
@@ -965,7 +987,7 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-  color: #3f4654;
+  color: #2B346C;
   font-weight: 600;
 }
 
@@ -973,7 +995,7 @@
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #454d59;
+  color: #2B346C;
 }
 
 @media (max-width: 1080px) {

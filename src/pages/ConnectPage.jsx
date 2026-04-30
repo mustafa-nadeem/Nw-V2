@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './ConnectPage.css';
+import placeholderImg from '../assets/placeholder.jpg';
 
 function ConnectPage() {
+  const heroRef = useRef(null);
+  const [showSectionHeading, setShowSectionHeading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,6 +17,27 @@ function ConnectPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [workshopSubmitStatus, setWorkshopSubmitStatus] = useState(null);
+
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) {
+      return undefined;
+    }
+
+    const updateHeadingVisibility = () => {
+      const triggerPoint = heroEl.offsetTop + (heroEl.offsetHeight * 0.5);
+      setShowSectionHeading(window.scrollY >= triggerPoint);
+    };
+
+    updateHeadingVisibility();
+    window.addEventListener('scroll', updateHeadingVisibility, { passive: true });
+    window.addEventListener('resize', updateHeadingVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', updateHeadingVisibility);
+      window.removeEventListener('resize', updateHeadingVisibility);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,12 +93,15 @@ function ConnectPage() {
 
   return (
     <div className="connect-page" id="connect">
-      <div className="connect-hero">
+      <div ref={heroRef} className="connect-hero">
         <h1>Connect with us</h1>
       </div>
 
       <div className="connect-form-section">
         <div className="connect-container">
+          <div className={`connect-form-heading${showSectionHeading ? ' is-visible' : ''}`}>
+            <h2>Connect with us</h2>
+          </div>
           <div className="connect-content">
             {/* Contact Information Section */}
             <div className="connect-info">
@@ -239,7 +266,7 @@ function ConnectPage() {
               </form>
             </div>
             <div className="workshop-image">
-              <img src="/images/workshops.jpg" alt="Educational workshops" />
+              <img src={placeholderImg} alt="Educational workshops" />
             </div>
           </div>
         </div>

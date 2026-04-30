@@ -31,7 +31,7 @@ const streams = [
     key: 'private',
     color: '#01ACA6',
     top: '44%',
-    factor: 0.7,
+    startFactor: 0.72,
     label: 'Internal Private Waqf',
     Icon: PersonLockIcon,
   },
@@ -39,7 +39,7 @@ const streams = [
     key: 'business',
     color: '#E27D50',
     top: '66%',
-    factor: 0.76,
+    startFactor: 0.79,
     label: 'Monthly Business Donations',
     Icon: HandsExchangeIcon,
   },
@@ -47,7 +47,7 @@ const streams = [
     key: 'gift',
     color: '#2B346C',
     top: '88%',
-    factor: 0.7,
+    startFactor: 0.72,
     label: 'Gift Aid',
     Icon: GiftIcon,
   },
@@ -61,21 +61,22 @@ function FundingDiagram({ step = 0 }) {
           <div className="funding-ring funding-ring--outer" aria-hidden="true" />
           <div className="funding-ring funding-ring--mid" aria-hidden="true" />
           <div className="funding-ring funding-ring--inner" aria-hidden="true" />
-          <div className="funding-center">
-            <h3>National Waqf&rsquo;s Operations</h3>
-            <p>(Salary &amp; Wages, Marketing costs, Events and all other admin costs)</p>
-          </div>
+        </div>
+
+        <div className="funding-center">
+          <h3>National Waqf&rsquo;s Operations</h3>
+          <p>(Salary &amp; Wages, Marketing costs, Events and all other admin costs)</p>
         </div>
 
         <ul className="funding-streams">
-          {streams.map(({ key, color, top, factor, label, Icon }, index) => (
+          {streams.map(({ key, color, top, startFactor, label, Icon }, index) => (
             <li
               key={key}
               className={`funding-stream funding-stream--${key}${step === index + 1 ? ' is-active' : ''}`}
               style={{
                 '--arrow-color': color,
                 '--stream-top': top,
-                '--stream-factor': factor,
+                '--stream-start-factor': startFactor,
               }}
             >
               <div className="funding-stream-track" aria-hidden="true">

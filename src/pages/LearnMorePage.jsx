@@ -11,7 +11,7 @@ const roleCards = [
     mediaLabel: 'Image',
   },
   {
-    title: 'Zakat',
+    title: 'Zakaat',
     subtitle: 'A pillar of our faith',
     text: 'Obligatory charitable giving distributed to eligible recipients to relieve hardship, reduce poverty, and uphold social justice in line with Islamic principles.',
     mediaLabel: 'Image',
@@ -27,14 +27,20 @@ const roleCards = [
 const usageCards = [
   {
     title: 'Religious Waqf',
+    imageSrc: placeholderImg,
+    imageAlt: 'Religious Waqf illustration',
     paragraphs: ['Endowments dedicated to supporting Islamic worship and sacred knowledge, such as mosques, Qur\'an distribution, and religious institutions.'],
   },
   {
     title: 'Philanthropic Waqf',
+    imageSrc: placeholderImg,
+    imageAlt: 'Philanthropic Waqf illustration',
     paragraphs: ['Endowments established for the public good, funding essential services such as education, social welfare, healthcare, and community development.'],
   },
   {
     title: 'Family Waqf',
+    imageSrc: placeholderImg,
+    imageAlt: 'Family Waqf illustration',
     paragraphs: ['Endowments designed to support family members while preserving wealth, enabling Islamic estate planning and a legacy of financial security.'],
   },
 ];

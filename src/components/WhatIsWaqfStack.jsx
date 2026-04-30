@@ -113,6 +113,7 @@ function WhatIsWaqfStack({
   }, []);
 
   const useStaticLayout = prefersReducedMotion;
+  const isUsageVariant = sectionClassName.includes('learn-usage-stack');
 
   useLayoutEffect(() => {
     if (!sectionRef.current || useStaticLayout) {
@@ -211,7 +212,9 @@ function WhatIsWaqfStack({
       });
 
       gsap.set(headingEl, {
-        fontSize: 'clamp(3.5rem, 7vw, 7rem)',
+        fontSize: isUsageVariant
+          ? 'clamp(2rem, 4.2vw, 3.6rem)'
+          : 'clamp(3.5rem, 7vw, 7rem)',
         display: 'flex',
         justifyContent: 'flex-start',
         gap: '0.32ch',
@@ -305,7 +308,9 @@ function WhatIsWaqfStack({
       // Phase 1: heading shrinks and moves to left
       timeline
         .to(headingEl, {
-          fontSize: 'clamp(2.4rem, 4vw, 5rem)',
+          fontSize: isUsageVariant
+            ? 'clamp(1.7rem, 3.3vw, 2.8rem)'
+            : 'clamp(2.4rem, 4vw, 5rem)',
           duration: 1,
           ease: 'power2.inOut',
         }, 0)
@@ -337,7 +342,7 @@ function WhatIsWaqfStack({
       });
       ctx.revert();
     };
-  }, [useStaticLayout, isMobileLayout]);
+  }, [useStaticLayout, isMobileLayout, isUsageVariant]);
 
   return (
     <section
@@ -372,28 +377,36 @@ function WhatIsWaqfStack({
         <div className="waqf-stack-cards" role="list" aria-label="What is Waqf key cards">
           {cardsData.map((card, index) => (
             <article
-              className="waqf-stack-card"
+              className={`waqf-stack-card${card.imageSrc ? ' waqf-stack-card--with-media' : ''}`}
               key={card.title}
               role="listitem"
               aria-setsize={cardsData.length}
               aria-posinset={index + 1}
             >
-              <h3>{card.title}</h3>
+              {card.imageSrc ? (
+                <div className="waqf-stack-card-media">
+                  <img src={card.imageSrc} alt={card.imageAlt || ''} />
+                </div>
+              ) : null}
 
-              {card.intro ? <p className="waqf-stack-intro">{card.intro}</p> : null}
+              <div className="waqf-stack-card-content">
+                <h3>{card.title}</h3>
 
-              {card.paragraphs
-                ? card.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)
-                : null}
+                {card.intro ? <p className="waqf-stack-intro">{card.intro}</p> : null}
 
-              {card.sections
-                ? card.sections.map((item) => (
-                    <div className="waqf-stack-detail" key={item.heading}>
-                      <p className="waqf-stack-detail-heading">{item.heading}</p>
-                      <p>{item.body}</p>
-                    </div>
-                  ))
-                : null}
+                {card.paragraphs
+                  ? card.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)
+                  : null}
+
+                {card.sections
+                  ? card.sections.map((item) => (
+                      <div className="waqf-stack-detail" key={item.heading}>
+                        <p className="waqf-stack-detail-heading">{item.heading}</p>
+                        <p>{item.body}</p>
+                      </div>
+                    ))
+                  : null}
+              </div>
             </article>
           ))}
         </div>

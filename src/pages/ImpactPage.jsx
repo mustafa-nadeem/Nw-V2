@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import placeholderImg from '../assets/placeholder.jpg';
 import ukMapImage from '../assets/uk.jpg';
+import logoMcb from '../assets/logosss/MCB 2 (1).png';
+import logoMsf from '../assets/logosss/MSF (1).png';
+import logoNewBeginnings from '../assets/logosss/New beginnings (1).png';
+import logoSacred from '../assets/logosss/sacred.png';
+import logoSapience from '../assets/logosss/sapience.png';
+import logoSpinney from '../assets/logosss/spinney.png';
+import logoThumbnail from '../assets/logosss/thumbnail_2025-12-19 14.52.20.jpg';
 import DigitalReelNumber from '../components/DigitalReelNumber';
 import './ImpactPage.css';
 
@@ -355,12 +362,13 @@ const fundedProjects = [
 ];
 
 const supportedLogos = [
-  'Sapience Institute',
-  'Community Policy Forum',
-  'Spinney Hill',
-  'Muslim Census',
-  'MCB',
-  'Sacred',
+  { src: logoMcb, alt: 'MCB logo' },
+  { src: logoMsf, alt: 'MSF logo' },
+  { src: logoNewBeginnings, alt: 'New Beginnings logo' },
+  { src: logoSacred, alt: 'Sacred logo' },
+  { src: logoSapience, alt: 'Sapience logo' },
+  { src: logoSpinney, alt: 'Spinney logo' },
+  { src: logoThumbnail, alt: 'Community Policy Forum logo' },
 ];
 
 const impactStats = [
@@ -715,7 +723,7 @@ function ImpactPage() {
             </p>
             <button type="button" className="impact-btn">Download Now</button>
           </div>
-          <div className="impact-placeholder impact-eligibility-image" aria-hidden="true">Image</div>
+          <img className="impact-placeholder impact-eligibility-image" src={placeholderImg} alt="" aria-hidden="true" />
         </div>
       </section>
 
@@ -732,7 +740,7 @@ function ImpactPage() {
                 key={project.title}
                 className={`impact-funded-row ${index % 2 !== 0 ? 'impact-funded-row--reverse' : ''}`}
               >
-                <div className="impact-placeholder impact-funded-image" aria-hidden="true">Image</div>
+                <img className="impact-placeholder impact-funded-image" src={placeholderImg} alt="" aria-hidden="true" />
                 <div className="impact-funded-copy">
                   <h3>{project.title}</h3>
                   <p>{project.text}</p>
@@ -750,8 +758,8 @@ function ImpactPage() {
         <div className="impact-supported-marquee" aria-label="Supported organisations logos">
           <div className="impact-supported-track" role="list">
             {[...supportedLogos, ...supportedLogos].map((logo, index) => (
-              <div key={`${logo}-${index}`} className="impact-supported-logo" role="listitem">
-                {logo}
+              <div key={`${logo.alt}-${index}`} className="impact-supported-logo" role="listitem">
+                <img className="impact-supported-logo-image" src={logo.src} alt={logo.alt} loading="lazy" />
               </div>
             ))}
           </div>
@@ -836,6 +844,12 @@ function ImpactPage() {
                 onClick={() => onSelectCause(cause)}
                 aria-label={`Learn more about ${cause.title}`}
               >
+                <img
+                  className="impact-cause-card-image"
+                  src={placeholderImg}
+                  alt=""
+                  aria-hidden="true"
+                />
                 <span className="impact-cause-card-title">{cause.title}</span>
                 <span className="impact-cause-card-arrow" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

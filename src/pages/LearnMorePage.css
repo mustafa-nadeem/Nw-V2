@@ -94,10 +94,12 @@
 }
 
 .learn-hero {
-  min-height: 100svh;
-  padding: clamp(160px, 24vw, 380px) 0 clamp(64px, 9vw, 180px);
-  background: linear-gradient(135deg, #2B346C 0%, #3a4284 100%);
-  animation: gradientShift 8s ease infinite;
+  min-height: 100vh;
+  padding: 0;
+  background-image: url('../assets/placeholder.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: grid;
   align-items: center;
   margin-top: 0;
@@ -105,17 +107,29 @@
   z-index: 1;
 }
 
+.learn-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
 .learn-hero-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 34px;
   align-items: center;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .learn-hero-copy {
   display: grid;
   gap: 20px;
-  text-align: left;
+  text-align: center;
+  justify-items: center;
 }
 
 .learn-hero-copy h1 {
@@ -124,16 +138,19 @@
 
 .learn-hero-copy p {
   max-width: 64ch;
-  color: #d0d0d0;
+  color: #ffffff;
+  font-weight: 600;
+  margin: 0 auto;
 }
 
 .learn-hero-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(160px, 240px));
-  justify-content: flex-start;
+  justify-content: center;
   gap: 22px;
   margin-top: 18px;
   width: fit-content;
+  margin-inline: auto;
 }
 
 .learn-hero-actions button {
@@ -331,6 +348,14 @@
 .learn-usage-stack .waqf-stack-card .waqf-stack-intro,
 .learn-usage-stack .waqf-stack-card .waqf-stack-detail-heading {
   color: #ffffff;
+}
+
+.learn-usage-stack .waqf-stack-layout {
+  gap: 30px;
+}
+
+.learn-usage-stack .waqf-stack-copy h2 {
+  font-size: clamp(2.2rem, 4.8vw, 4.2rem);
 }
 
 .learn-usage-grid {
@@ -861,8 +886,8 @@
 
 @media (max-width: 1080px) {
   .learn-hero {
-    min-height: 100svh;
-    padding: clamp(132px, 20vw, 220px) 0 clamp(56px, 9vw, 88px);
+    min-height: 100vh;
+    padding: 0;
     margin-top: 0;
   }
 
@@ -896,6 +921,14 @@
     gap: 20px;
   }
 
+  .learn-usage-stack .waqf-stack-layout {
+    gap: 20px;
+  }
+
+  .learn-usage-stack .waqf-stack-copy h2 {
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+  }
+
   .learn-usage-card {
     min-height: 360px;
     padding: 28px;
@@ -913,8 +946,8 @@
   }
 
   .learn-hero {
-    min-height: 100svh;
-    padding: clamp(96px, 22vw, 120px) 0 clamp(52px, 12vw, 68px);
+    min-height: 100vh;
+    padding: 0;
     align-items: center;
   }
 
@@ -1016,7 +1049,7 @@
   }
 
   .learn-hero {
-    padding: 88px 0 52px;
+    padding: 0;
   }
 
   .learn-hero-copy p {

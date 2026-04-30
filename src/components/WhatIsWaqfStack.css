@@ -78,7 +78,7 @@
   inset: 0;
   width: 480px;
   height: 420px;
-  padding: 36px;
+  padding: 30px;
   border-radius: 20px;
   border: none;
   background: #fff;
@@ -89,6 +89,31 @@
   gap: 14px;
   will-change: transform;
   color: #fff;
+}
+
+.waqf-stack-card--with-media {
+  justify-content: flex-start;
+}
+
+.waqf-stack-card-media {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: clamp(180px, 50%, 260px);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.waqf-stack-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.waqf-stack-card-content {
+  display: grid;
+  gap: 12px;
 }
 
 .waqf-stack-card:nth-child(1) { background: #2B346C; }
@@ -134,7 +159,7 @@
 
 .waqf-stack-index {
   margin: 0;
-  color: #5a6372;
+  color: #2B346C;
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -223,7 +248,11 @@
   .waqf-stack-card {
     width: 400px;
     height: 480px;
-    padding: 28px;
+    padding: 24px;
+  }
+
+  .waqf-stack-card-media {
+    min-height: clamp(170px, 46%, 230px);
   }
 
   .waqf-stack-card p {
@@ -285,8 +314,12 @@
     width: 100%;
     max-width: 100%;
     height: 400px;
-    padding: 22px;
+    padding: 18px;
     gap: 10px;
+  }
+
+  .waqf-stack-card-media {
+    min-height: clamp(160px, 42vw, 220px);
   }
 
   .waqf-stack-icon {

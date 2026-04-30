@@ -363,7 +363,7 @@ h3 {
 }
 
 .info-card p {
-  color: #3f4550;
+  color: #2B346C;
   line-height: 1.6;
 }
 
@@ -376,7 +376,7 @@ h3 {
   border: 1px dashed #b9bec6;
   display: grid;
   place-items: center;
-  color: #707784;
+  color: #2B346C;
   font-weight: 600;
   font-size: 0.85rem;
 }
@@ -413,7 +413,7 @@ h3 {
   background: var(--surface-strong);
   display: grid;
   place-items: center;
-  color: #47505d;
+  color: #2B346C;
   font-weight: 600;
 }
 
@@ -424,14 +424,14 @@ h3 {
 }
 
 .reason-body p {
-  color: #39404c;
+  color: #2B346C;
   line-height: 1.6;
 }
 
 .impact {
   background: #FFF9F3;
   padding-top: 92px;
-  padding-bottom: 110px;
+  padding-bottom: 220px;
 }
 
 .impact-shell {
@@ -584,7 +584,7 @@ h3 {
 }
 
 .impact-text {
-  color: #333946;
+  color: #2B346C;
   line-height: 1.5;
   font-size: 0.88rem;
   font-weight: 600;

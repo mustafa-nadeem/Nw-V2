@@ -65,10 +65,10 @@
     opacity: 0;
   }
   5% {
-    opacity: 1;
+    opacity: 0.7;
   }
   95% {
-    opacity: 1;
+    opacity: 0.7;
   }
   100% {
     transform: translateY(-110vh);
@@ -88,14 +88,6 @@
   background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
-}
-
-.hero-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
 }
 
 .hero-card--1 {
@@ -133,7 +125,7 @@
 .hero-card--5 {
   width: 170px;
   height: 220px;
-  left: 34%;
+  left: 10%;
   animation-duration: 20s;
   animation-delay: -10s;
 }
@@ -141,7 +133,7 @@
 .hero-card--6 {
   width: 180px;
   height: 240px;
-  right: 30%;
+  right: 10%;
   animation-duration: 17s;
   animation-delay: -2s;
 }
@@ -604,7 +596,7 @@
 
 .about-principles-list {
   display: grid;
-  grid-template-rows: repeat(4, minmax(94px, 1fr));
+  grid-template-rows: repeat(4, minmax(112px, 1fr));
   gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
@@ -616,7 +608,7 @@
   color: #fff;
   border: none;
   border-radius: 18px;
-  padding: 14px 28px;
+  padding: 24px 28px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -624,7 +616,7 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: 94px;
+  min-height: 112px;
   overflow: hidden;
   will-change: transform;
 }
@@ -704,7 +696,7 @@
   }
 
   .about-principle-card {
-    padding: 20px 18px;
+    padding: 24px 18px;
     border-radius: 14px;
     overflow: visible;
   }

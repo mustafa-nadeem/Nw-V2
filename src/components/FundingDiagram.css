@@ -1,6 +1,8 @@
 .funding-diagram {
   --ring: clamp(270px, 31vw, 430px);
   --label-column: clamp(150px, 20vw, 270px);
+  --private-label-width: 19ch;
+  --stream-start-factor: 0.72;
   --stream-gap: clamp(12px, 1.4vw, 22px);
   --arrow-end-pad: clamp(2px, 0.5vw, 8px);
   --stream-embed: clamp(8px, 1.1vw, 14px);
@@ -52,32 +54,31 @@
 
 .funding-center {
   position: absolute;
-  inset: 23%;
-  display: grid;
-  place-content: center;
-  text-align: center;
+  right: calc(var(--label-column) - var(--private-label-width));
+  top: calc(44% - clamp(132px, 13vw, 176px));
+  width: var(--label-column);
+  text-align: right;
   z-index: 2;
   pointer-events: none;
-  padding: 0 clamp(8px, 1.5vw, 20px);
+  padding: 0;
 }
 
 .funding-center h3 {
   margin: 0 0 clamp(6px, 0.8vw, 12px);
-  max-width: 11ch;
-  margin-inline: auto;
-  font-size: clamp(1.15rem, 2.1vw, 2.45rem);
+  max-width: none;
+  font-size: clamp(1.12rem, 1.95vw, 2.3rem);
   line-height: 1.08;
   letter-spacing: -0.02em;
   font-weight: 600;
-  color: #0f1720;
+  color: #2B346C;
 }
 
 .funding-center p {
-  margin: 0 auto;
-  max-width: 16ch;
-  font-size: clamp(0.76rem, 1.15vw, 1.38rem);
-  line-height: 1.28;
-  color: #6c737e;
+  margin: 0 0 0 auto;
+  max-width: 20ch;
+  font-size: clamp(0.66rem, 0.98vw, 1.08rem);
+  line-height: 1.24;
+  color: #2B346C;
 }
 
 .funding-streams {
@@ -91,8 +92,8 @@
 
 .funding-stream {
   position: absolute;
-  left: calc(var(--diagram-left-offset) + (var(--ring) * var(--stream-factor)) - var(--stream-embed));
-  right: calc(var(--arrow-end-pad) - var(--icon-outset));
+  left: calc(var(--diagram-left-offset) + (var(--ring) * var(--stream-start-factor)) - var(--stream-embed));
+  right: 0;
   top: var(--stream-top);
   transform: translateY(-50%);
   display: grid;
@@ -196,12 +197,6 @@
   transform: translateX(0);
 }
 
-.funding-diagram.is-step-2 .funding-stream--private,
-.funding-diagram.is-step-3 .funding-stream--private,
-.funding-diagram.is-step-3 .funding-stream--business {
-  opacity: 0.62;
-}
-
 .funding-stream.is-active {
   opacity: 1 !important;
 }
@@ -262,12 +257,29 @@
     gap: 28px;
   }
 
+  .funding-center {
+    position: static;
+    width: min(100%, 620px);
+    text-align: right;
+    order: 1;
+  }
+
+  .funding-center h3 {
+    max-width: none;
+  }
+
+  .funding-center p {
+    margin: 0;
+    max-width: 20ch;
+  }
+
   .funding-streams {
     position: static;
     width: min(100%, 620px);
     height: auto;
     display: grid;
     gap: 12px;
+    order: 2;
   }
 
   .funding-stream {

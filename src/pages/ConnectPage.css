@@ -26,12 +26,36 @@
 /* Form Section */
 .connect-form-section {
   background: #ECFFFE;
-  padding: 160px 28px;
+  min-height: 100vh;
+  padding: clamp(40px, 8vh, 90px) 28px;
+  display: flex;
+  align-items: center;
 }
 
 .connect-container {
   width: min(100%, var(--container));
   margin: 0 auto;
+}
+
+.connect-form-heading {
+  margin: 0 0 34px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.connect-form-heading.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.connect-form-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #2B346C;
+  font-weight: 600;
 }
 
 .connect-header {
@@ -221,8 +245,11 @@
 
 /* Workshop Section */
 .workshop-section {
-  background: #2B346C;
-  padding: 120px 28px;
+  background: #E27D50;
+  min-height: 100vh;
+  padding: clamp(40px, 8vh, 90px) 28px;
+  display: flex;
+  align-items: center;
 }
 
 .workshop-container {
@@ -379,6 +406,14 @@
 @media (max-width: 640px) {
   .connect-form-section {
     padding: 40px 28px 60px 28px;
+  }
+
+  .connect-form-heading {
+    margin-bottom: 24px;
+  }
+
+  .connect-form-heading h2 {
+    font-size: clamp(1.7rem, 8vw, 2.2rem);
   }
 
   .connect-hero {
