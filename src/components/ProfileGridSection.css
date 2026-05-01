@@ -437,7 +437,7 @@
 
   .profile-grid-section__dialog-body {
     padding-top: 0;
-    padding-right: 0;
+    padding-right: 42px;
   }
 
   .profile-grid-section__dialog-name {
@@ -452,6 +452,7 @@
   }
 
   .profile-grid-section__dialog-heading {
+    align-items: flex-start;
     gap: 10px;
     margin: 0 0 4px;
   }
@@ -492,6 +493,10 @@
     padding: 14px 12px 14px;
     gap: 12px;
     border-radius: 14px;
+  }
+
+  .profile-grid-section__dialog-body {
+    padding-right: 38px;
   }
 
   .profile-grid-section__dialog-name {
