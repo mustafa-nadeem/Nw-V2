@@ -137,13 +137,16 @@ function WhatIsWaqfStack({
       const headingWords = gsap.utils.toArray('.waqf-word');
 
       if (isMobileLayout) {
-        const navbarOffset = 92;
+        const navbarOffset = 0;
         const viewportHeight = window.innerHeight;
         const copyHeight = copyEl ? copyEl.getBoundingClientRect().height : 0;
         const availableForCards = viewportHeight - navbarOffset - copyHeight - 34;
-        const mobileCardHeight = Math.max(220, Math.min(420, availableForCards));
-        const mobilePeek = Math.max(56, Math.min(110, Math.round(mobileCardHeight * 0.24)));
-        const stackHeight = mobileCardHeight + (cardEls.length - 1) * mobilePeek;
+        // MOBILE CARD HEIGHT CONTROL (PINNED MODE):
+        // - 0.55: relative scale factor (higher = taller cards)
+        // - 280: max cap (higher = allows taller cards)
+        // - 170: min floor (higher = prevents cards becoming too short)
+        const mobileCardHeight = Math.max(190, Math.min(310, Math.round(availableForCards * 0.62)));
+        const stackHeight = mobileCardHeight;
 
         gsap.set(copyEl, {
           position: 'relative',
@@ -158,7 +161,7 @@ function WhatIsWaqfStack({
             left: 0,
             right: 0,
             bottom: 'auto',
-            top: `${index * mobilePeek}px`,
+            top: 0,
             width: '100%',
             height: `${mobileCardHeight}px`,
             zIndex: index + 1,
@@ -176,7 +179,7 @@ function WhatIsWaqfStack({
           scrollTrigger: {
             id: pinTriggerId,
             trigger: sectionEl,
-            start: `top ${navbarOffset}px`,
+            start: 'top top',
             end: '+=' + totalScroll,
             pin: sectionEl,
             pinSpacing: true,

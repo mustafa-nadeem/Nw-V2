@@ -1226,12 +1226,12 @@
   }
 
   .impact-project-panel__close {
-    margin: 16px 20px 12px 20px;
+    margin: 16px var(--mobile-shell-pad) 12px var(--mobile-shell-pad);
     padding: 8px 16px;
   }
 
   .impact-project-panel__header {
-    padding: 16px 20px 16px 20px;
+    padding: 16px var(--mobile-shell-pad) 16px var(--mobile-shell-pad);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: 12px;
   }
@@ -1239,13 +1239,13 @@
   .impact-project-panel__body {
     flex: 1;
     overflow: visible;
-    padding: 0 20px calc(24px + env(safe-area-inset-bottom)) 20px;
+    padding: 0 var(--mobile-shell-pad) calc(24px + env(safe-area-inset-bottom)) var(--mobile-shell-pad);
     gap: 12px;
   }
 
   .impact-shell,
   .impact-supported-marquee {
-    padding: 0 16px;
+    padding: 0 var(--mobile-shell-pad);
   }
 
   .impact-section {
@@ -1276,7 +1276,7 @@
 
   .impact-model-grid {
     min-height: 0;
-    padding: 0 16px;
+    padding: 0 var(--mobile-shell-pad);
   }
 
   .impact-model-content {
@@ -1304,22 +1304,36 @@
 
   .impact-stats-grid {
     width: 100%;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.8fr) minmax(0, 1.15fr);
     grid-template-areas:
-      "left-tall"
-      "top-wide"
-      "middle-tall"
-      "bottom-right"
-      "bottom-left";
-    gap: 10px;
+      "left-tall    top-wide     top-wide"
+      "left-tall    middle-tall  bottom-right"
+      "bottom-left  middle-tall  bottom-right";
+    gap: 8px;
   }
 
   .impact-stat-card {
-    min-height: unset;
+    min-height: 138px;
+    padding: 18px 16px;
+    gap: 8px;
   }
 
   .impact-stat-card--bottom-left {
-    min-height: unset;
+    min-height: 118px;
+  }
+
+  .impact-stat-value {
+    font-size: clamp(1.4rem, 4.2vw, 2rem);
+    line-height: 1;
+  }
+
+  .impact-stat-value--compact {
+    font-size: clamp(1.2rem, 3.6vw, 1.65rem);
+  }
+
+  .impact-stat-text {
+    font-size: clamp(0.7rem, 1.9vw, 0.82rem);
+    line-height: 1.35;
   }
 
   .impact-cause-grid {
@@ -1354,11 +1368,31 @@
 
   .impact-stats-grid {
     height: auto;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.84fr) minmax(0, 1.08fr);
+    gap: 6px;
   }
 
   .impact-stat-card {
-    padding: 22px 18px;
-    gap: 10px;
+    padding: 13px 11px;
+    min-height: 108px;
+    gap: 6px;
+  }
+
+  .impact-stat-card--bottom-left {
+    min-height: 92px;
+  }
+
+  .impact-stat-value {
+    font-size: clamp(1.1rem, 5.2vw, 1.45rem);
+  }
+
+  .impact-stat-value--compact {
+    font-size: clamp(1rem, 4.4vw, 1.26rem);
+  }
+
+  .impact-stat-text {
+    font-size: clamp(0.62rem, 2.35vw, 0.72rem);
+    line-height: 1.26;
   }
 
   .impact-cause-grid {

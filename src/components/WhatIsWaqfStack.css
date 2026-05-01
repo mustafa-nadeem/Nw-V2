@@ -71,6 +71,7 @@
   justify-self: end;
   overflow: visible;
   grid-column: 2;
+  isolation: isolate;
 }
 
 .waqf-stack-card {
@@ -89,6 +90,12 @@
   gap: 14px;
   will-change: transform;
   color: #fff;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 .waqf-stack-card--with-media {
@@ -262,26 +269,34 @@
 }
 
 @media (max-width: 768px) {
-  .waqf-stack-section {
-    padding-top: 28px;
-    padding-bottom: 0;
+  .homepage .waqf-stack-section.section {
+    padding: 96px 0 40px !important;
+    margin-top: 0 !important;
   }
 
   .waqf-stack-layout {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 24px;
     min-height: 100vh;
     align-content: start;
+    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--home-mobile-inline, 18px);
+    padding-right: var(--home-mobile-inline, 18px);
   }
 
   .waqf-stack-copy {
-    max-width: none;
+    width: 100%;
+    max-width: var(--home-mobile-content-max, 400px);
+    margin-left: auto;
+    margin-right: auto;
     text-align: left;
   }
 
   .waqf-stack-copy h2 {
-    margin-inline: 0;
-    font-size: clamp(2.4rem, 10vw, 4rem);
+    margin: 0 0 8px;
+    font-size: clamp(1.7rem, 7.8vw, 2.7rem);
   }
 
   .waqf-word + .waqf-word {
@@ -296,16 +311,17 @@
   }
 
   .waqf-stack-description p {
-    font-size: 0.88rem;
-    line-height: 1.42;
+    font-size: 0.8rem;
+    line-height: 1.36;
   }
 
   .waqf-stack-cards {
     grid-column: 1 / -1;
     width: 100%;
-    max-width: 100%;
+    max-width: var(--home-mobile-content-max, 400px);
     height: auto;
-    margin-inline: 0;
+    margin-left: auto;
+    margin-right: auto;
     justify-self: stretch;
     margin-top: -2px;
   }
@@ -313,13 +329,14 @@
   .waqf-stack-card {
     width: 100%;
     max-width: 100%;
-    height: 400px;
-    padding: 18px;
-    gap: 10px;
+    /* MOBILE CARD HEIGHT CONTROL (STATIC/REDUCED-MOTION CSS FALLBACK) */
+    height: 270px;
+    padding: 14px;
+    gap: 8px;
   }
 
   .waqf-stack-card-media {
-    min-height: clamp(160px, 42vw, 220px);
+    min-height: clamp(120px, 30vw, 170px);
   }
 
   .waqf-stack-icon {
@@ -329,8 +346,8 @@
   }
 
   .waqf-stack-card p {
-    font-size: 0.84rem;
-    line-height: 1.38;
+    font-size: 0.78rem;
+    line-height: 1.34;
   }
 
   .waqf-stack-section.reduced-motion .waqf-stack-cards {
@@ -342,15 +359,37 @@
   .waqf-stack-section.reduced-motion .waqf-stack-card {
     position: relative;
     width: 100%;
-    height: 420px;
+    /* MOBILE REDUCED-MOTION HEIGHT CONTROL */
+    height: 280px;
     margin: 0;
   }
 
   .waqf-stack-section.reduced-motion .waqf-stack-card + .waqf-stack-card {
-    margin-top: -300px;
+    margin-top: -220px;
   }
 
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(1) { z-index: 1; }
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(2) { z-index: 2; }
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(3) { z-index: 3; }
+}
+
+@media (max-width: 640px) {
+  .homepage .waqf-stack-section.section {
+    padding-top: 84px !important;
+    padding-bottom: 34px !important;
+  }
+
+  .waqf-stack-copy h2 {
+    font-size: clamp(1.55rem, 7.2vw, 2.25rem);
+  }
+
+  .waqf-stack-description p {
+    font-size: 0.76rem;
+    line-height: 1.32;
+  }
+
+  .waqf-stack-card p {
+    font-size: 0.7rem;
+    line-height: 1.25;
+  }
 }

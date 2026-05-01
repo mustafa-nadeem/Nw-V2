@@ -8,6 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_PACING = 1.28;
 const LAST_SLIDE_HOLD = 0.3;
+const MOBILE_SCROLL_PACING = 0.78;
+const MOBILE_LAST_SLIDE_HOLD = 0.24;
 
 const slides = [
   {
@@ -53,29 +55,11 @@ function WhyWaqfSection() {
     heading: 'why-waqf-heading-reveal',
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isMobileLayout, setIsMobileLayout] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
-  );
   const [showPanelKicker, setShowPanelKicker] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setPrefersReducedMotion(media.matches);
-
-    update();
-
-    if (media.addEventListener) {
-      media.addEventListener('change', update);
-      return () => media.removeEventListener('change', update);
-    }
-
-    media.addListener(update);
-    return () => media.removeListener(update);
-  }, []);
-
-  useEffect(() => {
-    const media = window.matchMedia('(max-width: 767px)');
-    const update = () => setIsMobileLayout(media.matches);
 
     update();
 
@@ -109,7 +93,7 @@ function WhyWaqfSection() {
   }, []);
 
   useLayoutEffect(() => {
-    if (!sectionRef.current || !stageRef.current || prefersReducedMotion || isMobileLayout) {
+    if (!sectionRef.current || !stageRef.current || prefersReducedMotion) {
       return undefined;
     }
 
@@ -143,7 +127,7 @@ function WhyWaqfSection() {
 
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 768px)', () => {
+    const buildPinnedTimeline = (pacing, scrubValue, holdDuration) => {
       const scopedCtx = gsap.context(() => {
         const panels = gsap.utils.toArray('.why-waqf-panel');
 
@@ -159,13 +143,13 @@ function WhyWaqfSection() {
             start: 'top top',
             pin: true,
             pinSpacing: true,
-            scrub: 0.8,
+            scrub: scrubValue,
             end: () =>
               '+=' +
-              (panels.length - 1 + LAST_SLIDE_HOLD) * window.innerHeight * SCROLL_PACING,
+              (panels.length - 1 + holdDuration) * window.innerHeight * pacing,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              const totalSteps = panels.length - 1 + LAST_SLIDE_HOLD;
+              const totalSteps = panels.length - 1 + holdDuration;
               const progress = self.progress * totalSteps;
 
               panels.forEach((panel) => {
@@ -193,13 +177,18 @@ function WhyWaqfSection() {
           );
         }
 
-        timeline.to({}, { duration: LAST_SLIDE_HOLD });
+        timeline.to({}, { duration: holdDuration });
       }, sectionRef);
 
       return () => {
         scopedCtx.revert();
       };
-    });
+    };
+
+    mm.add('(min-width: 768px)', () => buildPinnedTimeline(SCROLL_PACING, 0.8, LAST_SLIDE_HOLD));
+    mm.add('(max-width: 767px)', () =>
+      buildPinnedTimeline(MOBILE_SCROLL_PACING, 0.85, MOBILE_LAST_SLIDE_HOLD)
+    );
 
     return () => {
       const allowedIds = Object.values(triggerIds);

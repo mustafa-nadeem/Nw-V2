@@ -169,30 +169,29 @@
 
 @media (max-width: 767px) {
   .why-waqf-header-block {
-    width: 100%;
-    padding: 44px 24px 42px;
+    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
+    padding: 74px var(--home-mobile-inline, 18px) 42px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: left;
   }
 
   .why-waqf-header-block h2 {
-    font-size: clamp(2.2rem, 12vw, 3.1rem);
+    font-size: clamp(1.8rem, 9.2vw, 2.55rem);
     line-height: 1.05;
   }
 
   .why-waqf-stage {
-    height: auto;
-    overflow: visible;
+    height: 100vh;
+    overflow: hidden;
     display: block;
   }
 
   .why-waqf-panel {
-    position: relative;
-    inset: auto;
-    height: auto;
-    overflow: visible;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    position: absolute;
+    inset: 0;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .why-waqf-panel-overlay {
@@ -202,27 +201,21 @@
   .why-waqf-panel-inner {
     grid-template-columns: 1fr;
     align-content: start;
-    height: auto;
-    padding: 68px 24px 44px;
+    height: 100%;
+    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
+    padding: 148px var(--home-mobile-inline, 18px) 44px;
     gap: 20px;
     max-width: none;
-    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .why-waqf-panel-content {
-    display: contents;
+    display: block;
   }
 
   .why-waqf-panel-content h3 {
-    order: 1;
-  }
-
-  .why-waqf-panel-media {
-    order: 2;
-  }
-
-  .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
-    order: 3;
+    order: initial;
   }
 
   .why-waqf-panel-kicker {
@@ -242,33 +235,33 @@
   }
 
   .why-waqf-panel-content h3 {
-    font-size: clamp(1.45rem, 7vw, 2rem);
+    font-size: clamp(1.25rem, 5.9vw, 1.65rem);
     line-height: 1.15;
     margin: 0;
   }
 
   .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
     margin-top: 18px;
-    font-size: 1.08rem;
-    line-height: 1.68;
+    font-size: 0.95rem;
+    line-height: 1.58;
   }
 }
 
 @media (max-width: 640px) {
   .why-waqf-header-block {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: var(--home-mobile-inline, 18px);
+    padding-right: var(--home-mobile-inline, 18px);
     padding-bottom: 16px;
   }
 
   .why-waqf-header-block h2 {
-    font-size: clamp(2rem, 11.5vw, 2.8rem);
+    font-size: clamp(1.65rem, 8.5vw, 2.2rem);
   }
 
   .why-waqf-panel-inner {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 62px;
+    padding-left: var(--home-mobile-inline, 18px);
+    padding-right: var(--home-mobile-inline, 18px);
+    padding-top: 126px;
     padding-bottom: 40px;
   }
 
@@ -277,11 +270,11 @@
   }
 
   .why-waqf-panel-content h3 {
-    font-size: clamp(1.35rem, 6.8vw, 1.85rem);
+    font-size: clamp(1.15rem, 5.2vw, 1.45rem);
   }
 
   .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
-    font-size: 1.02rem;
+    font-size: 0.88rem;
   }
 }
 
@@ -291,7 +284,7 @@
   }
 
   .why-waqf-panel-inner {
-    padding-top: 54px;
+    padding-top: 112px;
     padding-bottom: 34px;
   }
 
