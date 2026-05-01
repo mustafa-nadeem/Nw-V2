@@ -171,13 +171,21 @@
     padding: 60px 0;
   }
 
+  .about-page .profile-grid-section__container {
+    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--about-mobile-inline, 18px) * 2)));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--about-mobile-inline, 18px);
+    padding-right: var(--about-mobile-inline, 18px);
+  }
+
   .profile-grid-section__container {
     padding-right: 0;
   }
 
   .profile-grid-section__intro {
     margin-bottom: 28px;
-    padding-right: 20px;
+    padding-right: var(--about-mobile-inline, 18px);
   }
 
   .profile-grid-section__intro h2 {
@@ -193,7 +201,7 @@
     overflow-y: visible;
     scroll-snap-type: x mandatory;
     gap: 16px;
-    padding: 4px 20px 12px 0;
+    padding: 4px var(--about-mobile-inline, 18px) 12px 0;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -416,14 +424,15 @@
 @media (max-width: 720px) {
   .profile-grid-section__dialog {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 24px 22px 28px;
+    gap: 14px;
+    padding: 18px 16px 18px;
     width: calc(100% - 24px);
+    max-height: calc(100vh - 24px);
+    border-radius: 18px;
   }
 
   .profile-grid-section__dialog-media {
-    aspect-ratio: 4 / 3;
-    max-height: 320px;
+    display: none;
   }
 
   .profile-grid-section__dialog-body {
@@ -431,10 +440,71 @@
     padding-right: 0;
   }
 
+  .profile-grid-section__dialog-name {
+    font-size: clamp(1.14rem, 6vw, 1.48rem);
+    line-height: 1.16;
+  }
+
+  .profile-grid-section__dialog-role {
+    margin: 0 0 8px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .profile-grid-section__dialog-heading {
+    gap: 10px;
+    margin: 0 0 4px;
+  }
+
+  .profile-grid-section__dialog-linkedin {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profile-grid-section__dialog-linkedin svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .profile-grid-section__dialog-divider {
+    width: 38px;
+    margin: 0 0 10px;
+  }
+
+  .profile-grid-section__dialog-bio {
+    font-size: clamp(0.88rem, 3.9vw, 0.98rem);
+    line-height: 1.45;
+  }
+
   .profile-grid-section__dialog-close {
-    top: 14px;
-    right: 14px;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
     background: rgba(43, 52, 108, 0.92);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-grid-section__dialog {
+    width: calc(100% - 12px);
+    max-height: calc(100vh - 12px);
+    padding: 14px 12px 14px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .profile-grid-section__dialog-name {
+    font-size: clamp(1rem, 5.5vw, 1.28rem);
+  }
+
+  .profile-grid-section__dialog-role {
+    font-size: 0.74rem;
+  }
+
+  .profile-grid-section__dialog-bio {
+    font-size: clamp(0.8rem, 3.75vw, 0.92rem);
+    line-height: 1.4;
   }
 }
 

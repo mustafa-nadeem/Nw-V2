@@ -89,9 +89,6 @@ function AboutPage() {
   const [fundingStep, setFundingStep] = useState(0);
   const prevStepRef = useRef(1);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isPvmMobile, setIsPvmMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
-  );
 
   const activeStep = hoverStep ?? cycleStep;
   const activeData = steps[activeStep - 1];
@@ -124,8 +121,8 @@ function AboutPage() {
 
     const triggerId = 'about-works-cycle-pin';
     const earlyTriggerId = 'about-works-cycle-early';
-    const isMobile = window.matchMedia('(max-width: 520px)').matches;
-    const pinStart = isMobile ? 'bottom bottom-=120' : 'bottom bottom';
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const pinStart = isMobile ? 'top top+=76' : 'bottom bottom';
 
     ScrollTrigger.create({
       id: earlyTriggerId,
@@ -161,18 +158,6 @@ function AboutPage() {
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setPrefersReducedMotion(mq.matches);
-    update();
-    if (mq.addEventListener) {
-      mq.addEventListener('change', update);
-      return () => mq.removeEventListener('change', update);
-    }
-    mq.addListener(update);
-    return () => mq.removeListener(update);
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const update = () => setIsPvmMobile(mq.matches);
     update();
     if (mq.addEventListener) {
       mq.addEventListener('change', update);
@@ -236,14 +221,14 @@ function AboutPage() {
   }, [prefersReducedMotion]);
 
   useLayoutEffect(() => {
-    if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion || isPvmMobile) {
+    if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion) {
       return undefined;
     }
 
     const pvmTriggerId = 'about-pvm-stage-pin';
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 768px)', () => {
+    const buildPvmTimeline = (scrollPacing, lastPanelHoldScroll, scrubValue) => {
       const ctx = gsap.context(() => {
         const panels = gsap.utils.toArray('.about-pvm-panel');
 
@@ -260,10 +245,10 @@ function AboutPage() {
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
-            scrub: 0.8,
+            scrub: scrubValue,
             fastScrollEnd: true,
             end: () => '+=' + (
-              (panels.length - 1) * window.innerHeight * PVM_SCROLL_PACING + PVM_LAST_PANEL_HOLD_SCROLL
+              (panels.length - 1) * window.innerHeight * scrollPacing + lastPanelHoldScroll
             ),
             invalidateOnRefresh: true,
             onUpdate: (self) => {
@@ -306,7 +291,14 @@ function AboutPage() {
       }, pvmSectionRef);
 
       return () => ctx.revert();
-    });
+    };
+
+    mm.add('(min-width: 768px)', () =>
+      buildPvmTimeline(PVM_SCROLL_PACING, PVM_LAST_PANEL_HOLD_SCROLL, 0.8)
+    );
+    mm.add('(max-width: 767px)', () =>
+      buildPvmTimeline(1.06, 190, 0.88)
+    );
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {
@@ -314,7 +306,7 @@ function AboutPage() {
       });
       mm.revert();
     };
-  }, [prefersReducedMotion, isPvmMobile]);
+  }, [prefersReducedMotion]);
 
   return (
     <div className="about-page" id="about">

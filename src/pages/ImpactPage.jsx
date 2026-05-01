@@ -26,6 +26,16 @@ const UK_MAP_DRAW_BOUNDS = {
 const STATIC_OVERVIEW_SCALE = 0.84;
 const STATIC_OVERVIEW_TX = 0;
 const STATIC_OVERVIEW_TY = -3;
+const MOBILE_OVERVIEW_SCALE = 1.54;
+const MOBILE_OVERVIEW_TX = 0;
+const MOBILE_OVERVIEW_TY = 3;
+const MAP_MOBILE_BREAKPOINT = '(max-width: 860px)';
+
+function getOverviewView(isMobile) {
+  return isMobile
+    ? { scale: MOBILE_OVERVIEW_SCALE, tx: MOBILE_OVERVIEW_TX, ty: MOBILE_OVERVIEW_TY }
+    : { scale: STATIC_OVERVIEW_SCALE, tx: STATIC_OVERVIEW_TX, ty: STATIC_OVERVIEW_TY };
+}
 
 function projectLatLngToImagePercent([lat, lng]) {
   const normalizedX = (lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west);
@@ -485,16 +495,16 @@ function ImpactPage() {
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const zoomTimerRef = useRef(null);
   const [staticMapView, setStaticMapView] = useState({
-    scale: STATIC_OVERVIEW_SCALE,
-    tx: STATIC_OVERVIEW_TX,
-    ty: STATIC_OVERVIEW_TY,
+    ...(typeof window !== 'undefined' && window.matchMedia(MAP_MOBILE_BREAKPOINT).matches
+      ? getOverviewView(true)
+      : getOverviewView(false)),
   });
   const [isMobileMap, setIsMobileMap] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches,
+    () => typeof window !== 'undefined' && window.matchMedia(MAP_MOBILE_BREAKPOINT).matches,
   );
 
   useEffect(() => {
-    const media = window.matchMedia('(max-width: 860px)');
+    const media = window.matchMedia(MAP_MOBILE_BREAKPOINT);
     const update = () => setIsMobileMap(media.matches);
 
     update();
@@ -530,11 +540,7 @@ function ImpactPage() {
   useEffect(() => {
     setIsProjectPanelOpen(false);
     setSelectedLocation(null);
-    setStaticMapView({
-      scale: STATIC_OVERVIEW_SCALE,
-      tx: STATIC_OVERVIEW_TX,
-      ty: STATIC_OVERVIEW_TY,
-    });
+    setStaticMapView(getOverviewView(isMobileMap));
   }, [isMobileMap]);
 
   useEffect(() => {
@@ -545,11 +551,7 @@ function ImpactPage() {
 
     if (selectedLocation) {
       if (selectedLocation.isNationwide) {
-        setStaticMapView({
-          scale: STATIC_OVERVIEW_SCALE,
-          tx: STATIC_OVERVIEW_TX,
-          ty: STATIC_OVERVIEW_TY,
-        });
+        setStaticMapView(getOverviewView(isMobileMap));
         zoomTimerRef.current = window.setTimeout(() => {
           onZoomSettled();
         }, 220);
@@ -565,11 +567,7 @@ function ImpactPage() {
         }, 860);
       }
     } else {
-      setStaticMapView({
-        scale: STATIC_OVERVIEW_SCALE,
-        tx: STATIC_OVERVIEW_TX,
-        ty: STATIC_OVERVIEW_TY,
-      });
+      setStaticMapView(getOverviewView(isMobileMap));
     }
   }, [isMobileMap, onZoomSettled, selectedLocation]);
 
