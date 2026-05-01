@@ -327,6 +327,11 @@
   pointer-events: auto;
 }
 
+.impact-checkpoint-marker:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 4px;
+}
+
 .impact-checkpoint-core {
   position: relative;
   display: block;
@@ -343,6 +348,156 @@
   background: #ff8e54;
   box-shadow: 0 0 0 8px rgba(255, 142, 84, 0.35);
   animation-duration: 1.2s;
+}
+
+.impact-checkpoint-marker--nationwide {
+  z-index: 4;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.impact-checkpoint-marker--nationwide:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.impact-checkpoint-marker--nationwide:active {
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+.impact-checkpoint-marker--nationwide .impact-checkpoint-core {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  overflow: visible;
+  background: radial-gradient(circle at 32% 28%, #ffffff 0%, #f4f7ff 55%, #e8ecf8 100%);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  display: grid;
+  place-items: center;
+  color: #01aca6;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.65) inset,
+    0 4px 14px rgba(1, 172, 166, 0.35),
+    0 0 0 1px rgba(1, 172, 166, 0.55),
+    0 0 28px rgba(1, 172, 166, 0.45),
+    0 0 48px rgba(255, 142, 84, 0.2);
+  animation: impactNationwideCoreGlow 2.8s ease-in-out infinite;
+}
+
+.impact-checkpoint-marker--nationwide .impact-checkpoint-core::before {
+  content: '';
+  position: absolute;
+  inset: -11px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  opacity: 0.85;
+  animation: impactNationwideRingSpin 16s linear infinite;
+  pointer-events: none;
+}
+
+.impact-checkpoint-marker--nationwide .impact-checkpoint-core::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(1, 172, 166, 0.65);
+  box-shadow:
+    0 0 14px rgba(1, 172, 166, 0.55),
+    0 0 28px rgba(1, 172, 166, 0.22);
+  opacity: 0.95;
+  animation: impactNationwideRingSpin 22s linear infinite reverse;
+  pointer-events: none;
+}
+
+.impact-checkpoint-marker--nationwide.impact-checkpoint-marker--active .impact-checkpoint-core {
+  background: radial-gradient(circle at 32% 28%, #ffb089 0%, #ff8e54 52%, #e76d36 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 6px 22px rgba(255, 142, 84, 0.55),
+    0 0 0 1px rgba(255, 180, 130, 0.85),
+    0 0 36px rgba(255, 142, 84, 0.65);
+}
+
+.impact-checkpoint-marker--nationwide.impact-checkpoint-marker--active .impact-checkpoint-core::after {
+  border-color: rgba(255, 214, 190, 0.95);
+  box-shadow:
+    0 0 18px rgba(255, 142, 84, 0.65),
+    0 0 36px rgba(255, 142, 84, 0.35);
+}
+
+.impact-checkpoint-marker--nationwide.impact-checkpoint-marker--active .impact-checkpoint-core::before {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.impact-checkpoint-icon {
+  width: 19px;
+  height: 19px;
+}
+
+.impact-checkpoint-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  background: rgba(9, 14, 36, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 8px 24px rgba(5, 10, 28, 0.45),
+    0 0 0 1px rgba(1, 172, 166, 0.2) inset;
+  color: #f4f8ff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.impact-checkpoint-label__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6cfffb 0%, #01aca6 100%);
+  box-shadow: 0 0 10px rgba(1, 172, 166, 0.85);
+}
+
+@keyframes impactNationwideCoreGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.65) inset,
+      0 4px 14px rgba(1, 172, 166, 0.32),
+      0 0 0 1px rgba(1, 172, 166, 0.55),
+      0 0 26px rgba(1, 172, 166, 0.42),
+      0 0 46px rgba(255, 142, 84, 0.18);
+  }
+
+  50% {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.65) inset,
+      0 6px 20px rgba(1, 172, 166, 0.48),
+      0 0 0 1px rgba(1, 172, 166, 0.85),
+      0 0 38px rgba(1, 172, 166, 0.62),
+      0 0 56px rgba(255, 142, 84, 0.28);
+  }
+}
+
+@keyframes impactNationwideRingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes impactCheckpointPulse {
@@ -1237,6 +1392,16 @@
   .impact-cause-card,
   .impact-checkpoint-core {
     transition: none;
+    animation: none;
+  }
+
+  .impact-checkpoint-marker--nationwide:hover,
+  .impact-checkpoint-marker--nationwide:active {
+    transform: translate(-50%, -50%);
+  }
+
+  .impact-checkpoint-marker--nationwide .impact-checkpoint-core::before,
+  .impact-checkpoint-marker--nationwide .impact-checkpoint-core::after {
     animation: none;
   }
 

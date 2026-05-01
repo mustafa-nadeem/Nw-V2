@@ -16,13 +16,22 @@ const UK_IMAGE_BOUNDS = {
   west: -8.9,
   east: 2.2,
 };
+
+const UK_MAP_DRAW_BOUNDS = {
+  left: 26.4,
+  right: 72.2,
+  top: 3.6,
+  bottom: 92.8,
+};
 const STATIC_OVERVIEW_SCALE = 0.84;
 const STATIC_OVERVIEW_TX = 0;
 const STATIC_OVERVIEW_TY = -3;
 
 function projectLatLngToImagePercent([lat, lng]) {
-  const x = ((lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west)) * 100;
-  const y = ((UK_IMAGE_BOUNDS.north - lat) / (UK_IMAGE_BOUNDS.north - UK_IMAGE_BOUNDS.south)) * 100;
+  const normalizedX = (lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west);
+  const normalizedY = (UK_IMAGE_BOUNDS.north - lat) / (UK_IMAGE_BOUNDS.north - UK_IMAGE_BOUNDS.south);
+  const x = UK_MAP_DRAW_BOUNDS.left + (normalizedX * (UK_MAP_DRAW_BOUNDS.right - UK_MAP_DRAW_BOUNDS.left));
+  const y = UK_MAP_DRAW_BOUNDS.top + (normalizedY * (UK_MAP_DRAW_BOUNDS.bottom - UK_MAP_DRAW_BOUNDS.top));
   return {
     x: Math.min(100, Math.max(0, x)),
     y: Math.min(100, Math.max(0, y)),
@@ -282,13 +291,18 @@ const rawProjects = [
 ];
 
 const locationCoordinates = {
-  oldham: [53.5409, -2.1114],
-  london: [51.5072, -0.1276],
+  oldham: [52.709, -1.8114],
+  london: [50.8072, -0.32],
   'dundee-scotland': [56.462, -2.9707],
-  leicester: [52.6369, -1.1398],
+  leicester: [52.0369, -1.1398],
   birmingham: [52.4862, -1.8904],
   scotland: [56.4907, -4.2026],
   national: [54.55, -3.43],
+};
+
+const locationScreenOverrides = {
+  'dundee-scotland': { x: 54.2, y: 33.2 },
+  scotland: { x: 50.9, y: 36.4 },
 };
 
 function makeLocationId(value) {
@@ -322,8 +336,14 @@ const projects = rawProjects.map((project) => ({
   isNationwide: typeof project.impact_area === 'string' && project.impact_area.toLowerCase().includes('nationwide'),
 }));
 
-const locations = Object.values(
-  projects.reduce((acc, project) => {
+const NATIONWIDE_LOCATION_ID = 'nationwide';
+const NATIONWIDE_SCREEN_POSITION = { x: 68, y: 18 };
+
+const localProjects = projects.filter((project) => !project.isNationwide);
+const nationwideProjects = projects.filter((project) => project.isNationwide);
+
+const groupedLocations = Object.values(
+  localProjects.reduce((acc, project) => {
     const key = makeLocationId(project.basedIn || 'National');
     const position = locationCoordinates[key] || locationCoordinates.national;
 
@@ -332,6 +352,7 @@ const locations = Object.values(
         id: key,
         city: project.basedIn || 'National',
         position,
+        screenPosition: locationScreenOverrides[key],
         projects: [],
       };
     }
@@ -340,6 +361,18 @@ const locations = Object.values(
     return acc;
   }, {})
 ).sort((a, b) => a.city.localeCompare(b.city));
+
+const nationwideLocation = nationwideProjects.length > 0
+  ? {
+      id: NATIONWIDE_LOCATION_ID,
+      city: 'Nationwide',
+      isNationwide: true,
+      screenPosition: NATIONWIDE_SCREEN_POSITION,
+      projects: nationwideProjects,
+    }
+  : null;
+
+const locations = nationwideLocation ? [...groupedLocations, nationwideLocation] : groupedLocations;
 
 const fundedProjects = [
   {
@@ -511,15 +544,26 @@ function ImpactPage() {
     }
 
     if (selectedLocation) {
-      const point = projectLatLngToImagePercent(selectedLocation.position);
-      const scale = isMobileMap ? 1.72 : 2.1;
-      const tx = (50 - point.x) * scale;
-      const ty = (53 - point.y) * scale;
-      setStaticMapView({ scale, tx, ty });
+      if (selectedLocation.isNationwide) {
+        setStaticMapView({
+          scale: STATIC_OVERVIEW_SCALE,
+          tx: STATIC_OVERVIEW_TX,
+          ty: STATIC_OVERVIEW_TY,
+        });
+        zoomTimerRef.current = window.setTimeout(() => {
+          onZoomSettled();
+        }, 220);
+      } else {
+        const point = projectLatLngToImagePercent(selectedLocation.position);
+        const scale = isMobileMap ? 1.72 : 2.1;
+        const tx = (50 - point.x) * scale;
+        const ty = (53 - point.y) * scale;
+        setStaticMapView({ scale, tx, ty });
 
-      zoomTimerRef.current = window.setTimeout(() => {
-        onZoomSettled();
-      }, 860);
+        zoomTimerRef.current = window.setTimeout(() => {
+          onZoomSettled();
+        }, 860);
+      }
     } else {
       setStaticMapView({
         scale: STATIC_OVERVIEW_SCALE,
@@ -621,18 +665,43 @@ function ImpactPage() {
                 <img src="/uk.svg" alt="" aria-hidden="true" className="impact-static-map__image" />
                 <div className="impact-static-map__markers" aria-hidden="false">
                   {locations.map((location) => {
-                    const point = projectLatLngToImagePercent(location.position);
+                    const point = location.screenPosition || projectLatLngToImagePercent(location.position);
                     const isActive = selectedLocation?.id === location.id;
+                    const isNationwidePin = !!location.isNationwide;
                     return (
                       <button
                         key={location.id}
                         type="button"
-                        className={`impact-checkpoint-marker impact-checkpoint-marker--static${isActive ? ' impact-checkpoint-marker--active' : ''}`}
+                        className={`impact-checkpoint-marker impact-checkpoint-marker--static${isActive ? ' impact-checkpoint-marker--active' : ''}${isNationwidePin ? ' impact-checkpoint-marker--nationwide' : ''}`}
                         style={{ left: `${point.x}%`, top: `${point.y}%` }}
                         onClick={() => onSelectLocation(location)}
-                        aria-label={`View projects in ${location.city}`}
+                        aria-label={isNationwidePin ? 'View nationwide projects' : `View projects in ${location.city}`}
                       >
-                        <span className="impact-checkpoint-core" aria-hidden="true" />
+                        <span className="impact-checkpoint-core" aria-hidden="true">
+                          {isNationwidePin ? (
+                            <svg
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                              focusable="false"
+                              className="impact-checkpoint-icon"
+                            >
+                              <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+                              <path
+                                d="M2.75 12h18.5M12 2.85c2.85 3.15 2.85 15.15 0 18.3M12 2.85c-2.85 3.15-2.85 15.15 0 18.3"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.25"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          ) : null}
+                        </span>
+                        {isNationwidePin ? (
+                          <span className="impact-checkpoint-label">
+                            <span className="impact-checkpoint-label__dot" aria-hidden="true" />
+                            Nationwide reach
+                          </span>
+                        ) : null}
                       </button>
                     );
                   })}
@@ -675,8 +744,14 @@ function ImpactPage() {
                 </button>
 
                 <header className="impact-project-panel__header">
-                  <p className="impact-project-panel__eyebrow">{selectedLocation.city}</p>
-                  <h2>Projects in {selectedLocation.city}</h2>
+                  <p className="impact-project-panel__eyebrow">
+                    {selectedLocation.isNationwide ? 'Across the UK' : selectedLocation.city}
+                  </p>
+                  <h2>
+                    {selectedLocation.isNationwide
+                      ? 'Nationwide projects'
+                      : `Projects in ${selectedLocation.city}`}
+                  </h2>
                   <p className="impact-project-panel__count">
                     {selectedLocation.projects.length} funded {selectedLocation.projects.length === 1 ? 'project' : 'projects'}
                   </p>
