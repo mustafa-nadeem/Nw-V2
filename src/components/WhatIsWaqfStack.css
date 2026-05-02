@@ -335,6 +335,7 @@
     gap: 8px;
   }
 
+
   .waqf-stack-card-media {
     min-height: clamp(120px, 30vw, 170px);
   }
