@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
-import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
 
 const roleCards = [
   {
@@ -221,19 +220,29 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <WhatIsWaqfStack
-        cardsData={usageCards}
-        headingWords={[
-          { text: 'Usages' },
-          { text: 'of' },
-          { text: 'Awqaf', accent: true },
-        ]}
-        descriptionParagraphs={[]}
-        headingId="learn-usage-title"
-        headingAriaLabel="Usages of Awqaf"
-        sectionClassName="learn-usage-stack"
-        includeBaseSectionClass={false}
-      />
+      <section className="learn-section learn-section--usage is-visible" aria-labelledby="learn-usage-title">
+        <div className="learn-shell">
+          <h2 id="learn-usage-title" className="learn-usage-heading">
+            <span className="learn-usage-word">Usages</span>{' '}
+            <span className="learn-usage-word">of</span>{' '}
+            <span className="learn-usage-word learn-usage-word--accent">Awqaf</span>
+          </h2>
+
+          <div className="learn-usage-grid">
+            {usageCards.slice(0, 3).map((card) => (
+              <article className="learn-usage-card" key={card.title}>
+                <div className="learn-usage-media" aria-hidden="true">
+                  <img src={card.imageSrc || placeholderImg} alt="" />
+                </div>
+                <h3 className="learn-usage-title">{card.title}</h3>
+                <p className="learn-usage-description">
+                  {card.paragraphs?.[0] || ''}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="learn-section learn-workshop" aria-labelledby="learn-workshop-title">
         <div className="learn-shell learn-workshop-grid">
