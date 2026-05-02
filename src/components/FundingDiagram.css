@@ -8,8 +8,14 @@
   --stream-embed: clamp(8px, 1.1vw, 14px);
   --icon-outset: clamp(18px, 2vw, 34px);
   --diagram-left-offset: clamp(0px, calc(25% - (var(--ring) / 2)), 120px);
+  /* Vertical tuning variables:
+     --diagram-vertical-offset: moves the whole diagram down (px)
+     --center-top: controls the vertical position of the center header (percent)
+     Change these values (root or per-media) to quickly adjust layout. */
+  --diagram-vertical-offset: 28px;
+  --center-top: 74%;
   width: min(100%, 980px);
-  margin: 28px auto 0;
+  margin: var(--diagram-vertical-offset) auto 0;
 }
 
 .funding-orbit {
@@ -54,11 +60,13 @@
 
 .funding-center {
   position: absolute;
-  right: calc(var(--label-column) - var(--private-label-width));
-  top: calc(44% - clamp(132px, 13vw, 176px));
+  /* center this block on top of the circular diagram */
+  left: calc(var(--diagram-left-offset) + (var(--ring) / 2) - (var(--label-column) / 2));
+  top: var(--center-top);
+  transform: translateY(-50%);
   width: var(--label-column);
-  text-align: right;
-  z-index: 2;
+  text-align: center;
+  z-index: 4;
   pointer-events: none;
   padding: 0;
 }
@@ -246,97 +254,120 @@
 
 @media (max-width: 920px) {
   .funding-diagram {
-    --ring: min(340px, 82vw);
-    --diagram-left-offset: 0px;
-    margin-top: 22px;
-  }
-
-  .funding-orbit {
-    display: grid;
-    justify-items: center;
-    gap: 28px;
+    --ring: min(200px, 62vw);
+    --label-column: min(142px, 34vw);
+    --private-label-width: 13ch;
+    --diagram-left-offset: -12px;
+    --diagram-vertical-offset: 120px;
+    --center-top: -16%;
   }
 
   .funding-center {
-    position: static;
-    width: min(100%, 620px);
-    text-align: right;
-    order: 1;
+    left: calc(var(--diagram-left-offset) + (var(--ring) / 2) - (var(--label-column) / 2));
+    top: var(--center-top);
+    transform: translateY(-50%);
+    width: calc(var(--label-column) - 8px);
   }
 
   .funding-center h3 {
-    max-width: none;
+    font-size: clamp(0.9rem, 3.9vw, 1.08rem);
+    line-height: 1.04;
   }
 
   .funding-center p {
-    margin: 0;
-    max-width: 20ch;
-  }
-
-  .funding-streams {
-    position: static;
-    width: min(100%, 620px);
-    height: auto;
-    display: grid;
-    gap: 12px;
-    order: 2;
-  }
-
-  .funding-stream {
-    position: static;
-    transform: none;
-    width: 100%;
-    left: auto;
-    right: auto;
-    grid-template-columns: minmax(120px, 1fr) minmax(0, 1fr);
-    column-gap: 10px;
-    opacity: 1;
-  }
-
-  .funding-center p {
-    line-height: 1.38;
-  }
-
-  .funding-stream-line {
-    border-top-width: 2px;
-    transform: scaleX(1);
+    font-size: clamp(0.62rem, 2.7vw, 0.8rem);
+    line-height: 1.1;
+    max-width: 15ch;
   }
 
   .funding-label {
-    font-size: clamp(1rem, 3.7vw, 1.65rem);
-    line-height: 1.1;
-    opacity: 1;
-    transform: none;
+    font-size: clamp(0.76rem, 3vw, 0.95rem);
+    line-height: 1.02;
+  }
+
+  .funding-stream-track {
+    min-height: 30px;
+    gap: 6px;
   }
 
   .funding-icon {
-    opacity: 1;
-    transform: none;
+    width: 28px;
+    height: 28px;
   }
 }
 
 @media (max-width: 580px) {
   .funding-diagram {
-    --ring: min(300px, 92vw);
-    margin-top: 18px;
+    --ring: min(176px, 60vw);
+    --label-column: min(126px, 35vw);
+    --diagram-left-offset: -18px;
+    --diagram-vertical-offset: 132px;
+    --center-top: -22%;
+  }
+
+  .funding-center {
+    left: 0;
+    top: var(--center-top);
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+    padding-inline: 12px;
   }
 
   .funding-center h3 {
-    font-size: clamp(1.15rem, 5.5vw, 1.55rem);
+    font-size: clamp(0.8rem, 3.9vw, 0.98rem);
   }
 
   .funding-center p {
-    font-size: clamp(0.84rem, 3.5vw, 1.02rem);
+    font-size: clamp(0.58rem, 2.7vw, 0.72rem);
+    line-height: 1.06;
+    max-width: 13ch;
   }
 
   .funding-stream {
-    grid-template-columns: minmax(100px, 1fr) minmax(0, 1fr);
-    column-gap: 8px;
+    column-gap: 6px;
+  }
+
+  .funding-label {
+    font-size: clamp(0.68rem, 2.9vw, 0.84rem);
+  }
+}
+
+@media (max-width: 420px) {
+  .funding-diagram {
+    --ring: min(160px, 58vw);
+    --label-column: min(112px, 32vw);
+    --diagram-left-offset: -22px;
+    --diagram-vertical-offset: 144px;
+    --center-top: -28%;
+  }
+
+  .funding-center {
+    left: 0;
+    top: var(--center-top);
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+    padding-inline: 10px;
+  }
+
+  .funding-center h3 {
+    font-size: clamp(0.72rem, 3.8vw, 0.9rem);
+  }
+
+  .funding-center p {
+    font-size: clamp(0.52rem, 2.4vw, 0.66rem);
+    line-height: 1.04;
+    max-width: 12ch;
+  }
+
+  .funding-label {
+    font-size: clamp(0.6rem, 2.6vw, 0.76rem);
   }
 
   .funding-icon {
-    width: 34px;
-    height: 34px;
+    width: 24px;
+    height: 24px;
   }
 }
 
