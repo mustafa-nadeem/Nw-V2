@@ -51,6 +51,7 @@ const PVM_INITIAL_HOLD_STEP = 0.42;
 const PVM_BETWEEN_PANEL_HOLD_STEP = 0.34;
 const PVM_LAST_PANEL_HOLD_STEP = 0.52;
 const FUNDING_SCROLL_PACING = 2.9;
+const FUNDING_SCROLL_PACING_MOBILE = 1.8;
 const FUNDING_LAST_STEP_HOLD = 1;
 
 const pvmSlides = [
@@ -209,7 +210,31 @@ function AboutPage() {
     });
 
     mm.add('(max-width: 920px)', () => {
-      setFundingStep(3);
+      setFundingStep(0);
+      const totalSteps = 3 + FUNDING_LAST_STEP_HOLD;
+
+      const trigger = ScrollTrigger.create({
+        id: fundingTriggerId,
+        trigger: fundingStageRef.current,
+        start: 'top top',
+        end: () => '+=' + window.innerHeight * FUNDING_SCROLL_PACING_MOBILE,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.85,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const progress = self.progress * totalSteps;
+          let nextStep = 0;
+          if (progress >= 0.9) nextStep = 1;
+          if (progress >= 1.9) nextStep = 2;
+          if (progress >= 2.9) nextStep = 3;
+          setFundingStep((prev) => (prev === nextStep ? prev : nextStep));
+        },
+        onLeaveBack: () => setFundingStep(0),
+      });
+
+      return () => trigger.kill();
     });
 
     return () => {

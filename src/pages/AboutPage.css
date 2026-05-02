@@ -828,15 +828,33 @@
   }
 
   .about-funding-pin-stage {
-    min-height: 0;
-    display: block;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
     padding-top: 0;
   }
 
   .about-section.about-fullscreen[aria-labelledby="about-funding-title"] {
-    min-height: 0;
-    display: block;
-    padding: 72px 0;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 56px 0 36px;
+  }
+
+  .about-section.about-fullscreen[aria-labelledby="about-funding-title"] .about-shell-narrow {
+    max-width: min(100%, 560px);
+  }
+
+  .about-section.about-fullscreen[aria-labelledby="about-funding-title"] h2 {
+    font-size: clamp(1.25rem, 5.2vw, 1.85rem);
+    line-height: 1.08;
+    margin-bottom: 12px;
+  }
+
+  .about-section.about-fullscreen[aria-labelledby="about-funding-title"] p {
+    font-size: clamp(0.82rem, 3.2vw, 0.96rem);
+    line-height: 1.32;
+    max-width: 40ch;
   }
 }
 
