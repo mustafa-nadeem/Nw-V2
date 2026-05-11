@@ -15,6 +15,30 @@
   min-height: calc(100vh - 192px);
 }
 
+/* Pin start state: applied only while ScrollTrigger is active to avoid snap-in/out glitches. */
+.waqf-stack-section.is-pinned .waqf-stack-copy {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  z-index: 10;
+}
+
+.waqf-stack-section.is-pinned .waqf-heading {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.32ch;
+}
+
+.waqf-stack-section.is-pinned.learn-usage-stack .waqf-heading {
+  font-size: clamp(2rem, 4.2vw, 3.6rem);
+}
+
+.waqf-stack-section.is-pinned:not(.learn-usage-stack) .waqf-heading {
+  font-size: clamp(3.5rem, 7vw, 7rem);
+}
+
 .waqf-stack-copy {
   max-width: 560px;
   text-align: left;
@@ -268,22 +292,46 @@
   }
 }
 
-@media (max-width: 768px) {
-  .homepage .waqf-stack-section.section {
-    padding: 96px 0 40px !important;
+@media (max-width: 767px) {
+  /* Pinned scroll lock: fill one viewport, center block vertically; horizontal gutter via --page-inline */
+  .homepage #learn .waqf-stack-section.section,
+  .learn-page .learn-section--usage.waqf-stack-section {
+    /* Fixed height matches ScrollTrigger pin + spacer math (min-height alone caused jump into next section) */
+    height: 100svh;
+    height: 100dvh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important;
+    padding-left: var(--page-inline, 38px) !important;
+    padding-right: var(--page-inline, 38px) !important;
     margin-top: 0 !important;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Cancel duplicate horizontal padding from App.css .homepage .container on this stack */
+  .homepage #learn .container.waqf-stack-layout,
+  .learn-page .learn-section--usage .container.waqf-stack-layout {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
+    margin-left: auto;
+    margin-right: auto;
+    flex: 0 1 auto;
+    min-height: 0;
   }
 
   .waqf-stack-layout {
     grid-template-columns: 1fr;
-    gap: 24px;
-    min-height: 100vh;
-    align-content: start;
-    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--home-mobile-inline, 18px);
-    padding-right: var(--home-mobile-inline, 18px);
+    gap: clamp(12px, 2.5vh, 20px);
+    min-height: 0;
+    align-content: center;
   }
 
   .waqf-stack-copy {
@@ -372,12 +420,26 @@
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(1) { z-index: 1; }
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(2) { z-index: 2; }
   .waqf-stack-section.reduced-motion .waqf-stack-card:nth-child(3) { z-index: 3; }
+
+  .homepage #learn .waqf-stack-section.section.reduced-motion,
+  .learn-page .learn-section--usage.waqf-stack-section.reduced-motion {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 640px) {
-  .homepage .waqf-stack-section.section {
-    padding-top: 84px !important;
-    padding-bottom: 34px !important;
+  .homepage #learn .waqf-stack-section.section,
+  .learn-page .learn-section--usage.waqf-stack-section {
+    height: 100svh;
+    height: 100dvh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important;
+    padding-left: var(--page-inline, 38px) !important;
+    padding-right: var(--page-inline, 38px) !important;
   }
 
   .waqf-stack-copy h2 {

@@ -8,6 +8,7 @@ import AboutPage from "./pages/AboutPage";
 import ImpactPage from "./pages/ImpactPage";
 import LearnMorePage from "./pages/LearnMorePage";
 import ConnectPage from "./pages/ConnectPage";
+import DonatePage from "./pages/DonatePage";
 
 function App() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function App() {
         <Route path="/impact" element={<ImpactPage />} />
         <Route path="/learn-more" element={<LearnMorePage />} />
         <Route path="/connect" element={<ConnectPage />} />
+        <Route path="/donate" element={<DonatePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

@@ -1,5 +1,5 @@
 .learn-page {
-  --learn-shell-pad: clamp(16px, 4vw, 44px);
+  --learn-shell-pad: var(--page-inline, 38px);
   background: #F2FFFF;
   color: #2B346C;
   overflow-x: clip;
@@ -28,8 +28,18 @@
 }
 
 .learn-section--role {
-  padding-top: 212px;
-  padding-bottom: 212px;
+  min-height: 100vh;
+}
+
+.learn-section--role.learn-scroll-lock {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.learn-section--role.learn-scroll-lock .learn-shell {
+  padding-top: clamp(64px, 10vh, 140px);
+  padding-bottom: clamp(64px, 10vh, 140px);
 }
 
 .learn-section--policies {
@@ -456,6 +466,29 @@
   height: 100vh;
   display: flex;
   align-items: center;
+}
+
+.learn-section--reports {
+  min-height: 100vh;
+}
+
+.learn-section--reports.learn-scroll-lock {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.learn-section--reports.learn-scroll-lock .learn-shell {
+  padding-top: clamp(64px, 10vh, 140px);
+  padding-bottom: clamp(64px, 10vh, 140px);
+}
+
+/* ScrollTrigger pins: avoid layout jumps during pin/unpin */
+.learn-scroll-lock {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .learn-workshop .learn-shell.learn-workshop-grid {
@@ -908,7 +941,7 @@
   font-size: 0.95rem;
   color: #2B346C;
   line-height: 1.65;
-  padding: 0 28px 24px;
+  padding: 0 var(--page-inline, 38px) 24px;
 }
 
 @media (max-width: 1080px) {
@@ -1046,15 +1079,6 @@
     grid-template-columns: 1fr;
   }
 
-  .learn-role-media,
-  .learn-role-media-item {
-    min-height: 220px;
-  }
-
-  .learn-role-tab-title {
-    font-size: 1.2rem;
-  }
-
   .learn-hero-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
@@ -1084,6 +1108,149 @@
   }
 }
 
+/* Learn More — Waqf / Zakaat / Sadaqah: one mobile viewport, vertically centered stack, breathable spacing */
+@media (max-width: 767px) {
+  .learn-section--role {
+    min-height: 100dvh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .learn-section--role .learn-shell {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(16px, 3vh, 26px);
+    min-height: 0;
+    width: 100%;
+    padding-left: var(--page-inline, 38px);
+    padding-right: var(--page-inline, 38px);
+    box-sizing: border-box;
+  }
+
+  .learn-section--role .learn-role-title {
+    flex-shrink: 0;
+    margin-bottom: 0 !important;
+    text-align: left;
+    font-size: clamp(1.12rem, 4.8vw, 1.48rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+  }
+
+  .learn-section--role .learn-role-accordion {
+    margin-top: 0 !important;
+    flex: 0 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2.8vh, 22px);
+    align-items: stretch;
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+  }
+
+  .learn-section--role .learn-role-tabs {
+    flex-shrink: 0;
+  }
+
+  .learn-section--role .learn-role-tab {
+    padding: 12px 0;
+  }
+
+  .learn-section--role .learn-role-tab-trigger {
+    gap: 14px;
+  }
+
+  .learn-section--role .learn-role-tab-title {
+    font-size: clamp(1.05rem, 4.4vw, 1.22rem);
+  }
+
+  .learn-section--role .learn-role-tab-panel {
+    padding-left: 30px;
+  }
+
+  .learn-section--role .learn-role-tab.is-active .learn-role-tab-panel {
+    margin-top: 10px;
+  }
+
+  .learn-section--role .learn-role-tab-panel-inner {
+    gap: 8px;
+  }
+
+  .learn-section--role .learn-role-tab-subtitle {
+    font-size: 0.84rem;
+    line-height: 1.28;
+  }
+
+  .learn-section--role .learn-role-tab-panel p {
+    font-size: 0.8rem;
+    line-height: 1.42;
+    max-width: none;
+  }
+
+  .learn-section--role .learn-role-media {
+    flex: 0 1 auto;
+    width: 100%;
+    min-height: 0;
+    max-height: min(36vh, 228px);
+    margin-top: 4px;
+    align-self: stretch;
+    display: grid;
+  }
+
+  .learn-section--role .learn-role-media-item {
+    min-height: 0 !important;
+    height: 100%;
+    max-height: inherit;
+    border-radius: 12px;
+  }
+
+  .learn-section--role .learn-role-media-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 720px) {
+  .learn-section--role .learn-shell {
+    gap: clamp(12px, 2.4vh, 18px);
+  }
+
+  .learn-section--role .learn-role-title {
+    font-size: clamp(1.02rem, 4.2vw, 1.28rem);
+  }
+
+  .learn-section--role .learn-role-accordion {
+    gap: clamp(10px, 2vh, 16px);
+  }
+
+  .learn-section--role .learn-role-tab {
+    padding: 9px 0;
+  }
+
+  .learn-section--role .learn-role-media {
+    max-height: min(32vh, 200px);
+    margin-top: 2px;
+  }
+
+  .learn-section--role .learn-role-media-item {
+    max-height: min(32vh, 200px);
+  }
+
+  .learn-section--role .learn-role-tab-panel p {
+    font-size: 0.76rem;
+    line-height: 1.36;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .learn-usage-card {
     opacity: 1;
@@ -1098,7 +1265,7 @@
 
 @media (max-width: 420px) {
   .learn-page {
-    --learn-shell-pad: 14px;
+    --learn-shell-pad: var(--page-inline, 38px);
   }
 
   .learn-hero {

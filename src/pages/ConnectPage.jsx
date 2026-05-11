@@ -1,11 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ConnectPage.css';
 import placeholderImg from '../assets/placeholder.jpg';
 
+gsap.registerPlugin(ScrollTrigger);
+
 function ConnectPage() {
   const heroRef = useRef(null);
+  const formSectionRef = useRef(null);
+  const workshopSectionRef = useRef(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [formSlideOffset, setFormSlideOffset] = useState(0);
   const [showSectionHeading, setShowSectionHeading] = useState(false);
+  const slideOffsetRef = useRef(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,6 +26,49 @@ function ConnectPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [workshopSubmitStatus, setWorkshopSubmitStatus] = useState(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return undefined;
+
+    const sections = [
+      { id: 'connect-scroll-lock-form', ref: formSectionRef },
+      { id: 'connect-scroll-lock-workshop', ref: workshopSectionRef },
+    ];
+
+    const triggers = sections
+      .map(({ id, ref }) => {
+        const el = ref.current;
+        if (!el) return null;
+        return ScrollTrigger.create({
+          id,
+          trigger: el,
+          start: 'top top',
+          end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 0,
+          scrub: false,
+          invalidateOnRefresh: true,
+        });
+      })
+      .filter(Boolean);
+
+    return () => {
+      triggers.forEach((t) => t?.kill());
+    };
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const heroEl = heroRef.current;
@@ -51,16 +102,29 @@ function ConnectPage() {
       const end = start + heroEl.offsetHeight;
       const progress = (window.scrollY - start) / Math.max(end - start, 1);
       const clamped = Math.max(0, Math.min(1, progress));
-      setFormSlideOffset(Math.round(clamped * 120));
+      const next = Math.round(clamped * 120);
+      if (next === slideOffsetRef.current) return;
+      slideOffsetRef.current = next;
+      setFormSlideOffset(next);
+    };
+
+    let rafId = 0;
+    const onScrollOrResize = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateFormSlideOffset();
+      });
     };
 
     updateFormSlideOffset();
-    window.addEventListener('scroll', updateFormSlideOffset, { passive: true });
-    window.addEventListener('resize', updateFormSlideOffset);
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
 
     return () => {
-      window.removeEventListener('scroll', updateFormSlideOffset);
-      window.removeEventListener('resize', updateFormSlideOffset);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
     };
   }, []);
 
@@ -122,7 +186,11 @@ function ConnectPage() {
         <h1>Connect with us</h1>
       </div>
 
-      <div className="connect-form-section" style={{ '--connect-form-slide': `${formSlideOffset}px` }}>
+      <div
+        ref={formSectionRef}
+        className="connect-form-section"
+        style={{ '--connect-form-slide': `${formSlideOffset}px` }}
+      >
         <div className="connect-container">
           <div className={`connect-form-heading${showSectionHeading ? ' is-visible' : ''}`}>
             <h2>Connect with us</h2>
@@ -259,7 +327,7 @@ function ConnectPage() {
         </div>
       </div>
 
-      <div className="workshop-section">
+      <div ref={workshopSectionRef} className="workshop-section">
         <div className="workshop-container">
           <div className="workshop-content">
             <div className="workshop-text">

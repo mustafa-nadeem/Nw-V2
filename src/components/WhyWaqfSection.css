@@ -1,14 +1,21 @@
 .why-waqf-scroll {
+  --why-waqf-surface: #f3ffff;
   position: relative;
-  background: #F3FFFF;
+  background: var(--why-waqf-surface);
   overflow: hidden;
   width: 100%;
+}
+
+/* GSAP wraps the pinned stage in .pin-spacer; match mint so body grey does not show through. */
+.why-waqf-scroll .pin-spacer-why-waqf-stage-pin,
+.why-waqf-scroll .pin-spacer {
+  background-color: var(--why-waqf-surface);
 }
 
 .why-waqf-header-block {
   width: min(calc(100% - 56px), 1160px);
   margin: 0 auto;
-  padding: 140px 0 56px;
+  padding: 212px 0 48px;
 }
 
 .why-waqf-header-block h2 {
@@ -29,6 +36,7 @@
   height: 100vh;
   overflow: hidden;
   width: 100%;
+  background: var(--why-waqf-surface);
 }
 
 .why-waqf-panel {
@@ -36,14 +44,11 @@
   inset: 0;
   height: 100vh;
   overflow: hidden;
-  transition: background-color 0.5s ease;
   width: 100%;
+  background: var(--why-waqf-surface);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-
-.why-waqf-panel:nth-child(1) { background: #F3FFFF; }
-.why-waqf-panel:nth-child(2) { background: #ECFFFE; }
-.why-waqf-panel:nth-child(3) { background: #E5FFFD; }
-.why-waqf-panel:nth-child(4) { background: #DEFFFC; }
 
 .why-waqf-panel-overlay {
   position: absolute;
@@ -51,13 +56,14 @@
   opacity: 0;
   pointer-events: none;
   z-index: 2;
+  /* Same-hue scrim only: black reads as a harsh grey jump when panels overlap during pin. */
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.12) 0%,
-    rgba(0, 0, 0, 0.04) 50%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(43, 52, 108, 0.06) 0%,
+    rgba(1, 172, 166, 0.04) 45%,
+    rgba(243, 255, 255, 0) 100%
   );
-  transition: opacity 0.4s ease-out;
+  /* No transition: overlap is toggled from ScrollTrigger; CSS transitions fight scrub and cause jank. */
 }
 
 .why-waqf-panel[data-overlap='true'] .why-waqf-panel-overlay {
@@ -132,7 +138,7 @@
 
 @media (min-width: 1024px) and (max-width: 1439px) {
   .why-waqf-header-block {
-    padding-top: 56px;
+    padding-top: 124px;
     padding-bottom: 34px;
   }
 
@@ -143,13 +149,14 @@
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .why-waqf-header-block {
-    width: calc(100% - 44px);
-    padding-top: 48px;
+    width: calc(100% - (2 * var(--page-inline, 38px)));
+    max-width: min(1160px, 100%);
+    padding-top: 112px;
     padding-bottom: 30px;
   }
 
   .why-waqf-panel-inner {
-    padding: 62px 44px 44px;
+    padding: 62px var(--page-inline, 38px) 44px;
     gap: 28px;
   }
 
@@ -169,8 +176,9 @@
 
 @media (max-width: 767px) {
   .why-waqf-header-block {
-    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
-    padding: 74px var(--home-mobile-inline, 18px) 42px;
+    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
+    /* Strong top offset + safe area + a touch of viewport height so the title sits clearly below prior section */
+    padding: max(132px, env(safe-area-inset-top, 0px) + 112px, 12svh) var(--page-inline, 38px) 36px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -182,7 +190,8 @@
   }
 
   .why-waqf-stage {
-    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     overflow: hidden;
     display: block;
   }
@@ -190,8 +199,14 @@
   .why-waqf-panel {
     position: absolute;
     inset: 0;
-    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
   }
 
   .why-waqf-panel-overlay {
@@ -199,15 +214,21 @@
   }
 
   .why-waqf-panel-inner {
-    grid-template-columns: 1fr;
-    align-content: start;
-    height: 100%;
-    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--home-mobile-inline, 18px) * 2)));
-    padding: 148px var(--home-mobile-inline, 18px) 44px;
-    gap: 20px;
-    max-width: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    grid-template-columns: unset;
+    align-content: unset;
+    flex: 0 1 auto;
+    width: min(100%, calc(var(--home-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
+    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
+    padding: max(4.25rem, calc(env(safe-area-inset-top, 0px) + 3rem)) var(--page-inline, 38px)
+      max(1rem, env(safe-area-inset-bottom, 0px));
+    gap: 20px;
+    max-width: none;
+    box-sizing: border-box;
   }
 
   .why-waqf-panel-content {
@@ -249,8 +270,8 @@
 
 @media (max-width: 640px) {
   .why-waqf-header-block {
-    padding-left: var(--home-mobile-inline, 18px);
-    padding-right: var(--home-mobile-inline, 18px);
+    padding-left: var(--page-inline, 38px);
+    padding-right: var(--page-inline, 38px);
     padding-bottom: 16px;
   }
 
@@ -259,10 +280,10 @@
   }
 
   .why-waqf-panel-inner {
-    padding-left: var(--home-mobile-inline, 18px);
-    padding-right: var(--home-mobile-inline, 18px);
-    padding-top: 126px;
-    padding-bottom: 40px;
+    padding-left: var(--page-inline, 38px);
+    padding-right: var(--page-inline, 38px);
+    padding-top: max(4rem, calc(env(safe-area-inset-top, 0px) + 2.75rem));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   }
 
   .why-waqf-panel-media {
@@ -280,12 +301,12 @@
 
 @media (max-width: 420px) {
   .why-waqf-header-block {
-    padding-top: 30px;
+    padding-top: max(124px, env(safe-area-inset-top, 0px) + 100px, 13svh);
   }
 
   .why-waqf-panel-inner {
-    padding-top: 112px;
-    padding-bottom: 34px;
+    padding-top: max(3.75rem, calc(env(safe-area-inset-top, 0px) + 2.5rem));
+    padding-bottom: max(0.85rem, env(safe-area-inset-bottom, 0px));
   }
 
   .why-waqf-panel-media {
@@ -316,4 +337,5 @@
   height: auto;
   padding-top: 18px;
   padding-bottom: 28px;
+  padding-inline: var(--page-inline, 38px);
 }

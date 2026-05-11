@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
 import WhyWaqfSection from '../components/WhyWaqfSection';
 import DigitalReelNumber from '../components/DigitalReelNumber';
 
+gsap.registerPlugin(ScrollTrigger);
+
 function HomePage() {
   const impactSectionRef = useRef(null);
   const [impactSheenActive, setImpactSheenActive] = useState(false);
+  const navigate = useNavigate();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
     const section = impactSectionRef.current;
@@ -29,6 +36,38 @@ function HomePage() {
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return undefined;
+    const el = impactSectionRef.current;
+    if (!el) return undefined;
+
+    const trigger = ScrollTrigger.create({
+      id: 'home-scroll-lock-impact',
+      trigger: el,
+      start: 'top top',
+      end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+      pin: true,
+      pinSpacing: true,
+      anticipatePin: 0,
+      scrub: false,
+      invalidateOnRefresh: true,
+    });
+
+    return () => trigger.kill();
+  }, [prefersReducedMotion]);
 
   return (
     <>
@@ -92,7 +131,7 @@ function HomePage() {
                 />
               </div>
 
-              <button type="button" className="dc-cta">Give Now &rarr;</button>
+              <button type="button" className="dc-cta" onClick={() => navigate('/donate')}>Give Now &rarr;</button>
             </div>
           </aside>
         </div>

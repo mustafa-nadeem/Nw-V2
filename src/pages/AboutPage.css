@@ -7,7 +7,7 @@
 .about-shell {
   width: min(100%, 1280px);
   margin: 0 auto;
-  padding: 0 60px;
+  padding: 0 var(--page-inline, 38px);
 }
 
 .about-shell-narrow {
@@ -269,6 +269,10 @@
   line-height: 1.5;
 }
 
+.about-funding-diagram-reveal {
+  width: 100%;
+}
+
 .about-diagram-placeholder {
   margin: 36px auto 0;
   border-radius: 14px;
@@ -511,13 +515,15 @@
 /* ── Cycle mobile ── */
 @media (max-width: 860px) {
   .about-section.about-works-pinned {
-    padding: 62px 0 0;
+    /* Reduce top padding so pinned content can truly center */
+    padding: 28px 0 0;
   }
 
   .about-works-pin-stage {
-    min-height: 108svh;
-    padding-top: 12px;
-    align-items: flex-start;
+    /* Keep the pinned block centered in the viewport */
+    min-height: 100svh;
+    padding-top: 0;
+    align-items: center;
   }
 
   .cycle-split {
@@ -550,7 +556,7 @@
     padding-left: 16px;
     min-height: 108px;
     width: 100%;
-    margin-top: -8px;
+    margin-top: 0;
   }
 
   .cycle-info-num {
@@ -570,12 +576,12 @@
 
 @media (max-width: 520px) {
   .about-section.about-works-pinned {
-    padding: 54px 0 0;
+    padding: 22px 0 0;
   }
 
   .about-works-pin-stage {
-    min-height: 112svh;
-    padding-top: 10px;
+    min-height: 100svh;
+    padding-top: 0;
   }
 
   .cycle-header {
@@ -596,7 +602,7 @@
   .cycle-info-panel {
     padding-left: 14px;
     min-height: 92px;
-    margin-top: -12px;
+    margin-top: 0;
   }
 
   .cycle-info-num {
@@ -675,6 +681,70 @@
   padding-bottom: 52px;
   align-items: stretch;
   background: #E9F6F8;
+}
+
+/* One viewport + GSAP pin hold — trustees, Shariah board, principles */
+.about-page .about-viewport-scroll-lock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 100svh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  background: #EDF1FF;
+}
+
+.about-page .about-viewport-scroll-lock .profile-grid-section--trustees,
+.about-page .about-viewport-scroll-lock .profile-grid-section--sharia {
+  background: transparent;
+}
+
+.about-page .about-viewport-scroll-lock .profile-grid-section {
+  flex: 0 1 auto;
+  width: 100%;
+  padding-top: clamp(56px, 11vh, 144px);
+  padding-bottom: clamp(40px, 9vh, 144px);
+}
+
+.about-section.about-principles.about-principles--scroll-pause {
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  min-height: 100dvh;
+  height: auto;
+  padding-top: clamp(72px, 11vh, 140px);
+  padding-bottom: clamp(28px, 4vh, 48px);
+}
+
+.about-section.about-principles.about-principles--scroll-pause .about-shell {
+  height: auto;
+  flex: 0 1 auto;
+  justify-content: center;
+}
+
+.about-section.about-principles.about-principles--scroll-pause .about-principles-list {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+@media (max-width: 767px) {
+  .about-section.about-principles.about-principles--scroll-pause {
+    padding-top: max(3.25rem, calc(env(safe-area-inset-top, 0px) + 2.25rem));
+  }
+}
+
+@media (max-width: 860px) {
+  .about-section.about-principles.about-principles--scroll-pause .about-shell {
+    height: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 860px) {
+  .about-section.about-principles.about-principles--scroll-pause {
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .about-principles .about-shell {
@@ -783,7 +853,6 @@
     padding-top: 92px;
     padding-bottom: 28px;
     display: flex;
-    align-items: flex-start;
   }
 
   .about-principles .about-shell {
@@ -858,27 +927,59 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 860px) {
+  .about-section.about-principles {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-section.about-principles {
+    align-items: center;
+    justify-content: center;
+    padding-top: max(3.25rem, calc(env(safe-area-inset-top, 0px) + 2.25rem));
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    /* Horizontal inset: page gutter, not less than safe area on notched devices */
+    padding-left: max(var(--page-inline, 38px), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--page-inline, 38px), env(safe-area-inset-right, 0px));
+    box-sizing: border-box;
+  }
+
+  .about-principles .about-shell {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .about-principles-list {
+    gap: 10px;
+  }
+}
+
 @media (max-width: 640px) {
   .about-section.about-principles {
     min-height: 100svh;
-    padding-top: 84px;
-    padding-bottom: 22px;
+    padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 2rem));
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    padding-left: max(var(--page-inline, 38px), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--page-inline, 38px), env(safe-area-inset-right, 0px));
   }
 
   .about-principles .about-principles-subhead {
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     font-size: clamp(0.86rem, 3.5vw, 0.96rem);
     line-height: 1.2;
   }
 
   .about-principles-list {
     grid-template-rows: repeat(4, minmax(86px, 1fr));
-    gap: 7px;
+    gap: 10px;
   }
 
   .about-principle-card {
     min-height: 86px;
-    padding: 10px 12px;
+    padding: 14px 16px;
   }
 
   .about-principle-content h3 {
@@ -1020,6 +1121,7 @@
 @media (max-width: 767px) {
   .about-pvm-stage {
     height: 100svh;
+    height: 100dvh;
     overflow: hidden;
     display: block;
   }
@@ -1028,7 +1130,13 @@
     position: absolute;
     inset: 0;
     height: 100svh;
+    height: 100dvh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
   }
 
   .about-pvm-panel-overlay {
@@ -1036,8 +1144,17 @@
   }
 
   .about-pvm-panel-inner {
-    min-height: 100%;
-    padding: 74px 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    flex: 0 1 auto;
+    width: 100%;
+    max-height: 100%;
+    min-height: 0;
+    padding: max(4rem, calc(env(safe-area-inset-top, 0px) + 3rem)) 0
+      max(1rem, env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
   }
 }
 
@@ -1051,10 +1168,6 @@
       "body";
     column-gap: 0;
     row-gap: 22px;
-  }
-
-  .about-pvm-panel-inner {
-    align-items: flex-start;
   }
 
   .about-pvm-title {
@@ -1076,6 +1189,13 @@
     aspect-ratio: auto;
     border-radius: 14px;
     margin: 0;
+  }
+}
+
+/* Tablet only: top-align PVM stack; phones use vertical centering (see max-width: 767) */
+@media (min-width: 768px) and (max-width: 860px) {
+  .about-pvm-panel-inner {
+    align-items: flex-start;
   }
 }
 
@@ -1112,7 +1232,7 @@
 
 @media (max-width: 1140px) {
   .about-shell {
-    padding: 0 34px;
+    padding: 0 var(--page-inline, 38px);
   }
 
   .about-journey-grid {
@@ -1136,7 +1256,7 @@
 
 @media (max-width: 767px) {
   .about-page {
-    --about-mobile-inline: var(--home-mobile-inline, 18px);
+    --about-mobile-inline: var(--page-inline, 38px);
     --about-mobile-content-max: var(--home-mobile-content-max, 400px);
   }
 
@@ -1149,9 +1269,9 @@
 
 @media (max-width: 640px) {
   .about-shell {
-    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--about-mobile-inline, 18px) * 2)));
-    padding-left: var(--about-mobile-inline, 18px);
-    padding-right: var(--about-mobile-inline, 18px);
+    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
+    padding-left: var(--page-inline, 38px);
+    padding-right: var(--page-inline, 38px);
   }
 
   .about-hero {

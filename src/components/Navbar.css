@@ -9,7 +9,7 @@
   z-index: 100;
   display: flex;
   justify-content: center;
-  padding: 12px 24px;
+  padding: 12px var(--page-inline, 38px);
   overflow-x: clip;
   transition: top 0.6s cubic-bezier(0.4, 0, 0.2, 1),
               padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,7 +43,7 @@ body.impact-project-panel-open .navbar-wrapper {
 /* ── Scrolled state: everything merges into one pill ── */
 .navbar-wrapper.scrolled {
   top: 20px;
-  padding: 10px 24px;
+  padding: 10px var(--page-inline, 38px);
 }
 
 .navbar-wrapper.scrolled .navbar {
@@ -52,7 +52,7 @@ body.impact-project-panel-open .navbar-wrapper {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
-  padding: 6px 24px;
+  padding: 6px var(--page-inline, 38px);
 }
 
 .navbar-wrapper.scrolled .navbar-center,
@@ -89,9 +89,6 @@ body.impact-project-panel-open .navbar-wrapper {
 .navbar-wrapper.scrolled .navbar-logo-white { display: none; }
 .navbar-wrapper.scrolled .navbar-logo-black { display: block; }
 
-/* Impact page: force black logo in non-scrolled state */
-.navbar-wrapper--dark-logo .navbar-logo-white { display: none; }
-.navbar-wrapper--dark-logo .navbar-logo-black { display: block; }
 
 /* ── Shared pill container ── */
 .navbar-center,
@@ -252,11 +249,40 @@ body.impact-project-panel-open .navbar-wrapper {
     border-radius: 0;
     padding: 0;
     gap: 10px;
+    width: 100%;
+    justify-items: center;
+  }
+
+  /* Mobile top bar: keep Donate visible as a real button */
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: auto;
+    margin-left: auto;
+    padding-right: 6px;
+  }
+
+  /* Hide Apply/Sign In in the collapsed top bar */
+  .navbar-actions .navbar-action-link {
+    display: none;
+  }
+
+  /* Ensure Donate looks like a button even in the moving navbar */
+  .navbar-actions .navbar-btn--donate {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
 
   .navbar.open .navbar-center,
   .navbar.open .navbar-actions {
     display: grid;
+    animation: navbarMobileDrop 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .navbar.open {
@@ -283,18 +309,32 @@ body.impact-project-panel-open .navbar-wrapper {
     order: 4;
     width: 100%;
     margin-top: 8px;
+    margin-left: 0;
+    padding-right: 0;
+    /* Override collapsed top-bar flex layout */
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+  }
+
+  /* When menu opens, show Apply/Sign In again */
+  .navbar.open .navbar-actions .navbar-action-link {
+    display: block;
+    width: auto;
+    justify-self: center;
   }
 
   .navbar.open .navbar-link,
   .navbar.open .navbar-action-link,
   .navbar.open .navbar-btn {
     width: 100%;
-    text-align: left;
-    border-radius: 10px;
-    padding: 11px 12px;
+    text-align: center;
+    border-radius: 0;
+    padding: 10px 12px;
     color: rgb(255, 255, 255);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: transparent;
+    border: none;
     font-size: 0.92rem;
   }
 
@@ -302,8 +342,15 @@ body.impact-project-panel-open .navbar-wrapper {
   .navbar-wrapper.scrolled .navbar.open .navbar-action-link,
   .navbar-wrapper.scrolled .navbar.open .navbar-btn {
     color: #2B346C;
-    background: rgba(43, 52, 108, 0.06);
-    border-color: rgba(43, 52, 108, 0.16);
+    background: transparent;
+    border: none;
+  }
+
+  /* Even in scrolled ("moving") state, keep Donate as the full-width colored button */
+  .navbar-wrapper.scrolled .navbar.open .navbar-btn--donate {
+    background: #01ACA6;
+    border-color: #01ACA6;
+    color: #2B346C;
   }
 
   .navbar.open .navbar-btn--donate {
@@ -312,6 +359,30 @@ body.impact-project-panel-open .navbar-wrapper {
     color: #2B346C;
     text-align: center;
     font-weight: 600;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  /* Subtle hover without boxes */
+  .navbar.open .navbar-link:hover,
+  .navbar.open .navbar-action-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  @keyframes navbarMobileDrop {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 

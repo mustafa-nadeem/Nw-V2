@@ -14,6 +14,7 @@ function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -59,9 +60,7 @@ function Navbar() {
 
   return (
     <header
-      className={`navbar-wrapper${scrolled ? ' scrolled' : ''}${
-        location.pathname.startsWith('/impact') ? ' navbar-wrapper--dark-logo' : ''
-      }`}
+      className={`navbar-wrapper${scrolled ? ' scrolled' : ''}`}
     >
       <nav className={`navbar${open ? ' open' : ''}`}>
         <Link to="/" className="navbar-logo" aria-label="National Waqf home" onClick={closeMenu}>
@@ -87,7 +86,7 @@ function Navbar() {
         <div className="navbar-actions">
           <a href="#grant" className="navbar-action-link" onClick={closeMenu}>Apply</a>
           <a href="#signin" className="navbar-action-link" onClick={closeMenu}>Sign In</a>
-          <a href="#donate" className="navbar-btn navbar-btn--donate" onClick={closeMenu}>Donate £5</a>
+          <Link to="/donate" className="navbar-btn navbar-btn--donate" onClick={closeMenu}>Donate £5</Link>
         </div>
 
         <button

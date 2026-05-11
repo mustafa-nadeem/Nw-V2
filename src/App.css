@@ -10,15 +10,10 @@
   --radius: 18px;
   --radius-sm: 12px;
   --container: 1160px;
-  --mobile-shell-pad: 26px;
-  --home-mobile-inline: 18px;
+  --page-inline: 38px;
+  --mobile-shell-pad: var(--page-inline);
+  --home-mobile-inline: var(--page-inline);
   --home-mobile-content-max: 400px;
-}
-
-@media (max-width: 640px) {
-  :root {
-    --mobile-shell-pad: 22px;
-  }
 }
 
 * {
@@ -39,7 +34,7 @@ body {
 }
 
 .section {
-  padding: 160px 28px 240px 28px;
+  padding: 160px var(--page-inline) 240px var(--page-inline);
 }
 
 #learn,
@@ -446,7 +441,8 @@ h3 {
 .impact-shell {
   width: min(100%, 1280px);
   margin: 0 auto;
-  padding: 0 120px;
+  /* Horizontal inset comes from parent .section — avoid doubling */
+  padding: 0;
 }
 
 .impact-intro {
@@ -600,19 +596,9 @@ h3 {
   max-width: 42ch;
 }
 
-@media (max-width: 1439px) and (min-width: 1025px) {
-  .impact-shell {
-    padding: 0 96px;
-  }
-}
-
 @media (max-width: 1024px) {
   .section {
-    padding: 68px 22px;
-  }
-
-  .impact-shell {
-    padding: 0 56px;
+    padding: 68px var(--page-inline);
   }
 
   .hero-grid,
@@ -725,17 +711,23 @@ h3 {
 
 @media (max-width: 767px) {
   .homepage {
-    --home-mobile-inline: 18px;
     --home-mobile-content-max: 400px;
   }
 
-  .homepage .container,
-  .homepage .impact-shell {
+  .homepage .container {
     width: min(100%, calc(var(--home-mobile-content-max) + (var(--home-mobile-inline) * 2)));
     padding-left: var(--home-mobile-inline);
     padding-right: var(--home-mobile-inline);
     margin-left: auto;
     margin-right: auto;
+  }
+
+  /* Hero: inset comes from .section.hero only — avoid doubling with .homepage .container */
+  .homepage .section.hero .container {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .homepage .hero-content,
@@ -744,10 +736,6 @@ h3 {
     max-width: var(--home-mobile-content-max);
     margin-left: auto;
     margin-right: auto;
-  }
-
-  .homepage .impact-shell {
-    padding: 0 var(--home-mobile-inline);
   }
 
   .impact-grid {
@@ -864,43 +852,42 @@ h3 {
 
   .section.hero {
     min-height: 100svh;
-    height: 100svh;
-    padding: 80px var(--home-mobile-inline) 18px;
+    /* Let the block grow with full copy; fixed 100svh + overflow was clipping paragraphs. */
+    height: auto;
+    padding: 72px var(--home-mobile-inline) 28px;
     align-items: center;
     background-position: 58% 78%, 58% 78%;
+    overflow: visible;
   }
 
   .hero-grid {
-    gap: 14px;
+    gap: clamp(26px, 5.8vw, 38px);
     grid-template-rows: auto auto;
-    align-content: center;
+    align-content: start;
   }
 
   .hero-content {
-    gap: 8px;
-    order: 2;
+    gap: clamp(9px, 2.2vw, 14px);
+    order: 1;
     max-width: var(--home-mobile-content-max);
+    min-width: 0;
   }
 
   .donation-card {
-    order: 1;
+    order: 2;
   }
 
   .hero-content h1 {
-    font-size: clamp(1.35rem, 5.4vw, 1.9rem);
-    line-height: 1.15;
+    font-size: clamp(1.35rem, 5vw + 0.55vmin, 2.1rem);
+    line-height: 1.12;
     letter-spacing: -0.01em;
   }
 
   .hero-content p {
-    font-size: 0.82rem;
-    line-height: 1.5;
+    font-size: clamp(0.84rem, 2.45vw + 0.38vmin, 1.05rem);
+    line-height: 1.52;
     max-width: 100%;
-  }
-
-  .hero-content p:nth-of-type(2),
-  .hero-content p:nth-of-type(3) {
-    display: none;
+    font-weight: 600;
   }
 
   .donation-card {
@@ -913,17 +900,23 @@ h3 {
   }
 
   .dc-body {
-    padding: 14px 14px 14px;
-    gap: 10px;
+    /* Match desktop glass inset (18px); fluid so narrow screens stay breathable */
+    padding: clamp(12px, 3.8vw, 18px);
+    gap: clamp(9px, 2.4vw, 11px);
   }
 
   .dc-heading {
-    font-size: 0.9rem;
+    font-size: clamp(0.94rem, 2.6vw, 1.02rem);
   }
 
   .dc-subtitle {
-    font-size: 0.78rem;
-    margin-top: -6px;
+    font-size: clamp(0.78rem, 2.35vw + 0.28vmin, 0.9rem);
+    line-height: 1.42;
+    margin-top: -2px;
+    max-width: 36ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
   }
 
   .dc-amounts {
@@ -944,7 +937,7 @@ h3 {
   }
 
   .dc-custom {
-    padding: 0 12px;
+    padding: 0 clamp(10px, 3vw, 12px);
   }
 
   .dc-custom-input {
@@ -960,22 +953,37 @@ h3 {
 }
 
 @media (max-width: 767px) and (max-height: 720px) {
+  .section.hero {
+    padding-top: 64px;
+    padding-bottom: 22px;
+  }
+
   .hero-content h1 {
-    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    font-size: clamp(1.22rem, 4.6vw + 0.4vmin, 1.72rem);
   }
 
   .hero-content p {
-    font-size: 0.78rem;
-    line-height: 1.45;
+    font-size: clamp(0.78rem, 2.15vw + 0.3vmin, 0.98rem);
+    line-height: 1.46;
+  }
+
+  .hero-grid {
+    gap: clamp(20px, 4.8vw, 28px);
+  }
+
+  .hero-content {
+    gap: clamp(7px, 2vw, 12px);
   }
 
   .dc-body {
-    padding: 12px;
+    padding: clamp(10px, 2.8vw, 16px);
     gap: 8px;
   }
 
   .dc-subtitle {
-    display: none;
+    font-size: clamp(0.72rem, 2.1vw + 0.2vmin, 0.86rem);
+    line-height: 1.4;
+    max-width: 38ch;
   }
 
   .dc-amount {
@@ -1001,24 +1009,12 @@ h3 {
 }
 
 @media (max-width: 640px) {
-  .homepage {
-    --home-mobile-inline: 18px;
-  }
-
   .homepage .section {
     padding: 56px var(--home-mobile-inline);
   }
 
-  .homepage .impact-shell {
-    padding: 0 var(--home-mobile-inline);
-  }
-
   .section-spacer {
     height: 70px;
-  }
-
-  .donation-card {
-    padding: 20px;
   }
 
   .amount-grid {

@@ -1,6 +1,6 @@
 .profile-grid-section {
   width: 100%;
-  padding: 144px 40px;
+  padding: 144px var(--page-inline, 38px);
 }
 
 .profile-grid-section--trustees {
@@ -172,11 +172,11 @@
   }
 
   .about-page .profile-grid-section__container {
-    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--about-mobile-inline, 18px) * 2)));
+    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--about-mobile-inline, 18px);
-    padding-right: var(--about-mobile-inline, 18px);
+    padding-left: var(--page-inline, 38px);
+    padding-right: var(--page-inline, 38px);
   }
 
   .profile-grid-section__container {
@@ -185,7 +185,7 @@
 
   .profile-grid-section__intro {
     margin-bottom: 28px;
-    padding-right: var(--about-mobile-inline, 18px);
+    padding-right: var(--page-inline, 38px);
   }
 
   .profile-grid-section__intro h2 {
@@ -201,7 +201,7 @@
     overflow-y: visible;
     scroll-snap-type: x mandatory;
     gap: 16px;
-    padding: 4px var(--about-mobile-inline, 18px) 12px 0;
+    padding: 4px var(--page-inline, 38px) 12px 0;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -259,8 +259,8 @@
   top: 50%;
   left: 50%;
   z-index: 1020;
-  width: min(880px, calc(100% - 32px));
-  max-height: calc(100vh - 64px);
+  width: min(880px, calc(100% - (2 * var(--page-inline, 38px))));
+  max-height: calc(100vh - (2 * var(--page-inline, 38px)));
   overflow-y: auto;
   padding: 28px;
   background: #ffffff;
@@ -292,8 +292,8 @@
   height: 38px;
   border: 0;
   border-radius: 50%;
-  background: #2B346C;
-  color: #ffffff;
+  background: #01ACA6;
+  color: #2B346C;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -302,7 +302,7 @@
 }
 
 .profile-grid-section__dialog-close:hover {
-  background: #1e265a;
+  background: #00a098;
   transform: scale(1.05);
 }
 
@@ -425,23 +425,31 @@
   .profile-grid-section__dialog {
     grid-template-columns: 1fr;
     gap: 14px;
-    padding: 18px 16px 18px;
-    width: calc(100% - 24px);
-    max-height: calc(100vh - 24px);
+    padding: 18px clamp(16px, 4vw, 22px) 18px;
+    width: calc(100% - (2 * var(--page-inline, 38px)));
+    max-width: calc(100% - (2 * var(--page-inline, 38px)));
+    max-height: calc(100dvh - (2 * var(--page-inline, 38px)));
     border-radius: 18px;
   }
 
   .profile-grid-section__dialog-media {
-    display: none;
+    display: block;
+    /* Slightly taller crop so faces are more likely to be visible */
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+  }
+
+  .profile-grid-section__dialog-image {
+    object-position: 50% 12%;
   }
 
   .profile-grid-section__dialog-body {
     padding-top: 0;
-    padding-right: 42px;
+    padding-right: 0;
   }
 
   .profile-grid-section__dialog-name {
-    font-size: clamp(1.14rem, 6vw, 1.48rem);
+    font-size: clamp(1.05rem, 5.4vw, 1.32rem);
     line-height: 1.16;
   }
 
@@ -473,34 +481,36 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: clamp(0.88rem, 3.9vw, 0.98rem);
-    line-height: 1.45;
+    font-size: clamp(0.78rem, 3.25vw, 0.88rem);
+    line-height: 1.48;
   }
 
   .profile-grid-section__dialog-close {
-    top: 10px;
-    right: 10px;
+    top: 14px;
+    right: 14px;
     width: 32px;
     height: 32px;
-    background: rgba(43, 52, 108, 0.92);
+    background: rgba(1, 172, 166, 0.92);
+    z-index: 5;
   }
 }
 
 @media (max-width: 480px) {
   .profile-grid-section__dialog {
-    width: calc(100% - 12px);
-    max-height: calc(100vh - 12px);
-    padding: 14px 12px 14px;
+    width: calc(100% - (2 * var(--page-inline, 38px)));
+    max-width: calc(100% - (2 * var(--page-inline, 38px)));
+    max-height: calc(100dvh - (2 * var(--page-inline, 38px)));
+    padding: 16px clamp(14px, 4vw, 20px) 16px;
     gap: 12px;
     border-radius: 14px;
   }
 
   .profile-grid-section__dialog-body {
-    padding-right: 38px;
+    padding-right: 0;
   }
 
   .profile-grid-section__dialog-name {
-    font-size: clamp(1rem, 5.5vw, 1.28rem);
+    font-size: clamp(0.98rem, 5.2vw, 1.22rem);
   }
 
   .profile-grid-section__dialog-role {
@@ -508,8 +518,8 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: clamp(0.8rem, 3.75vw, 0.92rem);
-    line-height: 1.4;
+    font-size: clamp(0.74rem, 3.2vw, 0.86rem);
+    line-height: 1.45;
   }
 }
 

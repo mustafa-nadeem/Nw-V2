@@ -50,9 +50,9 @@ const PVM_LAST_PANEL_HOLD_SCROLL = 340;
 const PVM_INITIAL_HOLD_STEP = 0.42;
 const PVM_BETWEEN_PANEL_HOLD_STEP = 0.34;
 const PVM_LAST_PANEL_HOLD_STEP = 0.52;
-const FUNDING_SCROLL_PACING = 2.9;
-const FUNDING_SCROLL_PACING_MOBILE = 1.8;
-const FUNDING_LAST_STEP_HOLD = 1;
+/** Pin length (× viewport height): intro tween + short read buffer — diagram is static, no step scrub. */
+const FUNDING_PIN_SCROLL_DESKTOP = 0.72;
+const FUNDING_PIN_SCROLL_MOBILE = 0.58;
 
 const pvmSlides = [
   {
@@ -83,11 +83,14 @@ function AboutPage() {
   const worksStageRef = useRef(null);
   const fundingSectionRef = useRef(null);
   const fundingStageRef = useRef(null);
+  const fundingDiagramRevealRef = useRef(null);
   const pvmSectionRef = useRef(null);
   const pvmStageRef = useRef(null);
+  const trusteesScrollLockRef = useRef(null);
+  const shariaScrollLockRef = useRef(null);
+  const principlesScrollLockRef = useRef(null);
   const [cycleStep, setCycleStep] = useState(1);
   const [hoverStep, setHoverStep] = useState(null);
-  const [fundingStep, setFundingStep] = useState(0);
   const prevStepRef = useRef(1);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -141,7 +144,7 @@ function AboutPage() {
       end: () => '+=' + window.innerHeight * 3,
       pin: true,
       pinSpacing: true,
-      anticipatePin: 1,
+      anticipatePin: 0,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const nextStep = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
@@ -169,73 +172,81 @@ function AboutPage() {
   }, []);
 
   useLayoutEffect(() => {
-    if (!fundingSectionRef.current || !fundingStageRef.current) {
+    const stage = fundingStageRef.current;
+    const diagramWrap = fundingDiagramRevealRef.current;
+    if (!fundingSectionRef.current || !stage || !diagramWrap) {
       return undefined;
     }
 
     if (prefersReducedMotion) {
-      setFundingStep(3);
+      gsap.set(diagramWrap, { autoAlpha: 1, clearProps: 'transform,opacity' });
       return undefined;
     }
 
     const fundingTriggerId = 'about-funding-stage-pin';
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 921px)', () => {
-      setFundingStep(0);
-      const totalSteps = 3 + FUNDING_LAST_STEP_HOLD;
+    const buildFundingReveal = (pinScrollMult) => {
+      const ctx = gsap.context(() => {
+        const leftPills = diagramWrap.querySelectorAll('.funding-flow-source');
+        const arrows = diagramWrap.querySelectorAll('.funding-flow-mid__cell');
+        const output = diagramWrap.querySelector('.funding-flow-output');
+        const container = diagramWrap.querySelector('.funding-diagram--flow');
 
-      const trigger = ScrollTrigger.create({
-        id: fundingTriggerId,
-        trigger: fundingStageRef.current,
-        start: 'top top',
-        end: () => '+=' + window.innerHeight * FUNDING_SCROLL_PACING,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.9,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress * totalSteps;
-          let nextStep = 0;
-          if (progress >= 0.9) nextStep = 1;
-          if (progress >= 1.9) nextStep = 2;
-          if (progress >= 2.9) nextStep = 3;
-          setFundingStep((prev) => (prev === nextStep ? prev : nextStep));
-        },
-        onLeaveBack: () => setFundingStep(0),
-      });
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: fundingTriggerId,
+            trigger: stage,
+            start: 'top top',
+            end: () => '+=' + Math.round(window.innerHeight * pinScrollMult),
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.32,
+            fastScrollEnd: true,
+            anticipatePin: 0,
+            invalidateOnRefresh: true,
+          },
+        });
 
-      return () => trigger.kill();
-    });
+        // Diagram-only reveal: pills → arrows → output card.
+        tl.set(diagramWrap, { autoAlpha: 1 }, 0);
+        if (container) {
+          tl.fromTo(
+            container,
+            { autoAlpha: 0, y: 18, scale: 0.985 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: 0.32, ease: 'power2.out' },
+            0
+          );
+        }
+        tl.fromTo(
+          leftPills,
+          { autoAlpha: 0, x: -28 },
+          { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out', stagger: 0.08 },
+          0.08
+        );
+        tl.fromTo(
+          arrows,
+          { autoAlpha: 0, x: -14, scaleX: 0.85, transformOrigin: '0% 50%' },
+          { autoAlpha: 1, x: 0, scaleX: 1, duration: 0.42, ease: 'power2.out', stagger: 0.08 },
+          0.16
+        );
+        if (output) {
+          tl.fromTo(
+            output,
+            { autoAlpha: 0, x: 28 },
+            { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out' },
+            0.22
+          );
+        }
+        tl.to({}, { duration: 0.38 });
+      }, fundingSectionRef);
 
-    mm.add('(max-width: 920px)', () => {
-      setFundingStep(0);
-      const totalSteps = 3 + FUNDING_LAST_STEP_HOLD;
+      return () => ctx.revert();
+    };
 
-      const trigger = ScrollTrigger.create({
-        id: fundingTriggerId,
-        trigger: fundingStageRef.current,
-        start: 'top top',
-        end: () => '+=' + window.innerHeight * FUNDING_SCROLL_PACING_MOBILE,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.85,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress * totalSteps;
-          let nextStep = 0;
-          if (progress >= 0.9) nextStep = 1;
-          if (progress >= 1.9) nextStep = 2;
-          if (progress >= 2.9) nextStep = 3;
-          setFundingStep((prev) => (prev === nextStep ? prev : nextStep));
-        },
-        onLeaveBack: () => setFundingStep(0),
-      });
-
-      return () => trigger.kill();
-    });
+    mm.add('(min-width: 921px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_DESKTOP));
+    mm.add('(max-width: 920px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_MOBILE));
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {
@@ -269,9 +280,9 @@ function AboutPage() {
             start: 'top top',
             pin: true,
             pinSpacing: true,
-            anticipatePin: 1,
             scrub: scrubValue,
             fastScrollEnd: true,
+            anticipatePin: 0,
             end: () => '+=' + (
               (panels.length - 1) * window.innerHeight * scrollPacing + lastPanelHoldScroll
             ),
@@ -330,6 +341,41 @@ function AboutPage() {
         if (t.vars?.id === pvmTriggerId) t.kill();
       });
       mm.revert();
+    };
+  }, [prefersReducedMotion]);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) {
+      return undefined;
+    }
+
+    const lockIds = [
+      'about-scroll-lock-trustees',
+      'about-scroll-lock-sharia',
+      'about-scroll-lock-principles',
+    ];
+    const lockRefs = [trusteesScrollLockRef, shariaScrollLockRef, principlesScrollLockRef];
+    const triggers = [];
+
+    lockRefs.forEach((refObj, index) => {
+      const el = refObj.current;
+      if (!el) return;
+
+      const trigger = ScrollTrigger.create({
+        id: lockIds[index],
+        trigger: el,
+        start: 'top top',
+        end: () => `+=${window.innerHeight}`,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 0,
+        invalidateOnRefresh: true,
+      });
+      triggers.push(trigger);
+    });
+
+    return () => {
+      triggers.forEach((t) => t.kill());
     };
   }, [prefersReducedMotion]);
 
@@ -458,7 +504,9 @@ function AboutPage() {
               business contributions. These funds support operational costs and ensure the
               organisation remains effective while maintaining financial sustainability.
             </p>
-            <FundingDiagram step={fundingStep} />
+            <div ref={fundingDiagramRevealRef} className="about-funding-diagram-reveal">
+              <FundingDiagram />
+            </div>
           </div>
         </div>
       </section>
@@ -496,23 +544,31 @@ function AboutPage() {
 
       <AuroraTimeline />
 
-      <ProfileGridSection
-        id="about-trustees"
-        title="Meet our trustees"
-        subtitle="Placeholder supporting line for trustees section."
-        variant="trustees"
-        profiles={trustees}
-      />
+      <div ref={trusteesScrollLockRef} className="about-viewport-scroll-lock">
+        <ProfileGridSection
+          id="about-trustees"
+          title="Meet our trustees"
+          subtitle="Placeholder supporting line for trustees section."
+          variant="trustees"
+          profiles={trustees}
+        />
+      </div>
 
-      <ProfileGridSection
-        id="about-shariah-board"
-        title="Meet our Shariah board"
-        subtitle="Placeholder supporting line for Shariah board section."
-        variant="sharia"
-        profiles={shariaBoard}
-      />
+      <div ref={shariaScrollLockRef} className="about-viewport-scroll-lock">
+        <ProfileGridSection
+          id="about-shariah-board"
+          title="Meet our Shariah board"
+          subtitle="Placeholder supporting line for Shariah board section."
+          variant="sharia"
+          profiles={shariaBoard}
+        />
+      </div>
 
-      <section className="about-section about-fullscreen about-principles" aria-labelledby="about-principles-title">
+      <section
+        ref={principlesScrollLockRef}
+        className="about-section about-fullscreen about-principles about-principles--scroll-pause"
+        aria-labelledby="about-principles-title"
+      >
         <div className="about-shell">
           <h2 id="about-principles-title">Our principles</h2>
           <p className="about-principles-subhead">

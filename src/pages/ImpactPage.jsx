@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import placeholderImg from '../assets/placeholder.jpg';
 import logoMcb from '../assets/logosss/MCB 2 (1).png';
 import logoMsf from '../assets/logosss/MSF (1).png';
@@ -9,6 +11,8 @@ import logoSpinney from '../assets/logosss/spinney.png';
 import logoThumbnail from '../assets/logosss/thumbnail_2025-12-19 14.52.20.jpg';
 import DigitalReelNumber from '../components/DigitalReelNumber';
 import './ImpactPage.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const UK_IMAGE_BOUNDS = {
   north: 59.35,
@@ -23,9 +27,14 @@ const UK_MAP_DRAW_BOUNDS = {
   top: 3.6,
   bottom: 92.8,
 };
-const STATIC_OVERVIEW_SCALE = 0.84;
+
+// Small global calibration so markers sit on the designed nodes in `uk.svg`.
+// (Lat/lng → percent mapping is approximate because the background is an illustrated map.)
+const UK_MAP_MARKER_CALIBRATION = { x: -0.6, y: -0.8 };
+/* Desktop overview: slight scale + top transform-origin (CSS) grows map downward; keep <1.04 to avoid bottom clip. */
+const STATIC_OVERVIEW_SCALE = 1.025;
 const STATIC_OVERVIEW_TX = 0;
-const STATIC_OVERVIEW_TY = -3;
+const STATIC_OVERVIEW_TY = 0;
 const MOBILE_OVERVIEW_SCALE = 1.54;
 const MOBILE_OVERVIEW_TX = 0;
 const MOBILE_OVERVIEW_TY = 3;
@@ -40,8 +49,14 @@ function getOverviewView(isMobile) {
 function projectLatLngToImagePercent([lat, lng]) {
   const normalizedX = (lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west);
   const normalizedY = (UK_IMAGE_BOUNDS.north - lat) / (UK_IMAGE_BOUNDS.north - UK_IMAGE_BOUNDS.south);
-  const x = UK_MAP_DRAW_BOUNDS.left + (normalizedX * (UK_MAP_DRAW_BOUNDS.right - UK_MAP_DRAW_BOUNDS.left));
-  const y = UK_MAP_DRAW_BOUNDS.top + (normalizedY * (UK_MAP_DRAW_BOUNDS.bottom - UK_MAP_DRAW_BOUNDS.top));
+  const x =
+    UK_MAP_DRAW_BOUNDS.left
+    + (normalizedX * (UK_MAP_DRAW_BOUNDS.right - UK_MAP_DRAW_BOUNDS.left))
+    + UK_MAP_MARKER_CALIBRATION.x;
+  const y =
+    UK_MAP_DRAW_BOUNDS.top
+    + (normalizedY * (UK_MAP_DRAW_BOUNDS.bottom - UK_MAP_DRAW_BOUNDS.top))
+    + UK_MAP_MARKER_CALIBRATION.y;
   return {
     x: Math.min(100, Math.max(0, x)),
     y: Math.min(100, Math.max(0, y)),
@@ -301,10 +316,12 @@ const rawProjects = [
 ];
 
 const locationCoordinates = {
-  oldham: [52.709, -1.8114],
-  london: [50.8072, -0.32],
+  // Lat/Lngs used to place markers on the static `uk.svg` background.
+  // Keep these accurate; incorrect values visibly drift away from the designed nodes.
+  oldham: [53.5409, -2.1114],
+  london: [51.5072, -0.1276],
   'dundee-scotland': [56.462, -2.9707],
-  leicester: [52.0369, -1.1398],
+  leicester: [52.6369, -1.1398],
   birmingham: [52.4862, -1.8904],
   scotland: [56.4907, -4.2026],
   national: [54.55, -3.43],
@@ -313,6 +330,8 @@ const locationCoordinates = {
 const locationScreenOverrides = {
   'dundee-scotland': { x: 54.2, y: 33.2 },
   scotland: { x: 50.9, y: 36.4 },
+  /* London: nudge vs lat/lng projection to sit on the orange node in `uk.svg` */
+  london: { x: 63.3, y: 77.2 },
 };
 
 function makeLocationId(value) {
@@ -347,7 +366,6 @@ const projects = rawProjects.map((project) => ({
 }));
 
 const NATIONWIDE_LOCATION_ID = 'nationwide';
-const NATIONWIDE_SCREEN_POSITION = { x: 68, y: 18 };
 
 const localProjects = projects.filter((project) => !project.isNationwide);
 const nationwideProjects = projects.filter((project) => project.isNationwide);
@@ -371,18 +389,6 @@ const groupedLocations = Object.values(
     return acc;
   }, {})
 ).sort((a, b) => a.city.localeCompare(b.city));
-
-const nationwideLocation = nationwideProjects.length > 0
-  ? {
-      id: NATIONWIDE_LOCATION_ID,
-      city: 'Nationwide',
-      isNationwide: true,
-      screenPosition: NATIONWIDE_SCREEN_POSITION,
-      projects: nationwideProjects,
-    }
-  : null;
-
-const locations = nationwideLocation ? [...groupedLocations, nationwideLocation] : groupedLocations;
 
 const fundedProjects = [
   {
@@ -491,9 +497,13 @@ function ImpactPage() {
   const projectPanelBodyRef = useRef(null);
   const [selectedCause, setSelectedCause] = useState(null);
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
+  const eligibilitySectionRef = useRef(null);
   const impactAreasRef = useRef(null);
+  const modelSectionRef = useRef(null);
+  const causesSectionRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const zoomTimerRef = useRef(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [staticMapView, setStaticMapView] = useState({
     ...(typeof window !== 'undefined' && window.matchMedia(MAP_MOBILE_BREAKPOINT).matches
       ? getOverviewView(true)
@@ -517,6 +527,50 @@ function ImpactPage() {
     media.addListener(update);
     return () => media.removeListener(update);
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return undefined;
+
+    const sections = [
+      { id: 'impact-scroll-lock-eligibility', ref: eligibilitySectionRef },
+      { id: 'impact-scroll-lock-areas', ref: impactAreasRef },
+      { id: 'impact-scroll-lock-model', ref: modelSectionRef },
+      { id: 'impact-scroll-lock-causes', ref: causesSectionRef },
+    ];
+
+    const triggers = sections
+      .map(({ id, ref }) => {
+        const el = ref.current;
+        if (!el) return null;
+        return ScrollTrigger.create({
+          id,
+          trigger: el,
+          start: 'top top',
+          end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 0,
+          invalidateOnRefresh: true,
+        });
+      })
+      .filter(Boolean);
+
+    return () => {
+      triggers.forEach((t) => t?.kill());
+    };
+  }, [prefersReducedMotion]);
 
   const onZoomSettled = useCallback(() => {
     setIsProjectPanelOpen(true);
@@ -646,6 +700,22 @@ function ImpactPage() {
     };
   }, []);
 
+  const isDesktopPinZoom =
+    !!selectedLocation && !selectedLocation.isNationwide;
+
+  // Nationwide badge positioning: keep it near the top on mobile, but lower on desktop (~45%).
+  const nationwideLocation = nationwideProjects.length > 0
+    ? {
+        id: NATIONWIDE_LOCATION_ID,
+        city: 'Nationwide',
+        isNationwide: true,
+        screenPosition: { x: 68, y: isMobileMap ? 18 : 37 },
+        projects: nationwideProjects,
+      }
+    : null;
+
+  const locations = nationwideLocation ? [...groupedLocations, nationwideLocation] : groupedLocations;
+
   return (
     <div className="impact-page" id="impact-page">
       <section className="impact-section impact-map" aria-labelledby="impact-map-title">
@@ -658,7 +728,9 @@ function ImpactPage() {
               '--static-map-ty': `${staticMapView.ty}%`,
             }}
           >
-            <div className="impact-static-map__inner">
+            <div
+              className={`impact-static-map__inner${isDesktopPinZoom ? ' impact-static-map__inner--pin-zoom' : ''}`}
+            >
               <div className="impact-static-map__frame">
                 <img src="/uk.svg" alt="" aria-hidden="true" className="impact-static-map__image" />
                 <div className="impact-static-map__markers" aria-hidden="false">
@@ -697,7 +769,10 @@ function ImpactPage() {
                         {isNationwidePin ? (
                           <span className="impact-checkpoint-label">
                             <span className="impact-checkpoint-label__dot" aria-hidden="true" />
-                            Nationwide reach
+                            <span className="impact-checkpoint-label__words">
+                              <span className="impact-checkpoint-label__line">Nationwide</span>
+                              <span className="impact-checkpoint-label__line">reach</span>
+                            </span>
                           </span>
                         ) : null}
                       </button>
@@ -709,10 +784,15 @@ function ImpactPage() {
           </div>
 
           <div className="impact-map-overlay">
-            <div className="impact-shell impact-shell-narrow">
-              <h1 id="impact-map-title">Explore our projects</h1>
-              <p>
-                Click a project checkpoint to trigger a guided zoom and view funding details.
+            <div className="impact-shell">
+              <h1 id="impact-map-title" className="impact-map-overlay__title">
+                <span className="impact-map-overlay__title-line">Explore our</span>
+                <span className="impact-map-overlay__title-line">projects</span>
+              </h1>
+              <p className="impact-map-overlay__lede">
+                Click a project checkpoint to trigger a guided zoom
+                <br />
+                and view funding details.
               </p>
             </div>
           </div>
@@ -785,17 +865,23 @@ function ImpactPage() {
         </div>
       </section>
 
-      <section className="impact-section impact-eligibility" aria-labelledby="impact-eligibility-title">
-        <div className="impact-shell impact-eligibility-grid">
-          <div className="impact-eligibility-content">
-            <h2 id="impact-eligibility-title">Is your organisation eligible for a Waqf grant?</h2>
-            <p>
-              Click to download our comprehensive guide on application criteria,
-              application guidance, and winning grant fundamentals.
-            </p>
-            <button type="button" className="impact-btn">Download Now</button>
+      <section
+        ref={eligibilitySectionRef}
+        className="impact-section impact-eligibility impact-scroll-lock"
+        aria-labelledby="impact-eligibility-title"
+      >
+        <div className="impact-scroll-lock-inner">
+          <div className="impact-shell impact-eligibility-grid">
+            <div className="impact-eligibility-content">
+              <h2 id="impact-eligibility-title">Is your organisation eligible for a Waqf grant?</h2>
+              <p>
+                Click to download our comprehensive guide on application criteria,
+                application guidance, and winning grant fundamentals.
+              </p>
+              <button type="button" className="impact-btn">Download Now</button>
+            </div>
+            <img className="impact-placeholder impact-eligibility-image" src={placeholderImg} alt="" aria-hidden="true" />
           </div>
-          <img className="impact-placeholder impact-eligibility-image" src={placeholderImg} alt="" aria-hidden="true" />
         </div>
       </section>
 
@@ -840,97 +926,111 @@ function ImpactPage() {
 
       <section
         ref={impactAreasRef}
-        className={`impact-section impact-areas ${impactAreasSheenActive ? 'impact-areas--sheen-active' : ''}`}
+        className={`impact-section impact-areas impact-scroll-lock ${impactAreasSheenActive ? 'impact-areas--sheen-active' : ''}`}
         aria-labelledby="impact-areas-title"
       >
-        <div className="impact-shell impact-shell-narrow">
-          <h2 id="impact-areas-title">Areas we fund:</h2>
-          <p>We focus on investing and funding particular areas that we believe will yield the best results.</p>
+        <div className="impact-scroll-lock-inner">
+          <div className="impact-shell impact-shell-narrow">
+            <h2 id="impact-areas-title">Areas we fund:</h2>
+            <p>We focus on investing and funding particular areas that we believe will yield the best results.</p>
+          </div>
+
+          <div className="impact-shell">
+            <div className="impact-stats-grid">
+              {impactStats.map((stat) => {
+                const compactValue = String(stat.value).replace(/\s+/g, '').length >= 9;
+
+                return (
+                  <article
+                    key={stat.value}
+                    className={`impact-stat-card impact-stat-card--${stat.layout} impact-stat-card--${stat.tone}`}
+                  >
+                    <p className={`impact-stat-value${compactValue ? ' impact-stat-value--compact' : ''}`}>
+                      <DigitalReelNumber value={stat.value} />
+                    </p>
+                    <p className="impact-stat-text">{stat.text}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="impact-shell">
-          <div className="impact-stats-grid">
-            {impactStats.map((stat) => {
-              const compactValue = String(stat.value).replace(/\s+/g, '').length >= 9;
+      <section
+        ref={modelSectionRef}
+        className="impact-section impact-model impact-scroll-lock"
+        aria-labelledby="impact-model-title"
+      >
+        <div className="impact-scroll-lock-inner">
+          <div className="impact-model-grid">
+            <div className="impact-model-content">
+              <h2 id="impact-model-title">Grant giving</h2>
+              <p>
+                Placeholder copy for how grants are evaluated, awarded, and monitored for impact.
+                Replace with final approved grant-giving language.
+              </p>
 
-              return (
-                <article
-                  key={stat.value}
-                  className={`impact-stat-card impact-stat-card--${stat.layout} impact-stat-card--${stat.tone}`}
+              <h3>Our funding model</h3>
+              <p>
+                Placeholder copy for investment-to-grant cycle, due diligence standards,
+                and governance checkpoints used to sustain long-term outcomes.
+              </p>
+            </div>
+
+            <div className="impact-model-diagram" aria-hidden="true">
+              <div className="impact-model-box impact-model-box--top">Input</div>
+              <div className="impact-model-box impact-model-box--left">Allocate</div>
+              <div className="impact-model-box impact-model-box--right">Deliver</div>
+              <div className="impact-model-box impact-model-box--bottom">Impact</div>
+              <svg className="impact-model-lines" viewBox="0 0 520 520" preserveAspectRatio="none">
+                <path d="M260 110 C260 150, 180 150, 170 205" />
+                <path d="M260 110 C260 150, 340 150, 350 205" />
+                <path d="M170 315 C180 370, 260 370, 260 410" />
+                <path d="M350 315 C340 370, 260 370, 260 410" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        ref={causesSectionRef}
+        className="impact-section impact-causes impact-scroll-lock"
+        aria-labelledby="impact-causes-title"
+      >
+        <div className="impact-scroll-lock-inner">
+          <div className="impact-shell impact-shell-narrow">
+            <h2 id="impact-causes-title">Our cause areas</h2>
+          </div>
+
+          <div className="impact-shell">
+            <div className="impact-cause-grid">
+              {causeAreas.map((cause) => (
+                <button
+                  type="button"
+                  key={cause.title}
+                  className="impact-cause-card"
+                  style={{ backgroundColor: cause.color }}
+                  onClick={() => onSelectCause(cause)}
+                  aria-label={`Learn more about ${cause.title}`}
                 >
-                  <p className={`impact-stat-value${compactValue ? ' impact-stat-value--compact' : ''}`}>
-                    <DigitalReelNumber value={stat.value} />
-                  </p>
-                  <p className="impact-stat-text">{stat.text}</p>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="impact-section impact-model" aria-labelledby="impact-model-title">
-        <div className="impact-model-grid">
-          <div className="impact-model-content">
-            <h2 id="impact-model-title">Grant giving</h2>
-            <p>
-              Placeholder copy for how grants are evaluated, awarded, and monitored for impact.
-              Replace with final approved grant-giving language.
-            </p>
-
-            <h3>Our funding model</h3>
-            <p>
-              Placeholder copy for investment-to-grant cycle, due diligence standards,
-              and governance checkpoints used to sustain long-term outcomes.
-            </p>
-          </div>
-
-          <div className="impact-model-diagram" aria-hidden="true">
-            <div className="impact-model-box impact-model-box--top">Input</div>
-            <div className="impact-model-box impact-model-box--left">Allocate</div>
-            <div className="impact-model-box impact-model-box--right">Deliver</div>
-            <div className="impact-model-box impact-model-box--bottom">Impact</div>
-            <svg className="impact-model-lines" viewBox="0 0 520 520" preserveAspectRatio="none">
-              <path d="M260 110 C260 150, 180 150, 170 205" />
-              <path d="M260 110 C260 150, 340 150, 350 205" />
-              <path d="M170 315 C180 370, 260 370, 260 410" />
-              <path d="M350 315 C340 370, 260 370, 260 410" />
-            </svg>
-          </div>
-        </div>
-      </section>
-
-      <section className="impact-section impact-causes" aria-labelledby="impact-causes-title">
-        <div className="impact-shell impact-shell-narrow">
-          <h2 id="impact-causes-title">Our cause areas</h2>
-        </div>
-
-        <div className="impact-shell">
-          <div className="impact-cause-grid">
-            {causeAreas.map((cause) => (
-              <button
-                type="button"
-                key={cause.title}
-                className="impact-cause-card"
-                style={{ backgroundColor: cause.color }}
-                onClick={() => onSelectCause(cause)}
-                aria-label={`Learn more about ${cause.title}`}
-              >
-                <img
-                  className="impact-cause-card-image"
-                  src={placeholderImg}
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span className="impact-cause-card-title">{cause.title}</span>
-                <span className="impact-cause-card-arrow" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </span>
-              </button>
-            ))}
+                  <img
+                    className="impact-cause-card-image"
+                    src={placeholderImg}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <span className="impact-cause-card-title">{cause.title}</span>
+                  <span className="impact-cause-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>

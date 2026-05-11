@@ -6,6 +6,9 @@ import placeholderImg from '../assets/placeholder.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* Pin math uses innerHeight; ignoring small mobile viewport chrome changes avoids refresh thrash. */
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const SCROLL_PACING = 1.28;
 const LAST_SLIDE_HOLD = 0.3;
 const MOBILE_SCROLL_PACING = 0.78;
@@ -73,23 +76,46 @@ function WhyWaqfSection() {
   }, []);
 
   useEffect(() => {
+    let resizeT;
+    const refreshSoon = () => {
+      window.clearTimeout(resizeT);
+      resizeT = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+    window.addEventListener('resize', refreshSoon);
+    /* Do not refresh on visualViewport resize: URL bar show/hide recalculates pin end
+       and causes visible jump/jitter during scroll on mobile. */
+    return () => {
+      window.clearTimeout(resizeT);
+      window.removeEventListener('resize', refreshSoon);
+    };
+  }, []);
+
+  useEffect(() => {
     const headerBlock = headerBlockRef.current;
     if (!headerBlock) {
       return undefined;
     }
 
+    let kickerRaf = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setShowPanelKicker(!entry.isIntersecting);
+        const next = !entry.isIntersecting;
+        window.cancelAnimationFrame(kickerRaf);
+        kickerRaf = window.requestAnimationFrame(() => {
+          setShowPanelKicker((prev) => (prev === next ? prev : next));
+        });
       },
       {
         threshold: 0,
-        rootMargin: '120px 0px 0px 0px',
+        rootMargin: '160px 0px 0px 0px',
       }
     );
 
     observer.observe(headerBlock);
-    return () => observer.disconnect();
+    return () => {
+      window.cancelAnimationFrame(kickerRaf);
+      observer.disconnect();
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -135,6 +161,9 @@ function WhyWaqfSection() {
           yPercent: (index) => (index === 0 ? 0 : 100),
         });
 
+        /* Avoid setAttribute on every tick — reduces layout thrash / scroll jitter */
+        let lastOverlapIndex = -2;
+
         const timeline = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
@@ -143,24 +172,44 @@ function WhyWaqfSection() {
             start: 'top top',
             pin: true,
             pinSpacing: true,
-            scrub: scrubValue,
-            end: () =>
-              '+=' +
-              (panels.length - 1 + holdDuration) * window.innerHeight * pacing,
+            anticipatePin: 0,
+            /* Default pinType ('fixed' outside scroll containers) lets the browser hold the
+               section in place natively; 'transform' re-translates every frame and on
+               Chrome can lag a frame behind compositor scroll → visible jitter. */
+            scrub: true,
+            fastScrollEnd: true,
+            preventOverlaps: 'learn-why',
+            end: () => {
+              const el = stageRef.current;
+              const h = el?.getBoundingClientRect().height;
+              /* Match actual stage box (100vh / 100dvh on mobile) so pin distance matches layout. */
+              const vh = h && h > 0 ? h : window.innerHeight;
+              return '+=' + (panels.length - 1 + holdDuration) * vh * pacing;
+            },
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               const totalSteps = panels.length - 1 + holdDuration;
               const progress = self.progress * totalSteps;
 
-              panels.forEach((panel) => {
-                panel.setAttribute('data-overlap', 'false');
-              });
-
+              let overlapIndex = -1;
               for (let index = 0; index < panels.length - 1; index += 1) {
                 if (progress > index && progress < index + 1) {
-                  panels[index].setAttribute('data-overlap', 'true');
+                  overlapIndex = index;
                   break;
                 }
+              }
+
+              if (overlapIndex === lastOverlapIndex) {
+                return;
+              }
+              const prev = lastOverlapIndex;
+              lastOverlapIndex = overlapIndex;
+
+              if (prev >= 0 && panels[prev]) {
+                panels[prev].setAttribute('data-overlap', 'false');
+              }
+              if (overlapIndex >= 0 && panels[overlapIndex]) {
+                panels[overlapIndex].setAttribute('data-overlap', 'true');
               }
             },
           },

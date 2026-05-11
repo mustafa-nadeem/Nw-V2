@@ -76,7 +76,7 @@ function WhatIsWaqfStack({
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isMobileLayout, setIsMobileLayout] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   );
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function WhatIsWaqfStack({
   }, []);
 
   useEffect(() => {
-    const media = window.matchMedia('(max-width: 768px)');
+    const media = window.matchMedia('(max-width: 767px)');
     const update = () => setIsMobileLayout(media.matches);
 
     update();
@@ -110,6 +110,20 @@ function WhatIsWaqfStack({
 
     media.addListener(update);
     return () => media.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    let t;
+    const refresh = () => {
+      window.clearTimeout(t);
+      t = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+    window.addEventListener('resize', refresh);
+    /* Avoid visualViewport refresh: URL bar resizes + crossing into the next pin caused jumps. */
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener('resize', refresh);
+    };
   }, []);
 
   const useStaticLayout = prefersReducedMotion;
@@ -137,15 +151,21 @@ function WhatIsWaqfStack({
       const headingWords = gsap.utils.toArray('.waqf-word');
 
       if (isMobileLayout) {
-        const navbarOffset = 0;
-        const viewportHeight = window.innerHeight;
+        const layoutViewportHeight =
+          sectionEl.getBoundingClientRect().height > 0
+            ? sectionEl.getBoundingClientRect().height
+            : window.innerHeight;
         const copyHeight = copyEl ? copyEl.getBoundingClientRect().height : 0;
-        const availableForCards = viewportHeight - navbarOffset - copyHeight - 34;
-        // MOBILE CARD HEIGHT CONTROL (PINNED MODE):
-        // - 0.55: relative scale factor (higher = taller cards)
-        // - 280: max cap (higher = allows taller cards)
-        // - 170: min floor (higher = prevents cards becoming too short)
-        const mobileCardHeight = Math.max(190, Math.min(310, Math.round(availableForCards * 0.62)));
+        /* Reserve gap between copy + cards, minimal section chrome (CSS centers in 100svh) */
+        const layoutGapPx = 20;
+        const sectionChromePx = 24;
+        const availableForCards =
+          layoutViewportHeight - copyHeight - layoutGapPx - sectionChromePx;
+        // MOBILE CARD HEIGHT CONTROL (PINNED MODE) — keep stack within ~100vh while pinned
+        const mobileCardHeight = Math.max(
+          160,
+          Math.min(300, Math.round(Math.max(0, availableForCards) * 0.58)),
+        );
         const stackHeight = mobileCardHeight;
 
         gsap.set(copyEl, {
@@ -172,7 +192,18 @@ function WhatIsWaqfStack({
         gsap.set(headingWords, { autoAlpha: 1, y: 0 });
         gsap.set(descriptionEl, { autoAlpha: 1, y: 0 });
 
-        const totalScroll = viewportHeight;
+        void sectionEl.offsetHeight;
+        const measuredH = sectionEl.getBoundingClientRect().height;
+        /* Match CSS 100dvh/svh — do not use visualViewport here or pin length disagrees with layout. */
+        const viewportHeight = measuredH > 0 ? measuredH : window.innerHeight;
+        /*
+         * Mobile pinning: generous scroll runway so a swipe does not unload this pin and
+         * immediately slam into Why Waqf's pin (felt as a skip / scroll lock jump).
+         */
+        const totalScroll = Math.max(
+          Math.round(viewportHeight * 2.85),
+          Math.round(measuredH + viewportHeight * 1.25),
+        );
 
         const mobileTimeline = gsap.timeline({
           defaults: { ease: 'none' },
@@ -183,9 +214,11 @@ function WhatIsWaqfStack({
             end: '+=' + totalScroll,
             pin: sectionEl,
             pinSpacing: true,
-            anticipatePin: 1,
-            scrub: 1,
+            anticipatePin: 0,
+            scrub: true,
+            fastScrollEnd: true,
             invalidateOnRefresh: true,
+            preventOverlaps: 'learn-why',
           },
         });
 
@@ -196,32 +229,12 @@ function WhatIsWaqfStack({
           mobileTimeline.to(card, { y: 0, duration: 1 });
         });
 
-        mobileTimeline.to({}, { duration: 0.7 });
+        mobileTimeline.to({}, { duration: 1.35 });
 
         return;
       }
 
       const totalScroll = HEADING_SCROLL + cardEls.length * SCROLL_PER_CARD + LAST_CARD_HOLD_SCROLL;
-
-      // Heading starts centered and large
-      gsap.set(copyEl, {
-        position: 'absolute',
-        top: '50%',
-        left: '0%',
-        xPercent: 0,
-        yPercent: -50,
-        width: '100%',
-        zIndex: 10,
-      });
-
-      gsap.set(headingEl, {
-        fontSize: isUsageVariant
-          ? 'clamp(2rem, 4.2vw, 3.6rem)'
-          : 'clamp(3.5rem, 7vw, 7rem)',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        gap: '0.32ch',
-      });
 
       // Cards hidden off-screen
       gsap.set(cardsWrap, { autoAlpha: 0 });
@@ -279,7 +292,8 @@ function WhatIsWaqfStack({
           trigger: sectionEl,
           start: 'top 40%',
           end: 'top 5%',
-          scrub: 1,
+          scrub: 0.45,
+          fastScrollEnd: true,
         },
       });
 
@@ -302,9 +316,17 @@ function WhatIsWaqfStack({
           end: '+=' + totalScroll,
           pin: true,
           pinSpacing: true,
-          anticipatePin: 1,
-          scrub: 1.5,
+          anticipatePin: 0,
+          scrub: 0.65,
+          fastScrollEnd: true,
           invalidateOnRefresh: true,
+          preventOverlaps: 'learn-why',
+          /* Add the pinned layout when we enter, but only remove it if we scroll back
+             above the pin start. Scrolling past (forward) keeps the same layout so the
+             copy column doesn't jump back to its pre-pin width. */
+          onEnter: () => sectionEl.classList.add('is-pinned'),
+          onEnterBack: () => sectionEl.classList.add('is-pinned'),
+          onLeaveBack: () => sectionEl.classList.remove('is-pinned'),
         },
       });
 
@@ -343,6 +365,7 @@ function WhatIsWaqfStack({
           trigger.kill();
         }
       });
+      sectionEl.classList.remove('is-pinned');
       ctx.revert();
     };
   }, [useStaticLayout, isMobileLayout, isUsageVariant]);

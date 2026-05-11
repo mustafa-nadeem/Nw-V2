@@ -1,6 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
+import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const roleCards = [
   {
@@ -43,6 +48,13 @@ const usageCards = [
     paragraphs: ['Endowments designed to support family members while preserving wealth, enabling Islamic estate planning and a legacy of financial security.'],
   },
 ];
+
+const usageStackCards = usageCards.map((card) => ({
+  title: card.title,
+  imageSrc: card.imageSrc || placeholderImg,
+  imageAlt: card.imageAlt || '',
+  paragraphs: card.paragraphs || [],
+}));
 
 const videoCards = [
   {
@@ -130,6 +142,54 @@ function LearnMorePage() {
   const [activeFaqGroup, setActiveFaqGroup] = useState(0);
   const [activeRole, setActiveRole] = useState(0);
   const reportsRailRef = useRef(null);
+  const roleSectionRef = useRef(null);
+  const workshopSectionRef = useRef(null);
+  const reportsSectionRef = useRef(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(mq.matches);
+    update();
+    if (mq.addEventListener) {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion) return undefined;
+
+    const sections = [
+      { id: 'learn-scroll-lock-role', ref: roleSectionRef },
+      { id: 'learn-scroll-lock-workshop', ref: workshopSectionRef },
+      { id: 'learn-scroll-lock-reports', ref: reportsSectionRef },
+    ];
+
+    const triggers = sections
+      .map(({ id, ref }) => {
+        const el = ref.current;
+        if (!el) return null;
+        return ScrollTrigger.create({
+          id,
+          trigger: el,
+          start: 'top top',
+          end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 0,
+          scrub: false,
+          invalidateOnRefresh: true,
+        });
+      })
+      .filter(Boolean);
+
+    return () => {
+      triggers.forEach((t) => t?.kill());
+    };
+  }, [prefersReducedMotion]);
 
   const toggleFaq = (key) => {
     setOpenFaqItems((previous) => ({
@@ -163,7 +223,11 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--role" aria-labelledby="learn-role-title">
+      <section
+        ref={roleSectionRef}
+        className="learn-section learn-section--role learn-scroll-lock"
+        aria-labelledby="learn-role-title"
+      >
         <div className="learn-shell">
           <h2 id="learn-role-title" className="learn-role-title">The role of Waqf, Zakaat and Sadaqah in Islam</h2>
           <div className="learn-role-accordion">
@@ -220,31 +284,25 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--usage is-visible" aria-labelledby="learn-usage-title">
-        <div className="learn-shell">
-          <h2 id="learn-usage-title" className="learn-usage-heading">
-            <span className="learn-usage-word">Usages</span>{' '}
-            <span className="learn-usage-word">of</span>{' '}
-            <span className="learn-usage-word learn-usage-word--accent">Awqaf</span>
-          </h2>
+      <WhatIsWaqfStack
+        cardsData={usageStackCards}
+        headingWords={[
+          { text: 'Usages' },
+          { text: 'of' },
+          { text: 'Awqaf', accent: true },
+        ]}
+        descriptionParagraphs={[]}
+        headingId="learn-usage-title"
+        headingAriaLabel="Usages of Awqaf"
+        sectionClassName="learn-section learn-section--usage is-visible learn-usage-stack"
+        includeBaseSectionClass={false}
+      />
 
-          <div className="learn-usage-grid">
-            {usageCards.slice(0, 3).map((card) => (
-              <article className="learn-usage-card" key={card.title}>
-                <div className="learn-usage-media" aria-hidden="true">
-                  <img src={card.imageSrc || placeholderImg} alt="" />
-                </div>
-                <h3 className="learn-usage-title">{card.title}</h3>
-                <p className="learn-usage-description">
-                  {card.paragraphs?.[0] || ''}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="learn-section learn-workshop" aria-labelledby="learn-workshop-title">
+      <section
+        ref={workshopSectionRef}
+        className="learn-section learn-workshop learn-scroll-lock"
+        aria-labelledby="learn-workshop-title"
+      >
         <div className="learn-shell learn-workshop-grid">
           <div className="learn-workshop-copy">
             <h2 id="learn-workshop-title">Book educational<br />workshops with us</h2>
@@ -329,7 +387,11 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--reports" aria-labelledby="learn-finance-title">
+      <section
+        ref={reportsSectionRef}
+        className="learn-section learn-section--reports learn-scroll-lock"
+        aria-labelledby="learn-finance-title"
+      >
         <div className="learn-shell">
           <div className="learn-reports-header">
             <h2 id="learn-finance-title" className="learn-reports-heading">Financial reports</h2>

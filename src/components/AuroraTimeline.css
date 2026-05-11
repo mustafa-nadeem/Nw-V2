@@ -5,7 +5,7 @@
   width: 100%;
   min-height: 100vh;
   background: #ffffff;
-  padding: 160px 40px;
+  padding: 160px var(--page-inline, 38px);
   position: relative;
   overflow: visible;
 }
@@ -277,13 +277,13 @@
 
   .about-page .aurora-timeline-section > .aurora-timeline__section-title,
   .about-page .aurora-timeline-section > .aurora-timeline__wrapper {
-    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--about-mobile-inline, 18px) * 2)));
+    width: min(100%, calc(var(--about-mobile-content-max, 400px) + (var(--page-inline, 38px) * 2)));
     margin-left: auto;
     margin-right: auto;
   }
 
   .aurora-timeline__section-title {
-    padding-left: var(--about-mobile-inline, 18px);
+    padding-left: var(--page-inline, 38px);
     margin-bottom: 28px;
     font-size: 1.8rem;
   }
@@ -293,7 +293,7 @@
     grid-template-columns: 56px minmax(0, 1fr);
     align-items: stretch;
     gap: 0;
-    padding-left: var(--about-mobile-inline, 18px);
+    padding-left: var(--page-inline, 38px);
   }
 
   .aurora-timeline__sticky-left {
@@ -397,7 +397,7 @@
   }
 
   .aurora-timeline__content {
-    padding: 0 var(--about-mobile-inline, 18px) 0 8px;
+    padding: 0 var(--page-inline, 38px) 0 8px;
     justify-content: flex-start;
   }
 
