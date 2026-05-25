@@ -11,9 +11,7 @@ function ConnectPage() {
   const formSectionRef = useRef(null);
   const workshopSectionRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [formSlideOffset, setFormSlideOffset] = useState(0);
   const [showSectionHeading, setShowSectionHeading] = useState(false);
-  const slideOffsetRef = useRef(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -91,43 +89,6 @@ function ConnectPage() {
     };
   }, []);
 
-  useEffect(() => {
-    const heroEl = heroRef.current;
-    if (!heroEl) {
-      return undefined;
-    }
-
-    const updateFormSlideOffset = () => {
-      const start = heroEl.offsetTop;
-      const end = start + heroEl.offsetHeight;
-      const progress = (window.scrollY - start) / Math.max(end - start, 1);
-      const clamped = Math.max(0, Math.min(1, progress));
-      const next = Math.round(clamped * 120);
-      if (next === slideOffsetRef.current) return;
-      slideOffsetRef.current = next;
-      setFormSlideOffset(next);
-    };
-
-    let rafId = 0;
-    const onScrollOrResize = () => {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(() => {
-        rafId = 0;
-        updateFormSlideOffset();
-      });
-    };
-
-    updateFormSlideOffset();
-    window.addEventListener('scroll', onScrollOrResize, { passive: true });
-    window.addEventListener('resize', onScrollOrResize);
-
-    return () => {
-      if (rafId) window.cancelAnimationFrame(rafId);
-      window.removeEventListener('scroll', onScrollOrResize);
-      window.removeEventListener('resize', onScrollOrResize);
-    };
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -182,14 +143,15 @@ function ConnectPage() {
 
   return (
     <div className="connect-page" id="connect">
-      <div ref={heroRef} className="connect-hero">
-        <h1>Connect with us</h1>
+      <div className="connect-hero-wrapper">
+        <div ref={heroRef} className="connect-hero">
+          <h1>Connect with us</h1>
+        </div>
       </div>
 
       <div
         ref={formSectionRef}
         className="connect-form-section"
-        style={{ '--connect-form-slide': `${formSlideOffset}px` }}
       >
         <div className="connect-container">
           <div className={`connect-form-heading${showSectionHeading ? ' is-visible' : ''}`}>

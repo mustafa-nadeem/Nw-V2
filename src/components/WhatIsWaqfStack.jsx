@@ -366,13 +366,11 @@ function WhatIsWaqfStack({
             ? 'clamp(1.7rem, 3.3vw, 2.8rem)'
             : 'clamp(2.4rem, 4vw, 5rem)',
           duration: 1,
-          ease: 'power2.inOut',
         }, 0)
         .to(copyEl, {
           width: '45%',
           zIndex: 1,
           duration: 1,
-          ease: 'power2.inOut',
         }, 0)
         .to(cardsWrap, {
           autoAlpha: 1,

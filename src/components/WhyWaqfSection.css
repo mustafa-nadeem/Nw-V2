@@ -45,9 +45,59 @@
   height: 100vh;
   overflow: hidden;
   width: 100%;
-  background: var(--why-waqf-surface);
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+.why-waqf-panel--surface {
+  background: var(--why-waqf-surface);
+  color: #2B346C;
+}
+
+.why-waqf-panel--dark {
+  background: #2B346C;
+  color: #fff;
+}
+
+.why-waqf-panel--light {
+  background: #fff;
+  color: #2B346C;
+}
+
+.why-waqf-panel--dark .why-waqf-panel-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.why-waqf-panel--light .why-waqf-panel-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(43, 52, 108, 0.08) 0%,
+    rgba(43, 52, 108, 0.03) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.why-waqf-panel--dark .why-waqf-panel-kicker {
+  color: #01ACA6;
+}
+
+.why-waqf-panel--dark .why-waqf-panel-content h3,
+.why-waqf-panel--dark .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
+  color: #fff;
+}
+
+.why-waqf-panel--light .why-waqf-panel-kicker {
+  color: #1F2A5F;
+}
+
+.why-waqf-panel--light .why-waqf-panel-content h3,
+.why-waqf-panel--light .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
+  color: #2B346C;
 }
 
 .why-waqf-panel-overlay {

@@ -465,16 +465,16 @@ h3 {
 }
 
 .impact-grid {
-  margin-top: 20px;
+  margin-top: 14px;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-auto-rows: minmax(96px, auto);
-  gap: 10px;
+  grid-auto-rows: minmax(88px, auto);
+  gap: 8px;
 }
 
 .impact-card {
   border-radius: var(--radius-sm);
-  padding: 30px;
+  padding: 24px;
   display: grid;
   gap: 8px;
   align-content: center;

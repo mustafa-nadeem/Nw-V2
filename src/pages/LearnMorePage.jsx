@@ -3,7 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
-import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,12 +48,8 @@ const usageCards = [
   },
 ];
 
-const usageStackCards = usageCards.map((card) => ({
-  title: card.title,
-  imageSrc: card.imageSrc || placeholderImg,
-  imageAlt: card.imageAlt || '',
-  paragraphs: card.paragraphs || [],
-}));
+const USAGE_COLORS = ['#2B346C', '#01ACA6', '#E27D50'];
+const USAGE_SECTION_HOVER_BACKGROUNDS = ['#E8ECFA', '#E8F5F4', '#FDF0EA'];
 
 const videoCards = [
   {
@@ -143,9 +138,12 @@ function LearnMorePage() {
   const [activeRole, setActiveRole] = useState(0);
   const reportsRailRef = useRef(null);
   const roleSectionRef = useRef(null);
+  const usageSectionRef = useRef(null);
   const workshopSectionRef = useRef(null);
   const reportsSectionRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [usageHoveredIndex, setUsageHoveredIndex] = useState(null);
+  const [expandedUsageIndex, setExpandedUsageIndex] = useState(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -164,6 +162,7 @@ function LearnMorePage() {
 
     const sections = [
       { id: 'learn-scroll-lock-role', ref: roleSectionRef },
+      { id: 'learn-scroll-lock-usage', ref: usageSectionRef },
       { id: 'learn-scroll-lock-workshop', ref: workshopSectionRef },
       { id: 'learn-scroll-lock-reports', ref: reportsSectionRef },
     ];
@@ -205,6 +204,11 @@ function LearnMorePage() {
     const step = card ? card.getBoundingClientRect().width + 20 : 260;
     rail.scrollBy({ left: direction * step, behavior: 'smooth' });
   };
+
+  const activeUsageIndex = usageHoveredIndex ?? expandedUsageIndex;
+  const usageSectionBackground = activeUsageIndex === null
+    ? '#FFF9F3'
+    : USAGE_SECTION_HOVER_BACKGROUNDS[activeUsageIndex];
 
   return (
     <div className="learn-page" id="learn-more">
@@ -284,19 +288,56 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <WhatIsWaqfStack
-        cardsData={usageStackCards}
-        headingWords={[
-          { text: 'Usages' },
-          { text: 'of' },
-          { text: 'Awqaf', accent: true },
-        ]}
-        descriptionParagraphs={[]}
-        headingId="learn-usage-title"
-        headingAriaLabel="Usages of Awqaf"
-        sectionClassName="learn-section learn-section--usage is-visible learn-usage-stack"
-        includeBaseSectionClass={false}
-      />
+      <section
+        ref={usageSectionRef}
+        className="learn-section learn-section--usage learn-scroll-lock"
+        style={{ '--usage-section-bg': usageSectionBackground }}
+        aria-labelledby="learn-usage-title"
+      >
+        <div className="learn-shell">
+          <div className="learn-usage-intro">
+            <h2 id="learn-usage-title">Usages of <span className="learn-accent">Awqaf</span></h2>
+          </div>
+          <div className="learn-usage-grid">
+            {usageCards.map((card, index) => (
+              <article
+                key={card.title}
+                className={`learn-usage-card${expandedUsageIndex === index ? ' is-revealed' : ''}`}
+                style={{ '--usage-color': USAGE_COLORS[index] }}
+                onMouseEnter={() => setUsageHoveredIndex(index)}
+                onMouseLeave={() => setUsageHoveredIndex(null)}
+                onClick={() =>
+                  setExpandedUsageIndex((prev) => (prev === index ? null : index))
+                }
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setExpandedUsageIndex((prev) => (prev === index ? null : index));
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-expanded={expandedUsageIndex === index}
+              >
+                <img
+                  className="learn-usage-card-photo"
+                  src={card.imageSrc}
+                  alt=""
+                  aria-hidden="true"
+                />
+                <div className="learn-usage-card-body">
+                  <h3 className="learn-usage-card-title">{card.title}</h3>
+                  <div className="learn-usage-card-reveal">
+                    {card.paragraphs.map((p) => (
+                      <p key={p} className="learn-usage-card-text">{p}</p>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section
         ref={workshopSectionRef}

@@ -45,14 +45,14 @@ const principles = [
   },
 ];
 
-const PVM_SCROLL_PACING = 1.75;
-const PVM_LAST_PANEL_HOLD_SCROLL = 340;
+const PVM_SCROLL_PACING = 2.05;
+const PVM_LAST_PANEL_HOLD_SCROLL = 440;
 /** Mobile: more scroll distance so each panel “locks” before the next section rises into view. */
-const PVM_SCROLL_PACING_MOBILE = 1.42;
-const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 300;
-const PVM_INITIAL_HOLD_STEP = 0.42;
-const PVM_BETWEEN_PANEL_HOLD_STEP = 0.34;
-const PVM_LAST_PANEL_HOLD_STEP = 0.52;
+const PVM_SCROLL_PACING_MOBILE = 1.78;
+const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 440;
+const PVM_INITIAL_HOLD_STEP = 0.56;
+const PVM_BETWEEN_PANEL_HOLD_STEP = 0.48;
+const PVM_LAST_PANEL_HOLD_STEP = 0.68;
 /** Pin length (× viewport height): intro tween + short read buffer — diagram is static, no step scrub. */
 const FUNDING_PIN_SCROLL_DESKTOP = 0.72;
 /** Mobile: enough runway to scrub the diagram reveal (similar “lock then release” feel to the cycle section). */
@@ -130,7 +130,7 @@ function AboutPage() {
     const triggerId = 'about-works-cycle-pin';
     const earlyTriggerId = 'about-works-cycle-early';
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
-    const pinStart = isMobile ? 'top top+=76' : 'bottom bottom';
+    const pinStart = isMobile ? 'top top+=38' : 'bottom bottom';
 
     ScrollTrigger.create({
       id: earlyTriggerId,
@@ -250,9 +250,9 @@ function AboutPage() {
     };
 
     mm.add('(min-width: 921px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_DESKTOP, 'top top'));
-    /* Match `.about-works-pin-stage` mobile pin (`top top+=76`) so the nav doesn’t cover the heading */
+    /* Mobile: pin flush to viewport top so heading sits closer to navbar. */
     mm.add('(max-width: 920px)', () =>
-      buildFundingReveal(FUNDING_PIN_SCROLL_MOBILE, 'top top+=76'),
+      buildFundingReveal(FUNDING_PIN_SCROLL_MOBILE, 'top top'),
     );
 
     return () => {

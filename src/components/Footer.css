@@ -1,6 +1,8 @@
 .site-footer {
   background: #2B346C;
   padding: 200px var(--page-inline, 38px);
+  position: relative;
+  z-index: 2;
 }
 
 .site-footer-inner {

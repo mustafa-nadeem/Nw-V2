@@ -9,13 +9,16 @@ gsap.registerPlugin(ScrollTrigger);
 /* Pin math uses innerHeight; ignoring small mobile viewport chrome changes avoids refresh thrash. */
 ScrollTrigger.config({ ignoreMobileResize: true });
 
-const SCROLL_PACING = 1.28;
-const LAST_SLIDE_HOLD = 0.3;
-const MOBILE_SCROLL_PACING = 0.78;
-const MOBILE_LAST_SLIDE_HOLD = 0.24;
+const SCROLL_PACING = 1.42;
+const LAST_SLIDE_HOLD = 0.42;
+const MOBILE_SCROLL_PACING = 1.72;
+const MOBILE_LAST_SLIDE_HOLD = 0.68;
+const MOBILE_INITIAL_SLIDE_HOLD = 0.72;
+const MOBILE_BETWEEN_SLIDE_HOLD = 0.56;
 
 const slides = [
   {
+    theme: 'surface',
     title: 'Because self-perpetuating funding is effective:',
     description:
       'Unlike one-time donations that get spent and disappear, waqf can create a permanent income stream or benefit to a community.',
@@ -24,6 +27,7 @@ const slides = [
     alt: 'People walking through a city square representing active community life',
   },
   {
+    theme: 'dark',
     title: 'Generational stability:',
     description:
       "Because Waqf assets can't be sold or divided up, they survive political changes, economic crises, and family disputes. A mosque or school established 500 years ago can still be operating today from the same endowment. This provides communities stable institutions that benefit them across generations.",
@@ -32,6 +36,7 @@ const slides = [
     alt: 'Urban skyline at sunset symbolizing shared social progress',
   },
   {
+    theme: 'light',
     title: 'The multiplier effect:',
     description:
       'One strategic waqf can spawn entire ecosystems. For example, a Waqf might fund a nearby school, which educates locals, who then open businesses in that same market. The economic and social benefits compound and grow over time.',
@@ -40,6 +45,7 @@ const slides = [
     alt: 'Architectural structure with strong lines representing institutional stability',
   },
   {
+    theme: 'dark',
     title: 'Community impact:',
     description:
       "Waqf creates lasting infrastructure that serves communities for generations. National Waqf carefully analyses and assesses a project's viability and the potential impact it can make before providing the funding that will drive that project forward.",
@@ -153,9 +159,18 @@ function WhyWaqfSection() {
 
     const mm = gsap.matchMedia();
 
-    const buildPinnedTimeline = (pacing, scrubValue, holdDuration) => {
+    const buildPinnedTimeline = (
+      pacing,
+      scrubValue,
+      holdDuration,
+      fastScrollEndValue,
+      initialSlideHold = 0,
+      betweenSlideHold = 0
+    ) => {
       const scopedCtx = gsap.context(() => {
         const panels = gsap.utils.toArray('.why-waqf-panel');
+        const transitionSpan = 1 + betweenSlideHold;
+        const totalSteps = initialSlideHold + (panels.length - 1) * transitionSpan + holdDuration;
 
         gsap.set(panels, {
           yPercent: (index) => (index === 0 ? 0 : 100),
@@ -176,8 +191,8 @@ function WhyWaqfSection() {
             /* Default pinType ('fixed' outside scroll containers) lets the browser hold the
                section in place natively; 'transform' re-translates every frame and on
                Chrome can lag a frame behind compositor scroll → visible jitter. */
-            scrub: true,
-            fastScrollEnd: true,
+            scrub: scrubValue,
+            fastScrollEnd: fastScrollEndValue,
             preventOverlaps: 'learn-why',
             end: () => {
               const el = stageRef.current;
@@ -188,12 +203,13 @@ function WhyWaqfSection() {
             },
             invalidateOnRefresh: true,
             onUpdate: (self) => {
-              const totalSteps = panels.length - 1 + holdDuration;
               const progress = self.progress * totalSteps;
 
               let overlapIndex = -1;
               for (let index = 0; index < panels.length - 1; index += 1) {
-                if (progress > index && progress < index + 1) {
+                const rangeStart = initialSlideHold + index * transitionSpan;
+                const rangeEnd = rangeStart + 1;
+                if (progress > rangeStart && progress < rangeEnd) {
                   overlapIndex = index;
                   break;
                 }
@@ -216,13 +232,14 @@ function WhyWaqfSection() {
         });
 
         for (let index = 1; index < panels.length; index += 1) {
+          const startAt = initialSlideHold + (index - 1) * transitionSpan;
           timeline.to(
             panels[index],
             {
               yPercent: 0,
               duration: 1,
             },
-            index - 1
+            startAt
           );
         }
 
@@ -234,9 +251,18 @@ function WhyWaqfSection() {
       };
     };
 
-    mm.add('(min-width: 768px)', () => buildPinnedTimeline(SCROLL_PACING, 0.8, LAST_SLIDE_HOLD));
+    mm.add('(min-width: 768px)', () =>
+      buildPinnedTimeline(SCROLL_PACING, 0.8, LAST_SLIDE_HOLD, true)
+    );
     mm.add('(max-width: 767px)', () =>
-      buildPinnedTimeline(MOBILE_SCROLL_PACING, 0.85, MOBILE_LAST_SLIDE_HOLD)
+      buildPinnedTimeline(
+        MOBILE_SCROLL_PACING,
+        0.95,
+        MOBILE_LAST_SLIDE_HOLD,
+        false,
+        MOBILE_INITIAL_SLIDE_HOLD,
+        MOBILE_BETWEEN_SLIDE_HOLD
+      )
     );
 
     return () => {
@@ -263,7 +289,11 @@ function WhyWaqfSection() {
 
       <div ref={stageRef} className="why-waqf-stage">
         {slides.map((slide) => (
-          <article className="why-waqf-panel" key={slide.title} data-overlap="false">
+          <article
+            className={`why-waqf-panel why-waqf-panel--${slide.theme}`}
+            key={slide.title}
+            data-overlap="false"
+          >
             <div className="why-waqf-panel-overlay" aria-hidden="true" />
 
             <div className="why-waqf-panel-inner">

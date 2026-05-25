@@ -1,9 +1,20 @@
 .connect-page {
-  background: #f2f2f2;
+  background: #2B346C;
 }
 
-/* Hero Section */
+/* Hero Section - Fixed behind form */
+.connect-hero-wrapper {
+  height: 50vh;
+  min-height: 400px;
+}
+
 .connect-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  min-height: 400px;
   background: #2B346C;
   color: white;
   padding: 120px var(--page-inline, 38px);
@@ -11,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
+  z-index: 1;
 }
 
 .connect-hero h1 {
@@ -23,7 +34,7 @@
   max-width: 900px;
 }
 
-/* Form Section */
+/* Form Section - Overlaps hero */
 .connect-form-section {
   background: #ECFFFE;
   min-height: 100vh;
@@ -32,11 +43,6 @@
   align-items: center;
   position: relative;
   z-index: 2;
-  border-radius: 32px 32px 0 0;
-  box-shadow: 0 -28px 60px rgba(16, 31, 56, 0.2);
-  /* Use layout (margin) instead of transform to avoid "ghost space" gaps below. */
-  margin-top: calc(-1 * var(--connect-form-slide, 0px));
-  transition: margin-top 0.18s linear;
 }
 
 .connect-container {
@@ -257,6 +263,8 @@
   padding: clamp(40px, 8vh, 90px) var(--page-inline, 38px);
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .workshop-container {
@@ -382,9 +390,15 @@
 
 /* Responsive Design */
 @media (max-width: 980px) {
+  .connect-hero-wrapper {
+    height: 40vh;
+    min-height: 280px;
+  }
+
   .connect-hero {
+    height: 40vh;
+    min-height: 280px;
     padding: 80px var(--page-inline, 38px);
-    min-height: 220px;
   }
 
   .connect-hero h1 {
@@ -413,7 +427,6 @@
 @media (max-width: 640px) {
   .connect-form-section {
     padding: 40px var(--page-inline, 38px) 60px var(--page-inline, 38px);
-    border-radius: 24px 24px 0 0;
   }
 
   .connect-form-heading {
@@ -424,10 +437,15 @@
     font-size: clamp(1.7rem, 8vw, 2.2rem);
   }
 
+  .connect-hero-wrapper {
+    height: 55vh;
+    min-height: 320px;
+  }
+
   .connect-hero {
-    /* Give the heading real breathing room on mobile (under fixed navbar) */
+    height: 55vh;
+    min-height: 320px;
     padding: 120px var(--page-inline, 38px) 86px;
-    min-height: 62vh;
   }
 
   .connect-hero h1 {
