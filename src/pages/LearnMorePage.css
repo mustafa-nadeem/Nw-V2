@@ -1114,14 +1114,16 @@
     min-height: 100dvh;
     min-height: 100svh;
     box-sizing: border-box;
-    padding-top: calc(72px + env(safe-area-inset-top, 0px));
-    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    /* Symmetric vertical padding so the content sits centered in the locked viewport */
+    padding-top: max(72px, calc(env(safe-area-inset-top, 0px) + 56px));
+    padding-bottom: max(56px, env(safe-area-inset-bottom, 0px));
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 
   .learn-section--role .learn-shell {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;

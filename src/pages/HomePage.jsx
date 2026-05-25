@@ -75,15 +75,21 @@ function HomePage() {
         <div className="container hero-grid">
           <div className="hero-content">
             <h1 id="hero-title">Building a better future through sustainable Waqf</h1>
-            <p>
+            <p className="hero-lede hero-lede--mobile-only">
+              We are the authoritative body that collects, distributes and safeguards
+              Waqf donations across the United Kingdom. We receive monetary and asset
+              donations, manage them responsibly, and use long-term yields to fund Islamic
+              community projects.
+            </p>
+            <p className="hero-lede hero-lede--desktop-only">
               We are the authoritative body that collects, distributes and safeguards
               Waqf donations across the United Kingdom.
             </p>
-            <p>
+            <p className="hero-lede hero-lede--desktop-only">
               We receive monetary and asset donations, manage them responsibly, and
               use long-term yields to fund Islamic community projects.
             </p>
-            <p>
+            <p className="hero-lede hero-lede--desktop-only">
               Our team identifies worthy initiatives that strengthen communities and
               create lasting social benefit.
             </p>

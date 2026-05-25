@@ -47,12 +47,16 @@ const principles = [
 
 const PVM_SCROLL_PACING = 1.75;
 const PVM_LAST_PANEL_HOLD_SCROLL = 340;
+/** Mobile: more scroll distance so each panel “locks” before the next section rises into view. */
+const PVM_SCROLL_PACING_MOBILE = 1.42;
+const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 300;
 const PVM_INITIAL_HOLD_STEP = 0.42;
 const PVM_BETWEEN_PANEL_HOLD_STEP = 0.34;
 const PVM_LAST_PANEL_HOLD_STEP = 0.52;
 /** Pin length (× viewport height): intro tween + short read buffer — diagram is static, no step scrub. */
 const FUNDING_PIN_SCROLL_DESKTOP = 0.72;
-const FUNDING_PIN_SCROLL_MOBILE = 0.58;
+/** Mobile: enough runway to scrub the diagram reveal (similar “lock then release” feel to the cycle section). */
+const FUNDING_PIN_SCROLL_MOBILE = 1.02;
 
 const pvmSlides = [
   {
@@ -186,7 +190,7 @@ function AboutPage() {
     const fundingTriggerId = 'about-funding-stage-pin';
     const mm = gsap.matchMedia();
 
-    const buildFundingReveal = (pinScrollMult) => {
+    const buildFundingReveal = (pinScrollMult, pinStart = 'top top') => {
       const ctx = gsap.context(() => {
         const leftPills = diagramWrap.querySelectorAll('.funding-flow-source');
         const arrows = diagramWrap.querySelectorAll('.funding-flow-mid__cell');
@@ -198,7 +202,7 @@ function AboutPage() {
           scrollTrigger: {
             id: fundingTriggerId,
             trigger: stage,
-            start: 'top top',
+            start: pinStart,
             end: () => '+=' + Math.round(window.innerHeight * pinScrollMult),
             pin: true,
             pinSpacing: true,
@@ -245,8 +249,11 @@ function AboutPage() {
       return () => ctx.revert();
     };
 
-    mm.add('(min-width: 921px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_DESKTOP));
-    mm.add('(max-width: 920px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_MOBILE));
+    mm.add('(min-width: 921px)', () => buildFundingReveal(FUNDING_PIN_SCROLL_DESKTOP, 'top top'));
+    /* Match `.about-works-pin-stage` mobile pin (`top top+=76`) so the nav doesn’t cover the heading */
+    mm.add('(max-width: 920px)', () =>
+      buildFundingReveal(FUNDING_PIN_SCROLL_MOBILE, 'top top+=76'),
+    );
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {
@@ -264,7 +271,7 @@ function AboutPage() {
     const pvmTriggerId = 'about-pvm-stage-pin';
     const mm = gsap.matchMedia();
 
-    const buildPvmTimeline = (scrollPacing, lastPanelHoldScroll, scrubValue) => {
+    const buildPvmTimeline = (scrollPacing, lastPanelHoldScroll, scrubValue, pinStart = 'top top') => {
       const ctx = gsap.context(() => {
         const panels = gsap.utils.toArray('.about-pvm-panel');
 
@@ -277,12 +284,12 @@ function AboutPage() {
           scrollTrigger: {
             id: pvmTriggerId,
             trigger: pvmStageRef.current,
-            start: 'top top',
+            start: pinStart,
             pin: true,
             pinSpacing: true,
             scrub: scrubValue,
             fastScrollEnd: true,
-            anticipatePin: 0,
+            anticipatePin: 1,
             end: () => '+=' + (
               (panels.length - 1) * window.innerHeight * scrollPacing + lastPanelHoldScroll
             ),
@@ -330,10 +337,17 @@ function AboutPage() {
     };
 
     mm.add('(min-width: 768px)', () =>
-      buildPvmTimeline(PVM_SCROLL_PACING, PVM_LAST_PANEL_HOLD_SCROLL, 0.8)
+      buildPvmTimeline(PVM_SCROLL_PACING, PVM_LAST_PANEL_HOLD_SCROLL, 0.8, 'top top'),
     );
+    /* Mobile: pin at top of viewport so the panels lock fully to 100vh (no nav-gap).
+       The fixed navbar overlays the dark/light panels naturally. */
     mm.add('(max-width: 767px)', () =>
-      buildPvmTimeline(1.06, 190, 0.88)
+      buildPvmTimeline(
+        PVM_SCROLL_PACING_MOBILE,
+        PVM_LAST_PANEL_HOLD_SCROLL_MOBILE,
+        0.88,
+        'top top',
+      ),
     );
 
     return () => {
@@ -349,12 +363,14 @@ function AboutPage() {
       return undefined;
     }
 
+    /* Trustees + Sharia get a scroll-lock pin. Principles is the last section before the
+       footer — pinning it caused the pin spacer to overlap the footer at the page bottom,
+       so leave it as a regular flow section. */
     const lockIds = [
       'about-scroll-lock-trustees',
       'about-scroll-lock-sharia',
-      'about-scroll-lock-principles',
     ];
-    const lockRefs = [trusteesScrollLockRef, shariaScrollLockRef, principlesScrollLockRef];
+    const lockRefs = [trusteesScrollLockRef, shariaScrollLockRef];
     const triggers = [];
 
     lockRefs.forEach((refObj, index) => {
@@ -365,10 +381,13 @@ function AboutPage() {
         id: lockIds[index],
         trigger: el,
         start: 'top top',
-        end: () => `+=${window.innerHeight}`,
+        end: () =>
+          `+=${Math.round(
+            window.innerHeight * (window.matchMedia('(max-width: 767px)').matches ? 1.22 : 1),
+          )}`,
         pin: true,
         pinSpacing: true,
-        anticipatePin: 0,
+        anticipatePin: 1,
         invalidateOnRefresh: true,
       });
       triggers.push(trigger);

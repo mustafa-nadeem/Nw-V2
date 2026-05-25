@@ -33,9 +33,8 @@
   gap: 12px;
   padding: clamp(12px, 1.8vw, 18px) clamp(14px, 2vw, 20px);
   border-radius: 14px;
-  border: 2px solid #01aca6;
-  background: rgba(8, 14, 36, 0.35);
-  color: #f4f8ff;
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  color: #fff;
   font-weight: 600;
   font-size: clamp(0.82rem, 1.25vw, 1.05rem);
   line-height: 1.2;
@@ -45,6 +44,19 @@
     border-color 0.28s ease,
     box-shadow 0.28s ease,
     transform 0.28s ease;
+}
+
+/* Match “How does National Waqf Work?” cycle slice colours (01→04); three rows use 1, 2 & teal (04) so the last chip isn’t navy-on-navy inside the diagram shell */
+.funding-flow-source--private {
+  background: #e27d50;
+}
+
+.funding-flow-source--business {
+  background: #c7366b;
+}
+
+.funding-flow-source--gift {
+  background: #01aca6;
 }
 
 .funding-flow-source__text {

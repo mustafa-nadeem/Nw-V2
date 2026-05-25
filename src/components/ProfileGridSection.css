@@ -481,8 +481,8 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: clamp(0.78rem, 3.25vw, 0.88rem);
-    line-height: 1.48;
+    font-size: clamp(0.7rem, 2.7vw, 0.8rem);
+    line-height: 1.42;
   }
 
   .profile-grid-section__dialog-close {
@@ -518,8 +518,8 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: clamp(0.74rem, 3.2vw, 0.86rem);
-    line-height: 1.45;
+    font-size: clamp(0.66rem, 2.6vw, 0.76rem);
+    line-height: 1.4;
   }
 }
 

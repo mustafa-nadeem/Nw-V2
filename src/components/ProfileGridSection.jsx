@@ -28,8 +28,13 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
       }
     };
 
+    document.body.classList.add('profile-grid-section-dialog-open');
+
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.classList.remove('profile-grid-section-dialog-open');
+    };
   }, [selectedProfile, onClose]);
 
   return (

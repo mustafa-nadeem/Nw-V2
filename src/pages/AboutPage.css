@@ -552,6 +552,19 @@
     max-width: 300px;
   }
 
+  /* SVG text is in viewBox units — kept readable while diagram scales down */
+  .cycle-label-num {
+    font-size: 44px;
+    font-weight: 600;
+    fill: rgba(255, 255, 255, 0.44);
+  }
+
+  .cycle-label-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
   .cycle-info-panel {
     padding-left: 16px;
     min-height: 108px;
@@ -596,8 +609,17 @@
     max-width: 250px;
   }
 
-  .cycle-label-num { font-size: 28px; }
-  .cycle-label-title { font-size: 13px; }
+  .cycle-label-num {
+    font-size: 50px;
+    font-weight: 600;
+    fill: rgba(255, 255, 255, 0.52);
+  }
+
+  .cycle-label-title {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+  }
 
   .cycle-info-panel {
     padding-left: 14px;
@@ -715,6 +737,12 @@
   height: auto;
   padding-top: clamp(72px, 11vh, 140px);
   padding-bottom: clamp(28px, 4vh, 48px);
+}
+
+@media (min-width: 861px) {
+  .about-section.about-principles.about-principles--scroll-pause {
+    padding-bottom: 208px;
+  }
 }
 
 .about-section.about-principles.about-principles--scroll-pause .about-shell {
@@ -898,16 +926,24 @@
 
   .about-funding-pin-stage {
     min-height: 100svh;
+    min-height: 100dvh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
     padding-top: 0;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .about-section.about-fullscreen[aria-labelledby="about-funding-title"] {
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    padding: 56px 0 36px;
+    min-height: 0;
+    display: block;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   .about-section.about-fullscreen[aria-labelledby="about-funding-title"] .about-shell-narrow {

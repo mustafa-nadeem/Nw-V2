@@ -158,13 +158,13 @@ function WhatIsWaqfStack({
         const copyHeight = copyEl ? copyEl.getBoundingClientRect().height : 0;
         /* Reserve gap between copy + cards, minimal section chrome (CSS centers in 100svh) */
         const layoutGapPx = 20;
-        const sectionChromePx = 24;
+        const sectionChromePx = 20;
         const availableForCards =
           layoutViewportHeight - copyHeight - layoutGapPx - sectionChromePx;
         // MOBILE CARD HEIGHT CONTROL (PINNED MODE) — keep stack within ~100vh while pinned
         const mobileCardHeight = Math.max(
-          160,
-          Math.min(300, Math.round(Math.max(0, availableForCards) * 0.58)),
+          168,
+          Math.min(328, Math.round(Math.max(0, availableForCards) * 0.64)),
         );
         const stackHeight = mobileCardHeight;
 
@@ -187,6 +187,21 @@ function WhatIsWaqfStack({
             zIndex: index + 1,
             y: index === 0 ? 0 : mobileCardHeight + 80,
           });
+        });
+
+        /* Upcoming cards: hide copy until each card nears its stacked position (fade scrubs with scroll). */
+        cardEls.forEach((card, index) => {
+          const innerTargets = card.querySelectorAll(
+            '.waqf-stack-card-content, .waqf-stack-card-media',
+          );
+          if (innerTargets.length === 0) {
+            return;
+          }
+          if (index === 0) {
+            gsap.set(innerTargets, { autoAlpha: 1 });
+            return;
+          }
+          gsap.set(innerTargets, { autoAlpha: 0 });
         });
 
         gsap.set(headingWords, { autoAlpha: 1, y: 0 });
@@ -226,7 +241,21 @@ function WhatIsWaqfStack({
           if (index === 0) {
             return;
           }
+          const innerTargets = card.querySelectorAll(
+            '.waqf-stack-card-content, .waqf-stack-card-media',
+          );
           mobileTimeline.to(card, { y: 0, duration: 1 });
+          if (innerTargets.length > 0) {
+            mobileTimeline.to(
+              innerTargets,
+              {
+                autoAlpha: 1,
+                duration: 0.5,
+                ease: 'power2.out',
+              },
+              '-=0.34',
+            );
+          }
         });
 
         mobileTimeline.to({}, { duration: 1.35 });
