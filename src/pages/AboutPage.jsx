@@ -363,14 +363,12 @@ function AboutPage() {
       return undefined;
     }
 
-    /* Trustees + Sharia get a scroll-lock pin. Principles is the last section before the
-       footer — pinning it caused the pin spacer to overlap the footer at the page bottom,
-       so leave it as a regular flow section. */
     const lockIds = [
       'about-scroll-lock-trustees',
       'about-scroll-lock-sharia',
+      'about-scroll-lock-principles',
     ];
-    const lockRefs = [trusteesScrollLockRef, shariaScrollLockRef];
+    const lockRefs = [trusteesScrollLockRef, shariaScrollLockRef, principlesScrollLockRef];
     const triggers = [];
 
     lockRefs.forEach((refObj, index) => {

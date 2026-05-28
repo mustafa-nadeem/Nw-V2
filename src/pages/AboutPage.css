@@ -378,9 +378,10 @@
 .cycle-slice--4 { fill: #01ACA6; }
 
 .cycle-label-num {
-  fill: rgba(255, 255, 255, 0.22);
+  fill: #fff;
+  fill-opacity: 0.42;
   font-size: 52px;
-  font-weight: 500;
+  font-weight: 600;
   pointer-events: none;
 }
 
@@ -556,7 +557,6 @@
   .cycle-label-num {
     font-size: 44px;
     font-weight: 600;
-    fill: rgba(255, 255, 255, 0.44);
   }
 
   .cycle-label-title {
@@ -612,7 +612,6 @@
   .cycle-label-num {
     font-size: 50px;
     font-weight: 600;
-    fill: rgba(255, 255, 255, 0.52);
   }
 
   .cycle-label-title {

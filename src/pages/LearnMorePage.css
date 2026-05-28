@@ -1059,11 +1059,11 @@
 
   .learn-usage-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 10px;
   }
 
   .learn-usage-card {
-    min-height: 320px;
+    min-height: clamp(118px, 18vh, 160px);
     border-radius: 18px;
   }
 
@@ -1121,6 +1121,28 @@
 
 /* Learn More — Waqf / Zakaat / Sadaqah: one mobile viewport, vertically centered stack, breathable spacing */
 @media (max-width: 767px) {
+  .learn-section--usage {
+    min-height: 100dvh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    padding-top: max(72px, calc(env(safe-area-inset-top, 0px) + 56px));
+    padding-bottom: max(56px, env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .learn-section--usage.learn-scroll-lock {
+    padding-top: max(72px, calc(env(safe-area-inset-top, 0px) + 56px));
+    padding-bottom: max(56px, env(safe-area-inset-bottom, 0px));
+    align-items: stretch;
+  }
+
+  .learn-section--usage.learn-scroll-lock .learn-shell {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .learn-section--role {
     min-height: 100dvh;
     min-height: 100svh;

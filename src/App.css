@@ -800,6 +800,8 @@ h3 {
     padding: 20px 14px;
     gap: 10px;
     container-type: inline-size;
+    align-content: start;
+    justify-items: start;
   }
 
   .impact-value {

@@ -60,7 +60,7 @@ function Navbar() {
 
   return (
     <header
-      className={`navbar-wrapper${scrolled ? ' scrolled' : ''}`}
+      className={`navbar-wrapper${scrolled ? ' scrolled' : ''}${open ? ' open' : ''}`}
     >
       <nav className={`navbar${open ? ' open' : ''}`}>
         <Link to="/" className="navbar-logo" aria-label="National Waqf home" onClick={closeMenu}>

@@ -426,8 +426,7 @@
     height: 300px;
     padding: 16px 14px 18px;
     gap: 7px;
-    /* Top-align so long copy isn't clipped at the bottom when height is capped */
-    justify-content: flex-start;
+    justify-content: center;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -436,27 +435,29 @@
   .waqf-stack-card-content {
     gap: 8px;
     min-height: 0;
+    justify-content: center;
+    text-align: left;
   }
 
   .waqf-stack-card h3 {
-    font-size: clamp(0.92rem, 4vw, 1.12rem);
-    line-height: 1.1;
+    font-size: clamp(1.26rem, 5.3vw, 1.5rem);
+    line-height: 1.18;
   }
 
   .waqf-stack-card p,
   .waqf-stack-card .waqf-stack-intro {
-    font-size: clamp(0.66rem, 2.65vw, 0.76rem);
-    line-height: 1.28;
+    font-size: 11.5px;
+    line-height: 1.42;
   }
 
   .waqf-stack-card .waqf-stack-detail-heading {
-    font-size: clamp(0.64rem, 2.5vw, 0.72rem);
-    line-height: 1.22;
+    font-size: clamp(0.9rem, 3.45vw, 1.02rem);
+    line-height: 1.34;
   }
 
   .waqf-stack-card .waqf-stack-detail p:not(.waqf-stack-detail-heading) {
-    font-size: clamp(0.64rem, 2.45vw, 0.72rem);
-    line-height: 1.26;
+    font-size: clamp(0.9rem, 3.45vw, 1.02rem);
+    line-height: 1.38;
   }
 
   .waqf-stack-card-media {
@@ -527,13 +528,13 @@
 
   .waqf-stack-card p,
   .waqf-stack-card .waqf-stack-intro {
-    font-size: clamp(0.63rem, 2.5vw, 0.72rem);
+    font-size: 11.5px;
     line-height: 1.24;
   }
 
   .waqf-stack-card .waqf-stack-detail-heading,
   .waqf-stack-card .waqf-stack-detail p:not(.waqf-stack-detail-heading) {
-    font-size: clamp(0.61rem, 2.35vw, 0.7rem);
+    font-size: 11.5px;
     line-height: 1.22;
   }
 }
@@ -549,13 +550,13 @@
 
   .waqf-stack-card p,
   .waqf-stack-card .waqf-stack-intro {
-    font-size: clamp(0.6rem, 2.45vw, 0.68rem);
+    font-size: 11.5px;
     line-height: 1.22;
   }
 
   .waqf-stack-card .waqf-stack-detail-heading,
   .waqf-stack-card .waqf-stack-detail p:not(.waqf-stack-detail-heading) {
-    font-size: clamp(0.58rem, 2.3vw, 0.66rem);
+    font-size: 11.5px;
     line-height: 1.2;
   }
 

@@ -287,36 +287,97 @@ body.profile-grid-section-dialog-open .navbar-wrapper {
   }
 
   .navbar.open {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
     align-items: start;
-    border-radius: 18px;
-    padding: 10px;
-    background: rgba(14, 20, 40, 0.95);
+    align-content: stretch;
+    width: 100%;
+    max-width: none;
+    min-height: 100%;
+    border-radius: 24px;
+    padding: max(16px, env(safe-area-inset-top, 0px) + 8px) 24px max(16px, env(safe-area-inset-bottom, 0px) + 8px);
+    background: rgba(14, 20, 40, 0.96);
     border-color: rgba(255, 255, 255, 0.2);
   }
 
   .navbar-wrapper.scrolled .navbar.open {
-    background: rgba(243, 244, 248, 0.98);
+    background: #f5f8ff;
     border-color: rgba(43, 52, 108, 0.18);
   }
 
+  .navbar-wrapper.open {
+    top: 8px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom, 0px));
+    z-index: 140;
+  }
+
+  .navbar-wrapper.open .navbar-logo {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .navbar-wrapper.open .navbar-logo-white {
+    display: block;
+  }
+
+  .navbar-wrapper.open .navbar-logo-black {
+    display: none;
+  }
+
+  .navbar-wrapper.open .navbar-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    width: 48px;
+    height: 48px;
+    border-color: rgba(255, 255, 255, 0.26);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+
+  .navbar-wrapper.open.scrolled .navbar-logo-white {
+    display: none;
+  }
+
+  .navbar-wrapper.open.scrolled .navbar-logo-black {
+    display: block;
+  }
+
+  .navbar-wrapper.open.scrolled .navbar-toggle {
+    border-color: rgba(43, 52, 108, 0.24);
+    background: rgba(43, 52, 108, 0.08);
+    color: #2B346C;
+  }
+
   .navbar.open .navbar-center {
-    order: 3;
+    order: 2;
+    grid-column: 1 / -1;
+    grid-row: 2;
     width: 100%;
-    margin-top: 10px;
+    margin-top: clamp(14px, 3vh, 28px);
+    align-content: center;
+    gap: clamp(16px, 2.2vh, 28px);
+    justify-items: center;
   }
 
   .navbar.open .navbar-actions {
-    order: 4;
+    order: 3;
+    grid-column: 1 / -1;
+    grid-row: 3;
     width: 100%;
-    margin-top: 8px;
+    margin-top: auto;
     margin-left: 0;
     padding-right: 0;
-    /* Override collapsed top-bar flex layout */
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
-    align-items: center;
+    align-content: end;
+    gap: clamp(14px, 2vh, 20px);
   }
 
   /* When menu opens, show Apply/Sign In again */
@@ -329,14 +390,16 @@ body.profile-grid-section-dialog-open .navbar-wrapper {
   .navbar.open .navbar-link,
   .navbar.open .navbar-action-link,
   .navbar.open .navbar-btn {
-    width: 100%;
+    width: auto;
     text-align: center;
     border-radius: 0;
-    padding: 10px 12px;
-    color: rgb(255, 255, 255);
+    padding: 0;
+    color: #fff;
     background: transparent;
     border: none;
-    font-size: 0.92rem;
+    font-size: clamp(2rem, 7.2vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.1;
   }
 
   .navbar-wrapper.scrolled .navbar.open .navbar-link,
@@ -361,10 +424,10 @@ body.profile-grid-section-dialog-open .navbar-wrapper {
     text-align: center;
     font-weight: 600;
     border-radius: 999px;
-    padding: 14px 22px;
-    font-size: 1rem;
+    padding: 18px 28px;
+    font-size: clamp(1.85rem, 6.6vw, 2.5rem);
     width: 100%;
-    max-width: none;
+    max-width: 620px;
     justify-self: stretch;
   }
 

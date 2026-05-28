@@ -166,16 +166,20 @@ function LearnMorePage() {
       { id: 'learn-scroll-lock-workshop', ref: workshopSectionRef },
       { id: 'learn-scroll-lock-reports', ref: reportsSectionRef },
     ];
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
     const triggers = sections
       .map(({ id, ref }) => {
         const el = ref.current;
         if (!el) return null;
+        const mobileUsageEnd = id === 'learn-scroll-lock-usage' && isMobile
+          ? Math.round(window.innerHeight * 0.62)
+          : null;
         return ScrollTrigger.create({
           id,
           trigger: el,
           start: 'top top',
-          end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+          end: () => `+=${mobileUsageEnd ?? Math.round(window.innerHeight * 0.42)}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 0,
