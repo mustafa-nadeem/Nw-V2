@@ -59,12 +59,18 @@
   color: #fff;
 }
 
+.why-waqf-panel--accent {
+  background: #E27D50;
+  color: #fff;
+}
+
 .why-waqf-panel--light {
   background: #fff;
   color: #2B346C;
 }
 
-.why-waqf-panel--dark .why-waqf-panel-overlay {
+.why-waqf-panel--dark .why-waqf-panel-overlay,
+.why-waqf-panel--accent .why-waqf-panel-overlay {
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.18) 0%,
@@ -82,12 +88,15 @@
   );
 }
 
-.why-waqf-panel--dark .why-waqf-panel-kicker {
+.why-waqf-panel--dark .why-waqf-panel-kicker,
+.why-waqf-panel--accent .why-waqf-panel-kicker {
   color: #01ACA6;
 }
 
 .why-waqf-panel--dark .why-waqf-panel-content h3,
-.why-waqf-panel--dark .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
+.why-waqf-panel--dark .why-waqf-panel-content p:not(.why-waqf-panel-kicker),
+.why-waqf-panel--accent .why-waqf-panel-content h3,
+.why-waqf-panel--accent .why-waqf-panel-content p:not(.why-waqf-panel-kicker) {
   color: #fff;
 }
 

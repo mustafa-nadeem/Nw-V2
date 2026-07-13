@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ukMapSvg from '../assets/NW Website interactive map2.svg';
 import placeholderImg from '../assets/placeholder.jpg';
 import logoMcb from '../assets/logosss/MCB 2 (1).png';
 import logoMsf from '../assets/logosss/MSF (1).png';
@@ -14,23 +15,6 @@ import './ImpactPage.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const UK_IMAGE_BOUNDS = {
-  north: 59.35,
-  south: 49.75,
-  west: -8.9,
-  east: 2.2,
-};
-
-const UK_MAP_DRAW_BOUNDS = {
-  left: 26.4,
-  right: 72.2,
-  top: 3.6,
-  bottom: 92.8,
-};
-
-// Small global calibration so markers sit on the designed nodes in `uk.svg`.
-// (Lat/lng → percent mapping is approximate because the background is an illustrated map.)
-const UK_MAP_MARKER_CALIBRATION = { x: -0.6, y: -0.8 };
 /* Desktop overview: slight scale + top transform-origin (CSS) grows map downward; keep <1.04 to avoid bottom clip. */
 const STATIC_OVERVIEW_SCALE = 1.025;
 const STATIC_OVERVIEW_TX = 0;
@@ -39,30 +23,15 @@ const MOBILE_OVERVIEW_SCALE = 1.54;
 const MOBILE_OVERVIEW_TX = 0;
 const MOBILE_OVERVIEW_TY = 3;
 const MAP_MOBILE_BREAKPOINT = '(max-width: 860px)';
+const PIN_ZOOM_ANCHOR_X = 50;
+const PIN_ZOOM_ANCHOR_Y_DESKTOP = 53;
+const PIN_ZOOM_ANCHOR_Y_MOBILE = 62;
 
 function getOverviewView(isMobile) {
   return isMobile
     ? { scale: MOBILE_OVERVIEW_SCALE, tx: MOBILE_OVERVIEW_TX, ty: MOBILE_OVERVIEW_TY }
     : { scale: STATIC_OVERVIEW_SCALE, tx: STATIC_OVERVIEW_TX, ty: STATIC_OVERVIEW_TY };
 }
-
-function projectLatLngToImagePercent([lat, lng]) {
-  const normalizedX = (lng - UK_IMAGE_BOUNDS.west) / (UK_IMAGE_BOUNDS.east - UK_IMAGE_BOUNDS.west);
-  const normalizedY = (UK_IMAGE_BOUNDS.north - lat) / (UK_IMAGE_BOUNDS.north - UK_IMAGE_BOUNDS.south);
-  const x =
-    UK_MAP_DRAW_BOUNDS.left
-    + (normalizedX * (UK_MAP_DRAW_BOUNDS.right - UK_MAP_DRAW_BOUNDS.left))
-    + UK_MAP_MARKER_CALIBRATION.x;
-  const y =
-    UK_MAP_DRAW_BOUNDS.top
-    + (normalizedY * (UK_MAP_DRAW_BOUNDS.bottom - UK_MAP_DRAW_BOUNDS.top))
-    + UK_MAP_MARKER_CALIBRATION.y;
-  return {
-    x: Math.min(100, Math.max(0, x)),
-    y: Math.min(100, Math.max(0, y)),
-  };
-}
-
 
 const rawProjects = [
   {
@@ -315,23 +284,24 @@ const rawProjects = [
   },
 ];
 
-const locationCoordinates = {
-  // Lat/Lngs used to place markers on the static `uk.svg` background.
-  // Keep these accurate; incorrect values visibly drift away from the designed nodes.
-  oldham: [53.5409, -2.1114],
-  london: [51.5072, -0.1276],
-  'dundee-scotland': [56.462, -2.9707],
-  leicester: [52.6369, -1.1398],
-  birmingham: [52.4862, -1.8904],
-  scotland: [56.4907, -4.2026],
-  national: [54.55, -3.43],
-};
+function mapPin(desktop, mobile) {
+  return { desktop, mobile: mobile ?? desktop };
+}
 
-const locationScreenOverrides = {
-  'dundee-scotland': { x: 54.2, y: 33.2 },
-  scotland: { x: 50.9, y: 36.4 },
-  /* London: nudge vs lat/lng projection to sit on the orange node in `uk.svg` */
-  london: { x: 63.3, y: 77.2 },
+function getMapPinPosition(key, isMobile) {
+  const entry = mapPinPositions[key] ?? mapPinPositions.national;
+  return isMobile ? entry.mobile : entry.desktop;
+}
+
+const mapPinPositions = {
+  oldham: mapPin({ x: 58.8, y: 63.2 }),
+  london: mapPin({ x: 65.3, y: 82.2 }),
+  'dundee-scotland': mapPin({ x: 55.2, y: 35.2 }),
+  leicester: mapPin({ x: 62.3, y: 73.2 }),
+  birmingham: mapPin({ x: 54.7, y: 66.6 }),
+  scotland: mapPin({ x: 50.9, y: 36.4 }),
+  national: mapPin({ x: 48.4, y: 47.4 }),
+  nationwide: mapPin({ x: 68, y: 37 }, { x: 68, y: 18 }),
 };
 
 function makeLocationId(value) {
@@ -373,14 +343,11 @@ const nationwideProjects = projects.filter((project) => project.isNationwide);
 const groupedLocations = Object.values(
   localProjects.reduce((acc, project) => {
     const key = makeLocationId(project.basedIn || 'National');
-    const position = locationCoordinates[key] || locationCoordinates.national;
 
     if (!acc[key]) {
       acc[key] = {
         id: key,
         city: project.basedIn || 'National',
-        position,
-        screenPosition: locationScreenOverrides[key],
         projects: [],
       };
     }
@@ -457,7 +424,7 @@ const causeAreas = [
     title: 'Spiritual Preservation and Growth',
     subtitle: 'Supporting Muslims to confidently live Islam and spiritually grow',
     text: '"O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow..." (Qur\'an, Al-Hashr 59:18)\n\nSpiritual preservation is the heart of a strong Muslim identity. The Prophet (peace be upon him) taught that the health of the heart shapes the entire person. When faith is nurtured, communities grow with resilience and direction.',
-    color: '#2B346C',
+    color: '#C7366B',
   },
   {
     title: 'Civic, Media and Legal Engagement',
@@ -475,7 +442,7 @@ const causeAreas = [
     title: 'Da\'wah - Religious Awareness & Outreach',
     subtitle: 'Supporting organisations to share Islamic values with wisdom and integrity',
     text: '"Invite to the way of your Lord with wisdom and good advice..." (Qur\'an 16:125)\n\nSharing the values of Islam with clarity is a prophetic tradition. Islam\'s teachings offer guidance for the flourishing of society as a whole. Religious outreach, therefore, is about helping people better understand Islam\'s message and contribution to our shared lives.\n\nNational Waqf\'s approach to religious outreach values collaboration, supporting stronger connections between Muslim organisations, as well as across diverse faith communities.',
-    color: '#3a4284',
+    color: '#C7366B',
   },
   {
     title: 'Educational Excellence and Development',
@@ -499,7 +466,6 @@ function ImpactPage() {
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
   const eligibilitySectionRef = useRef(null);
   const impactAreasRef = useRef(null);
-  const modelSectionRef = useRef(null);
   const causesSectionRef = useRef(null);
   const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const zoomTimerRef = useRef(null);
@@ -546,7 +512,6 @@ function ImpactPage() {
     const sections = [
       { id: 'impact-scroll-lock-eligibility', ref: eligibilitySectionRef },
       { id: 'impact-scroll-lock-areas', ref: impactAreasRef },
-      { id: 'impact-scroll-lock-model', ref: modelSectionRef },
       { id: 'impact-scroll-lock-causes', ref: causesSectionRef },
     ];
 
@@ -610,10 +575,11 @@ function ImpactPage() {
           onZoomSettled();
         }, 220);
       } else {
-        const point = projectLatLngToImagePercent(selectedLocation.position);
+        const point = getMapPinPosition(selectedLocation.id, isMobileMap);
         const scale = isMobileMap ? 1.72 : 2.1;
-        const tx = (50 - point.x) * scale;
-        const ty = (53 - point.y) * scale;
+        const anchorY = isMobileMap ? PIN_ZOOM_ANCHOR_Y_MOBILE : PIN_ZOOM_ANCHOR_Y_DESKTOP;
+        const tx = (PIN_ZOOM_ANCHOR_X - point.x) * scale;
+        const ty = (anchorY - point.y) * scale;
         setStaticMapView({ scale, tx, ty });
 
         zoomTimerRef.current = window.setTimeout(() => {
@@ -703,13 +669,11 @@ function ImpactPage() {
   const isDesktopPinZoom =
     !!selectedLocation && !selectedLocation.isNationwide;
 
-  // Nationwide badge positioning: keep it near the top on mobile, but lower on desktop (~45%).
   const nationwideLocation = nationwideProjects.length > 0
     ? {
         id: NATIONWIDE_LOCATION_ID,
         city: 'Nationwide',
         isNationwide: true,
-        screenPosition: { x: 68, y: isMobileMap ? 18 : 37 },
         projects: nationwideProjects,
       }
     : null;
@@ -732,10 +696,10 @@ function ImpactPage() {
               className={`impact-static-map__inner${isDesktopPinZoom ? ' impact-static-map__inner--pin-zoom' : ''}`}
             >
               <div className="impact-static-map__frame">
-                <img src="/uk.svg" alt="" aria-hidden="true" className="impact-static-map__image" />
+                <img src={ukMapSvg} alt="" aria-hidden="true" className="impact-static-map__image" />
                 <div className="impact-static-map__markers" aria-hidden="false">
                   {locations.map((location) => {
-                    const point = location.screenPosition || projectLatLngToImagePercent(location.position);
+                    const point = getMapPinPosition(location.id, isMobileMap);
                     const isActive = selectedLocation?.id === location.id;
                     const isNationwidePin = !!location.isNationwide;
                     return (
@@ -952,43 +916,6 @@ function ImpactPage() {
                   </article>
                 );
               })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        ref={modelSectionRef}
-        className="impact-section impact-model impact-scroll-lock"
-        aria-labelledby="impact-model-title"
-      >
-        <div className="impact-scroll-lock-inner">
-          <div className="impact-model-grid">
-            <div className="impact-model-content">
-              <h2 id="impact-model-title">Grant giving</h2>
-              <p>
-                Placeholder copy for how grants are evaluated, awarded, and monitored for impact.
-                Replace with final approved grant-giving language.
-              </p>
-
-              <h3>Our funding model</h3>
-              <p>
-                Placeholder copy for investment-to-grant cycle, due diligence standards,
-                and governance checkpoints used to sustain long-term outcomes.
-              </p>
-            </div>
-
-            <div className="impact-model-diagram" aria-hidden="true">
-              <div className="impact-model-box impact-model-box--top">Input</div>
-              <div className="impact-model-box impact-model-box--left">Allocate</div>
-              <div className="impact-model-box impact-model-box--right">Deliver</div>
-              <div className="impact-model-box impact-model-box--bottom">Impact</div>
-              <svg className="impact-model-lines" viewBox="0 0 520 520" preserveAspectRatio="none">
-                <path d="M260 110 C260 150, 180 150, 170 205" />
-                <path d="M260 110 C260 150, 340 150, 350 205" />
-                <path d="M170 315 C180 370, 260 370, 260 410" />
-                <path d="M350 315 C340 370, 260 370, 260 410" />
-              </svg>
             </div>
           </div>
         </div>

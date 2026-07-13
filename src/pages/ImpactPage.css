@@ -400,8 +400,8 @@
 }
 
 .impact-checkpoint-marker--active .impact-checkpoint-core {
-  background: #ff8e54;
-  box-shadow: 0 0 0 8px rgba(255, 142, 84, 0.35);
+  background: #C7366B;
+  box-shadow: 0 0 0 8px rgba(199, 54, 107, 0.35);
   animation-duration: 1.2s;
 }
 
@@ -782,7 +782,7 @@
 }
 
 .impact-areas {
-  background: #EDF1FF;
+  background: #E27D50;
 }
 
 .impact-areas .impact-shell-narrow p {
@@ -881,7 +881,7 @@
 .impact-stat-card--direct-debit { background: #00ACA6; color: #f6fbff; }
 .impact-stat-card--direct-debit .impact-stat-text { color: rgb(220, 255, 252); }
 
-.impact-stat-card--focus { background: #FF8E54; color: #fefaf6; }
+.impact-stat-card--focus { background: #00ACA6; color: #fefaf6; }
 .impact-stat-card--focus .impact-stat-text { color: rgb(255, 243, 231); }
 
 .impact-stat-card--left-tall {
@@ -953,103 +953,6 @@
   .impact-stat-text {
     font-size: clamp(0.95rem, 3.8cqw, 1.08rem);
   }
-}
-
-.impact-model {
-  padding: 0;
-  background: #EDF1FF;
-}
-
-.impact-model-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 640px;
-  width: min(100%, 1220px);
-  margin: 0 auto;
-  padding: 0 var(--page-inline, 38px);
-  box-sizing: border-box;
-}
-
-/* Avoid double horizontal inset when scroll-lock wrapper provides gutters */
-.impact-scroll-lock .impact-model-grid {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.impact-model-content,
-.impact-model-diagram {
-  padding: 84px 64px;
-}
-
-.impact-model-content {
-  background: #EDF1FF;
-  display: grid;
-  align-content: center;
-  gap: 18px;
-}
-
-.impact-model-content h2,
-.impact-model-content h3 {
-  margin-top: 8px;
-}
-
-.impact-model-content h3 {
-  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
-}
-
-.impact-model-diagram {
-  position: relative;
-  background: #EDF1FF;
-  display: grid;
-  place-items: center;
-}
-
-.impact-model-box {
-  position: absolute;
-  width: min(180px, 30%);
-  aspect-ratio: 1.6 / 1;
-  background: #f2f2f2;
-  border: 1px solid #d3d7de;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  color: #374357;
-  font-weight: 600;
-}
-
-.impact-model-box--top {
-  top: 14%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.impact-model-box--left {
-  top: 40%;
-  left: 18%;
-}
-
-.impact-model-box--right {
-  top: 40%;
-  right: 18%;
-}
-
-.impact-model-box--bottom {
-  bottom: 14%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.impact-model-lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.impact-model-lines path {
-  fill: none;
-  stroke: #8a8f98;
-  stroke-width: 2.5;
 }
 
 .impact-causes {
@@ -1252,11 +1155,6 @@
     padding-top: 40px;
   }
 
-  .impact-model-content,
-  .impact-model-diagram {
-    padding: 56px var(--page-inline, 38px);
-  }
-
   .impact-supported-logo {
     flex-basis: clamp(160px, 22vw, 210px);
   }
@@ -1292,7 +1190,7 @@
   }
 
   .impact-checkpoint-marker--active .impact-checkpoint-core {
-    box-shadow: 0 0 0 6px rgba(255, 142, 84, 0.32);
+    box-shadow: 0 0 0 6px rgba(199, 54, 107, 0.32);
   }
 
   .impact-checkpoint-marker--nationwide .impact-checkpoint-core {
@@ -1391,8 +1289,7 @@
   }
 
   .impact-eligibility-grid,
-  .impact-funded-row,
-  .impact-model-grid {
+  .impact-funded-row {
     grid-template-columns: 1fr;
   }
 
@@ -1413,29 +1310,6 @@
     min-height: 300px;
     height: auto;
     max-height: none;
-  }
-
-  .impact-model {
-    padding: 0;
-  }
-
-  .impact-model-grid {
-    min-height: 0;
-    padding: 0 var(--mobile-shell-pad);
-  }
-
-  .impact-model-content {
-    padding: 48px 20px 28px;
-    min-height: 0;
-  }
-
-  .impact-model-diagram {
-    padding: 20px 20px 48px;
-    min-height: 320px;
-  }
-
-  .impact-model-box {
-    width: min(150px, 35%);
   }
 
   .impact-supported-track {

@@ -61,9 +61,12 @@
   padding-top: 128px;
 }
 
-.learn-section--reports,
-.learn-faq {
+.learn-section--reports {
   background: #EDF1FF;
+}
+
+.learn-faq {
+  background: #E27D50;
 }
 
 .learn-page h1,

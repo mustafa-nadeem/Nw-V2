@@ -571,7 +571,7 @@ function AboutPage() {
         />
       </div>
 
-      <div ref={shariaScrollLockRef} className="about-viewport-scroll-lock">
+      <div ref={shariaScrollLockRef} className="about-viewport-scroll-lock about-viewport-scroll-lock--sharia">
         <ProfileGridSection
           id="about-shariah-board"
           title="Meet our Shariah board"

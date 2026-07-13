@@ -45,7 +45,7 @@ const slides = [
     alt: 'Architectural structure with strong lines representing institutional stability',
   },
   {
-    theme: 'dark',
+    theme: 'accent',
     title: 'Community impact:',
     description:
       "Waqf creates lasting infrastructure that serves communities for generations. National Waqf carefully analyses and assesses a project's viability and the potential impact it can make before providing the funding that will drive that project forward.",

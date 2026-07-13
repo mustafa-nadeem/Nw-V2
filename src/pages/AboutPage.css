@@ -716,6 +716,10 @@
   background: #EDF1FF;
 }
 
+.about-page .about-viewport-scroll-lock--sharia {
+  background: #E27D50;
+}
+
 .about-page .about-viewport-scroll-lock .profile-grid-section--trustees,
 .about-page .about-viewport-scroll-lock .profile-grid-section--sharia {
   background: transparent;

@@ -48,8 +48,8 @@ const usageCards = [
   },
 ];
 
-const USAGE_COLORS = ['#2B346C', '#01ACA6', '#E27D50'];
-const USAGE_SECTION_HOVER_BACKGROUNDS = ['#E8ECFA', '#E8F5F4', '#FDF0EA'];
+const USAGE_COLORS = ['#C7366B', '#01ACA6', '#E27D50'];
+const USAGE_SECTION_HOVER_BACKGROUNDS = ['#FCE8EF', '#E8F5F4', '#FDF0EA'];
 
 const videoCards = [
   {
