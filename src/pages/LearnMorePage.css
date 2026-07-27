@@ -67,6 +67,62 @@
 
 .learn-faq {
   background: #E27D50;
+  color: #ffffff;
+}
+
+.learn-faq-heading {
+  text-align: center;
+  margin-bottom: 28px !important;
+  color: #ffffff;
+}
+
+.learn-faq-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 38px;
+  margin-bottom: 38px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 0 var(--learn-shell-pad);
+}
+
+.learn-faq-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.learn-faq-tab {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 10px 2px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.learn-faq-tab:hover {
+  color: #ffffff;
+}
+
+.learn-faq-tab.is-active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.learn-faq-tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1.5px;
+  background: #ffffff;
 }
 
 .learn-page h1,
@@ -847,60 +903,6 @@
   font-weight: 600;
   color: #2B346C;
   margin: 0;
-}
-
-.learn-faq-heading {
-  text-align: center;
-  margin-bottom: 28px !important;
-}
-
-.learn-faq-tabs {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 38px;
-  margin-bottom: 38px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  scroll-padding: 0 var(--learn-shell-pad);
-}
-
-.learn-faq-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.learn-faq-tab {
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 1rem;
-  color: #2B346C;
-  padding: 10px 2px;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.learn-faq-tab:hover {
-  color: #2B346C;
-}
-
-.learn-faq-tab.is-active {
-  color: #2B346C;
-  font-weight: 600;
-}
-
-.learn-faq-tab.is-active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 2px;
-  height: 1.5px;
-  background: #2B346C;
 }
 
 .learn-faq-list {

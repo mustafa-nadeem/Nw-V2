@@ -17,14 +17,15 @@
 
 .profile-grid-section--sharia {
   background: #E27D50;
+  color: #ffffff;
 }
 
 .profile-grid-section--sharia .profile-grid-section__intro h2 {
-  color: #2B346C;
+  color: #ffffff;
 }
 
 .profile-grid-section--sharia .profile-grid-section__intro p {
-  color: #2B346C;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .profile-grid-section__container {
@@ -216,9 +217,12 @@
   -webkit-box-orient: vertical;
 }
 
-.profile-grid-section--trustees .profile-grid-section__name,
-.profile-grid-section--sharia .profile-grid-section__name {
+.profile-grid-section--trustees .profile-grid-section__name {
   color: #2B346C;
+}
+
+.profile-grid-section--sharia .profile-grid-section__name {
+  color: #ffffff;
 }
 
 .profile-grid-section__role {
@@ -228,9 +232,23 @@
   line-height: 1.35;
 }
 
-.profile-grid-section--trustees .profile-grid-section__role,
-.profile-grid-section--sharia .profile-grid-section__role {
+.profile-grid-section--trustees .profile-grid-section__role {
   color: #2B346C;
+}
+
+.profile-grid-section--sharia .profile-grid-section__role {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-grid-section--sharia .profile-grid-section__nav-btn {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+}
+
+.profile-grid-section--sharia .profile-grid-section__nav-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #E27D50;
 }
 
 @media (max-width: 1200px) {

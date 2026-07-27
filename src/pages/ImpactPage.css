@@ -795,11 +795,17 @@
 
 .impact-areas {
   background: #E27D50;
+  color: #ffffff;
+}
+
+.impact-areas h2 {
+  color: #ffffff;
 }
 
 .impact-areas .impact-shell-narrow p {
   margin: 12px auto 0;
   max-width: 72ch;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .impact-stats-grid {
