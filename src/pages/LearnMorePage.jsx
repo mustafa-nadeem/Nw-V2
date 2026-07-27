@@ -1,8 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
+import religiousWaqfImg from '../assets/unnamed (4) copy.jpg';
+import workshopImg from '../assets/WhatsApp Image 2025-12-07 at 16.18.32.jpeg';
+import report2024Img from '../assets/Trustee & Financial Statement Report 2024.png';
+import report2023Img from '../assets/Trustee & Financial Statement Report 2023.png';
+import governancePolicyImg from '../assets/Governance Policy.png';
+import grantGivingPolicyImg from '../assets/Grant Giving Policy.png';
+import ibnAshurBookImg from '../assets/Ibn Ashur Book.png';
+import investmentPolicyImg from '../assets/Investment Policy.png';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,7 +40,7 @@ const roleCards = [
 const usageCards = [
   {
     title: 'Religious Waqf',
-    imageSrc: placeholderImg,
+    imageSrc: religiousWaqfImg,
     imageAlt: 'Religious Waqf illustration',
     paragraphs: ['Endowments dedicated to supporting Islamic worship and sacred knowledge, such as mosques, Qur\'an distribution, and religious institutions.'],
   },
@@ -48,35 +58,87 @@ const usageCards = [
   },
 ];
 
-const USAGE_COLORS = ['#C7366B', '#01ACA6', '#E27D50'];
-const USAGE_SECTION_HOVER_BACKGROUNDS = ['#FCE8EF', '#E8F5F4', '#FDF0EA'];
+const USAGE_COLORS = ['#E27D50', '#01ACA6', '#C7366B'];
+const USAGE_SECTION_HOVER_BACKGROUNDS = ['#FDF0EA', '#E8F5F4', '#FCE8EF'];
 
 const videoCards = [
   {
-    title: 'What is Waqf?',
-    duration: '2m',
+    title: 'The Islamic System That Built a Civilisation | Mawlana Tahir Talati',
+    youtubeId: 'niAXWhmnxl8',
+    startAt: 142,
+    thumbnail: 'https://i.ytimg.com/vi/niAXWhmnxl8/hqdefault.jpg',
   },
   {
-    title: 'How your donation works',
-    duration: '3m',
+    title: 'How Waqf Endowments Built The Foundation of Muslim Society with Maulana Tahir Talati',
+    youtubeId: 'v64WMHYFzmY',
+    startAt: 8,
+    thumbnail: 'https://i.ytimg.com/vi/v64WMHYFzmY/hqdefault.jpg',
   },
   {
-    title: 'Community projects in action',
-    duration: '2m',
+    title: 'How £10/month Can Make YOU a Billionnaire | Maulana Tahir Talati',
+    youtubeId: 'ZJx7X2tFmtI',
+    startAt: 581,
+    thumbnail: 'https://i.ytimg.com/vi/ZJx7X2tFmtI/hqdefault.jpg',
   },
   {
-    title: 'Inside our annual report',
-    duration: '4m',
+    title: 'NEW: Understanding The Waqf System | Sheikh Ali Hammuda | Glasgow',
+    youtubeId: 'UBxJisGlH8s',
+    startAt: 165,
+    thumbnail: 'https://i.ytimg.com/vi/UBxJisGlH8s/hqdefault.jpg',
+  },
+  {
+    title: 'What is Waqf & How Does it Work? | NWF',
+    youtubeId: 'hzn8Dp3wlkI',
+    thumbnail: 'https://i.ytimg.com/vi/hzn8Dp3wlkI/hqdefault.jpg',
+  },
+  {
+    title: 'How does NWF work?',
+    youtubeId: '-1PsOMZUuCo',
+    thumbnail: 'https://i.ytimg.com/vi/-1PsOMZUuCo/hqdefault.jpg',
+  },
+  {
+    title: 'What is a Waqf?',
+    youtubeId: 'ni5vCMuTH0U',
+    thumbnail: 'https://i.ytimg.com/vi/ni5vCMuTH0U/hqdefault.jpg',
+  },
+  {
+    title: 'Is the Waqf a Must? | Sheikh Zahir Mahmood | Light Upon Light An Evening With',
+    youtubeId: 'U9iS6hHU4RY',
+    thumbnail: 'https://i.ytimg.com/vi/U9iS6hHU4RY/hqdefault.jpg',
+  },
+  {
+    title: 'The Long Term Vision Of Waqf | Sheikh Zahir Mahmood | Light Upon Light An Evening With',
+    youtubeId: 'lpgCvks21lw',
+    startAt: 7,
+    thumbnail: 'https://i.ytimg.com/vi/lpgCvks21lw/hqdefault.jpg',
   },
 ];
 
 const financialReports = [
-  { title: '2025 Annual Report' },
-  { title: '2025 Investments Report' },
-  { title: '2025 Fundraising Report' },
-  { title: '2025 Grant Impact Report' },
-  { title: '2024 Annual Report' },
-  { title: '2024 Investments Report' },
+  {
+    title: 'Trustee & Financial Statements Report 2024',
+    imageSrc: report2024Img,
+  },
+  {
+    title: 'Trustee & Financial Statements Report 2023',
+    imageSrc: report2023Img,
+  },
+  {
+    title: 'Governance Policy',
+    imageSrc: governancePolicyImg,
+  },
+  {
+    title: 'Grant Giving Policy',
+    imageSrc: grantGivingPolicyImg,
+  },
+  {
+    title: 'Investment Policy',
+    imageSrc: investmentPolicyImg,
+  },
+  {
+    title: 'Ibn Ashur Book',
+    imageSrc: ibnAshurBookImg,
+  },
 ];
 
 const faqGroups = [
@@ -136,6 +198,7 @@ function LearnMorePage() {
   const [openFaqItems, setOpenFaqItems] = useState({});
   const [activeFaqGroup, setActiveFaqGroup] = useState(0);
   const [activeRole, setActiveRole] = useState(0);
+  const [activeVideo, setActiveVideo] = useState(null);
   const reportsRailRef = useRef(null);
   const roleSectionRef = useRef(null);
   const usageSectionRef = useRef(null);
@@ -144,6 +207,7 @@ function LearnMorePage() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [usageHoveredIndex, setUsageHoveredIndex] = useState(null);
   const [expandedUsageIndex, setExpandedUsageIndex] = useState(null);
+  const viewportRebuildKey = useViewportRebuildKey();
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -166,20 +230,20 @@ function LearnMorePage() {
       { id: 'learn-scroll-lock-workshop', ref: workshopSectionRef },
       { id: 'learn-scroll-lock-reports', ref: reportsSectionRef },
     ];
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
     const triggers = sections
       .map(({ id, ref }) => {
         const el = ref.current;
         if (!el) return null;
-        const mobileUsageEnd = id === 'learn-scroll-lock-usage' && isMobile
-          ? Math.round(window.innerHeight * 0.62)
-          : null;
         return ScrollTrigger.create({
           id,
           trigger: el,
           start: 'top top',
-          end: () => `+=${mobileUsageEnd ?? Math.round(window.innerHeight * 0.42)}`,
+          end: () => {
+            const isMobile = window.matchMedia('(max-width: 767px)').matches;
+            const mult = id === 'learn-scroll-lock-usage' && isMobile ? 0.28 : 0.16;
+            return `+=${Math.round(window.innerHeight * mult)}`;
+          },
           pin: true,
           pinSpacing: true,
           anticipatePin: 0,
@@ -192,7 +256,7 @@ function LearnMorePage() {
     return () => {
       triggers.forEach((t) => t?.kill());
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   const toggleFaq = (key) => {
     setOpenFaqItems((previous) => ({
@@ -200,6 +264,29 @@ function LearnMorePage() {
       [key]: !previous[key],
     }));
   };
+
+  const closeActiveVideo = useCallback(() => {
+    setActiveVideo(null);
+  }, []);
+
+  useEffect(() => {
+    if (!activeVideo) {
+      return undefined;
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeActiveVideo();
+      }
+    };
+
+    document.body.classList.add('learn-video-modal-open');
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.classList.remove('learn-video-modal-open');
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [activeVideo, closeActiveVideo]);
 
   const scrollReports = (direction) => {
     const rail = reportsRailRef.current;
@@ -366,7 +453,7 @@ function LearnMorePage() {
               <p className="learn-workshop-fineprint">Unsubscribe anytime</p>
             </form>
           </div>
-          <img className="learn-workshop-media" src={placeholderImg} alt="" aria-hidden="true" />
+          <img className="learn-workshop-media" src={workshopImg} alt="" aria-hidden="true" />
         </div>
       </section>
 
@@ -406,12 +493,26 @@ function LearnMorePage() {
           <h2 id="learn-content-title" className="learn-content-heading">Watch our video walkthroughs</h2>
           <div className="learn-video-grid">
             {videoCards.map((card) => (
-              <article className="learn-video-card" key={card.title}>
+              <article className="learn-video-card" key={card.youtubeId}>
                 <button
                   type="button"
-                  className="learn-video-thumb"
+                  className={`learn-video-thumb${card.thumbnail ? ' learn-video-thumb--media' : ''}`}
                   aria-label={`Play ${card.title}`}
+                  disabled={!card.youtubeId}
+                  onClick={() => {
+                    if (card.youtubeId) {
+                      setActiveVideo(card);
+                    }
+                  }}
                 >
+                  {card.thumbnail ? (
+                    <img
+                      className="learn-video-thumb-image"
+                      src={card.thumbnail}
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : null}
                   <span className="learn-video-play" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22">
                       <path d="M8 5v14l11-7z" fill="currentColor" />
@@ -419,13 +520,6 @@ function LearnMorePage() {
                   </span>
                 </button>
                 <h3 className="learn-video-title">{card.title}</h3>
-                <p className="learn-video-meta">
-                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M10 8.5v7l6-3.5z" fill="currentColor" />
-                  </svg>
-                  Watch {card.duration}
-                </p>
               </article>
             ))}
           </div>
@@ -466,8 +560,8 @@ function LearnMorePage() {
           <div className="learn-reports-rail" ref={reportsRailRef}>
             {financialReports.map((report) => (
               <article className="learn-report-card" key={report.title}>
-                <div className="learn-report-cover" aria-hidden="true">
-                  <span>Image</span>
+                <div className="learn-report-cover">
+                  <img src={report.imageSrc} alt="" />
                 </div>
                 <p className="learn-report-title">{report.title}</p>
               </article>
@@ -534,6 +628,53 @@ function LearnMorePage() {
           </div>
         </div>
       </section>
+
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className={`learn-video-modal${activeVideo ? ' learn-video-modal--open' : ''}`}
+            aria-hidden={!activeVideo}
+          >
+            <button
+              type="button"
+              className="learn-video-modal__backdrop"
+              aria-label="Close video"
+              onClick={closeActiveVideo}
+              tabIndex={activeVideo ? 0 : -1}
+            />
+            {activeVideo ? (
+              <div
+                className="learn-video-modal__dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-label={activeVideo.title}
+              >
+                <button
+                  type="button"
+                  className="learn-video-modal__close"
+                  onClick={closeActiveVideo}
+                  aria-label="Close video"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+                <div className="learn-video-modal__frame">
+                  <iframe
+                    title={activeVideo.title}
+                    src={`https://www.youtube.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0${
+                      activeVideo.startAt ? `&start=${activeVideo.startAt}` : ''
+                    }`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

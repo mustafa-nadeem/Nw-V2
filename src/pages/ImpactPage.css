@@ -158,7 +158,7 @@
 .impact-map-overlay {
   position: relative;
   z-index: 3;
-  padding-top: 130px;
+  padding-top: 170px;
   padding-inline: var(--page-inline, 38px);
   box-sizing: border-box;
   pointer-events: none;
@@ -599,7 +599,7 @@
 }
 
 .impact-eligibility {
-  background: #2b346c;
+  background: #00aca6;
   color: #f7f9ff;
   min-height: 100vh;
   display: flex;
@@ -633,12 +633,12 @@
   font: inherit;
   font-weight: 600;
   color: #fff;
-  background: #00aca6;
+  background: #2b346c;
   cursor: pointer;
 }
 
 .impact-btn:hover {
-  background: #009994;
+  background: #222a56;
 }
 
 .impact-placeholder {
@@ -653,8 +653,10 @@
 .impact-eligibility-image {
   min-height: 320px;
   width: 100%;
+  max-width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .impact-funded {
@@ -699,7 +701,17 @@
   min-height: 360px;
   aspect-ratio: 16 / 10;
   width: 100%;
+  max-width: 100%;
   object-fit: cover;
+  object-position: center;
+}
+
+.impact-funded-image--contain {
+  object-fit: contain;
+  object-position: center;
+  background: #ffffff;
+  padding: clamp(24px, 4vw, 48px);
+  box-sizing: border-box;
 }
 
 .impact-funded-copy {
@@ -956,7 +968,7 @@
 }
 
 .impact-causes {
-  background: #E9F6F8;
+  background: #ffffff;
 }
 
 /* Extra breathing room before next dark band */
@@ -977,43 +989,40 @@
 .impact-cause-card {
   position: relative;
   min-height: 260px;
-  border: 0;
+  border: 1px solid rgba(43, 52, 108, 0.08);
   border-radius: 18px;
   padding: 26px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-start;
-  color: #ffffff;
+  background: #ffffff;
+  color: #2B346C;
   text-align: left;
   font: inherit;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
+  box-shadow: 0 10px 28px rgba(8, 13, 38, 0.06);
 }
 
 .impact-cause-card-image {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.24;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  width: min(58%, 168px);
+  height: auto;
+  max-height: 46%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 1;
   z-index: 0;
   pointer-events: none;
-}
-
-.impact-cause-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.22) 100%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .impact-cause-card:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline: 2px solid #2B346C;
   outline-offset: 3px;
 }
 
@@ -1026,7 +1035,7 @@
   font-weight: 600;
   letter-spacing: -0.008em;
   max-width: 16ch;
-  margin-top: auto;
+  color: #2B346C;
 }
 
 .impact-cause-card-arrow {
@@ -1037,10 +1046,10 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(43, 52, 108, 0.08);
   display: grid;
   place-items: center;
-  color: #ffffff;
+  color: #2B346C;
 }
 
 .impact-cause-card-arrow svg {
@@ -1174,7 +1183,7 @@
   }
 
   .impact-map-overlay {
-    padding-top: 108px;
+    padding-top: 130px;
     padding-inline: var(--page-inline, 38px);
   }
 
@@ -1475,7 +1484,7 @@
   }
 
   .impact-map-overlay {
-    padding-top: 92px;
+    padding-top: 108px;
   }
 
   .impact-section.impact-map .impact-map-overlay__title {

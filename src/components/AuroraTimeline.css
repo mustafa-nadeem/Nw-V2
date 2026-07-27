@@ -178,9 +178,12 @@
 
 .aurora-timeline__image-placeholder {
   width: 100%;
+  max-width: 100%;
+  height: auto;
   aspect-ratio: 1 / 1;
   margin-bottom: 16px;
   object-fit: cover;
+  object-position: center;
   display: block;
   border-radius: 4px;
 }

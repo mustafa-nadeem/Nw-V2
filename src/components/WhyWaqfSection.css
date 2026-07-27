@@ -88,9 +88,12 @@
   );
 }
 
-.why-waqf-panel--dark .why-waqf-panel-kicker,
-.why-waqf-panel--accent .why-waqf-panel-kicker {
+.why-waqf-panel--dark .why-waqf-panel-kicker {
   color: #01ACA6;
+}
+
+.why-waqf-panel--accent .why-waqf-panel-kicker {
+  color: #ffffff;
 }
 
 .why-waqf-panel--dark .why-waqf-panel-content h3,
@@ -133,7 +136,7 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: 45% 55%;
+  grid-template-columns: minmax(0, 0.45fr) minmax(0, 0.55fr);
   align-items: center;
   gap: 48px;
   width: 100%;
@@ -141,10 +144,12 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 80px 80px 70px;
+  box-sizing: border-box;
 }
 
 .why-waqf-panel-media {
   width: 100%;
+  min-width: 0;
   height: min(52vh, 520px);
   border-radius: 20px;
   overflow: hidden;
@@ -153,7 +158,9 @@
 .why-waqf-panel-media img {
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -220,7 +227,7 @@
   }
 
   .why-waqf-panel-media {
-    height: min(58vh, 520px);
+    height: min(42vh, 400px);
   }
 
   .why-waqf-panel-content h3 {

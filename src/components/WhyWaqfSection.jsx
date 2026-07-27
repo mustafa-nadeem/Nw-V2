@@ -3,18 +3,20 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './WhyWaqfSection.css';
 import placeholderImg from '../assets/placeholder.jpg';
+import selfPerpetuatingImg from '../assets/WhatsApp Image 2025-11-11 at 15.44.01.jpeg';
+import cafeBusinessImg from '../assets/image (6) copy 4.jpg';
+import generationalStabilityImg from '../assets/image (6) copy 3.png';
+import communityImpactImg from '../assets/WhatsApp Image 2026-03-03 at 14.32.23.jpeg';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* Pin math uses innerHeight; ignoring small mobile viewport chrome changes avoids refresh thrash. */
-ScrollTrigger.config({ ignoreMobileResize: true });
-
-const SCROLL_PACING = 1.42;
-const LAST_SLIDE_HOLD = 0.42;
-const MOBILE_SCROLL_PACING = 1.72;
-const MOBILE_LAST_SLIDE_HOLD = 0.68;
-const MOBILE_INITIAL_SLIDE_HOLD = 0.72;
-const MOBILE_BETWEEN_SLIDE_HOLD = 0.56;
+const SCROLL_PACING = 0.42;
+const LAST_SLIDE_HOLD = 0.14;
+const MOBILE_SCROLL_PACING = 0.5;
+const MOBILE_LAST_SLIDE_HOLD = 0.18;
+const MOBILE_INITIAL_SLIDE_HOLD = 0.16;
+const MOBILE_BETWEEN_SLIDE_HOLD = 0.1;
 
 const slides = [
   {
@@ -22,8 +24,7 @@ const slides = [
     title: 'Because self-perpetuating funding is effective:',
     description:
       'Unlike one-time donations that get spent and disappear, waqf can create a permanent income stream or benefit to a community.',
-    image:
-      'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=80',
+    image: selfPerpetuatingImg,
     alt: 'People walking through a city square representing active community life',
   },
   {
@@ -31,17 +32,15 @@ const slides = [
     title: 'Generational stability:',
     description:
       "Because Waqf assets can't be sold or divided up, they survive political changes, economic crises, and family disputes. A mosque or school established 500 years ago can still be operating today from the same endowment. This provides communities stable institutions that benefit them across generations.",
-    image:
-      'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80',
-    alt: 'Urban skyline at sunset symbolizing shared social progress',
+    image: generationalStabilityImg,
+    alt: 'Cambridge Central Mosque representing lasting community infrastructure',
   },
   {
     theme: 'light',
     title: 'The multiplier effect:',
     description:
       'One strategic waqf can spawn entire ecosystems. For example, a Waqf might fund a nearby school, which educates locals, who then open businesses in that same market. The economic and social benefits compound and grow over time.',
-    image:
-      'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=1600&q=80',
+    image: cafeBusinessImg,
     alt: 'Architectural structure with strong lines representing institutional stability',
   },
   {
@@ -49,8 +48,7 @@ const slides = [
     title: 'Community impact:',
     description:
       "Waqf creates lasting infrastructure that serves communities for generations. National Waqf carefully analyses and assesses a project's viability and the potential impact it can make before providing the funding that will drive that project forward.",
-    image:
-      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80',
+    image: communityImpactImg,
     alt: 'Historic and modern buildings side by side symbolizing long-term infrastructure',
   },
 ];
@@ -65,6 +63,7 @@ function WhyWaqfSection() {
   });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showPanelKicker, setShowPanelKicker] = useState(false);
+  const viewportRebuildKey = useViewportRebuildKey();
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -79,21 +78,6 @@ function WhyWaqfSection() {
 
     media.addListener(update);
     return () => media.removeListener(update);
-  }, []);
-
-  useEffect(() => {
-    let resizeT;
-    const refreshSoon = () => {
-      window.clearTimeout(resizeT);
-      resizeT = window.setTimeout(() => ScrollTrigger.refresh(), 120);
-    };
-    window.addEventListener('resize', refreshSoon);
-    /* Do not refresh on visualViewport resize: URL bar show/hide recalculates pin end
-       and causes visible jump/jitter during scroll on mobile. */
-    return () => {
-      window.clearTimeout(resizeT);
-      window.removeEventListener('resize', refreshSoon);
-    };
   }, []);
 
   useEffect(() => {
@@ -194,6 +178,15 @@ function WhyWaqfSection() {
             scrub: scrubValue,
             fastScrollEnd: fastScrollEndValue,
             preventOverlaps: 'learn-why',
+            snap: {
+              snapTo: (progress) => {
+                const segments = Math.max(1, panels.length - 1);
+                return Math.round(progress * segments) / segments;
+              },
+              duration: { min: 0.08, max: 0.22 },
+              delay: 0,
+              ease: 'power1.out',
+            },
             end: () => {
               const el = stageRef.current;
               const h = el?.getBoundingClientRect().height;
@@ -252,14 +245,14 @@ function WhyWaqfSection() {
     };
 
     mm.add('(min-width: 768px)', () =>
-      buildPinnedTimeline(SCROLL_PACING, 0.8, LAST_SLIDE_HOLD, true)
+      buildPinnedTimeline(SCROLL_PACING, 0.35, LAST_SLIDE_HOLD, true)
     );
     mm.add('(max-width: 767px)', () =>
       buildPinnedTimeline(
         MOBILE_SCROLL_PACING,
-        0.95,
+        0.4,
         MOBILE_LAST_SLIDE_HOLD,
-        false,
+        true,
         MOBILE_INITIAL_SLIDE_HOLD,
         MOBILE_BETWEEN_SLIDE_HOLD
       )
@@ -275,7 +268,7 @@ function WhyWaqfSection() {
       mm.revert();
       ctx.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   return (
     <section
@@ -298,7 +291,7 @@ function WhyWaqfSection() {
 
             <div className="why-waqf-panel-inner">
               <div className="why-waqf-panel-media" aria-hidden="true">
-                <img src={placeholderImg} alt="" />
+                <img src={slide.image || placeholderImg} alt={slide.alt || ''} />
               </div>
 
               <div className="why-waqf-panel-content">

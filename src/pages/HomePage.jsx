@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WhatIsWaqfStack from '../components/WhatIsWaqfStack';
 import WhyWaqfSection from '../components/WhyWaqfSection';
 import DigitalReelNumber from '../components/DigitalReelNumber';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +14,7 @@ function HomePage() {
   const [impactSheenActive, setImpactSheenActive] = useState(false);
   const navigate = useNavigate();
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const viewportRebuildKey = useViewportRebuildKey();
 
   useEffect(() => {
     const section = impactSectionRef.current;
@@ -58,7 +60,7 @@ function HomePage() {
       id: 'home-scroll-lock-impact',
       trigger: el,
       start: 'top top-=22',
-      end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+      end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
       pin: true,
       pinSpacing: true,
       anticipatePin: 0,
@@ -67,7 +69,7 @@ function HomePage() {
     });
 
     return () => trigger.kill();
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -9,9 +10,17 @@ import ImpactPage from "./pages/ImpactPage";
 import LearnMorePage from "./pages/LearnMorePage";
 import ConnectPage from "./pages/ConnectPage";
 import DonatePage from "./pages/DonatePage";
+import { setupScrollTriggerResize } from "./utils/setupScrollTriggerResize";
 
 function App() {
   const location = useLocation();
+
+  useEffect(() => setupScrollTriggerResize(), []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => ScrollTrigger.refresh(), 80);
+    return () => window.clearTimeout(timer);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!location.hash) {

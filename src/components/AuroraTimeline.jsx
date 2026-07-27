@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import './AuroraTimeline.css';
 import placeholderImg from '../assets/placeholder.jpg';
+import charityStatusImg from '../assets/unnamed (4).jpg';
+import momentumRebuildsImg from '../assets/20250114_114359.jpg';
+import visionRebrandImg from '../assets/Brand Concepts V1 Archetype 16-1.png';
+import firstGrantCycleImg from '../assets/WhatsApp Image 2025-12-27 at 13.09.26.jpeg';
+import waqfPackImg from '../assets/Waqf Pack Homepage-1.png';
 
 const milestones = [
   {
@@ -14,18 +19,21 @@ const milestones = [
     year: 2021,
     title: 'Charity status awarded',
     body: 'Our charity status was awarded by the Charity Commission, and we secured initial seed funding to begin our mission.',
+    image: charityStatusImg,
   },
   {
     monthYear: 'June 2022',
     year: 2022,
     title: 'Momentum rebuilds',
     body: 'With the pandemic easing, momentum rebuilt as community engagement increased and foundational structures were put in place.',
+    image: momentumRebuildsImg,
   },
   {
     monthYear: 'June 2023',
     year: 2023,
     title: 'Vision and rebrand',
     body: "The new executive board revised and defined a new vision and strategy, which included rebranding the charity's operating name to National Waqf.",
+    image: visionRebrandImg,
   },
   {
     monthYear: 'June 2024',
@@ -38,12 +46,14 @@ const milestones = [
     year: 2025,
     title: 'First public grant cycle',
     body: 'Our first public grant cycle marked a major milestone, with grants awarded to five organisations to strengthen their capacity and deliver measurable impact.',
+    image: firstGrantCycleImg,
   },
   {
     monthYear: 'February 2026',
     year: 2026,
     title: 'Waqf Pack launched',
     body: 'The Waqf Pack is launched and made available for purchase by charities, Muslim institutions, high-net-worth individuals, and families seeking structured Islamic estate planning.',
+    image: waqfPackImg,
   },
 ];
 
@@ -193,7 +203,12 @@ function AuroraTimeline() {
                     <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                       {milestone.monthYear}
                     </p>
-                    <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
+                    <img
+                      className="aurora-timeline__image-placeholder"
+                      src={milestone.image || placeholderImg}
+                      alt=""
+                      aria-hidden="true"
+                    />
                     <h3 className="aurora-timeline__title">{milestone.title}</h3>
                     <p className="aurora-timeline__body">{milestone.body}</p>
                   </article>
@@ -218,7 +233,12 @@ function AuroraTimeline() {
                       <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                         {milestone.monthYear}
                       </p>
-                      <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
+                      <img
+                        className="aurora-timeline__image-placeholder"
+                        src={milestone.image || placeholderImg}
+                        alt=""
+                        aria-hidden="true"
+                      />
                       <h3 className="aurora-timeline__title">{milestone.title}</h3>
                       <p className="aurora-timeline__body">{milestone.body}</p>
                     </article>
@@ -242,7 +262,12 @@ function AuroraTimeline() {
                       <p className={`aurora-timeline__year ${isActive ? 'aurora-timeline__year--active' : ''}`}>
                         {milestone.monthYear}
                       </p>
-                      <img className="aurora-timeline__image-placeholder" src={placeholderImg} alt="" aria-hidden="true" />
+                      <img
+                        className="aurora-timeline__image-placeholder"
+                        src={milestone.image || placeholderImg}
+                        alt=""
+                        aria-hidden="true"
+                      />
                       <h3 className="aurora-timeline__title">{milestone.title}</h3>
                       <p className="aurora-timeline__body">{milestone.body}</p>
                     </article>

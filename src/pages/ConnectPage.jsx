@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ConnectPage.css';
-import placeholderImg from '../assets/placeholder.jpg';
+import workshopImg from '../assets/WhatsApp Image 2026-02-07 at 17.27.21.jpeg';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +13,7 @@ function ConnectPage() {
   const workshopSectionRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showSectionHeading, setShowSectionHeading] = useState(false);
+  const viewportRebuildKey = useViewportRebuildKey();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -53,7 +55,7 @@ function ConnectPage() {
           id,
           trigger: el,
           start: 'top top',
-          end: () => `+=${Math.round(window.innerHeight * 0.42)}`,
+          end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 0,
@@ -66,7 +68,7 @@ function ConnectPage() {
     return () => {
       triggers.forEach((t) => t?.kill());
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   useEffect(() => {
     const heroEl = heroRef.current;
@@ -321,7 +323,7 @@ function ConnectPage() {
               </form>
             </div>
             <div className="workshop-image">
-              <img src={placeholderImg} alt="Educational workshops" />
+              <img src={workshopImg} alt="Educational workshops" />
             </div>
           </div>
         </div>

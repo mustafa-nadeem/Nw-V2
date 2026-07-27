@@ -108,10 +108,30 @@ h3 {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
-              url('./assets/hero.png') center 30% / cover no-repeat;
+  background-color: #1a1210;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
+    url('./assets/courtney-cantu-5oNX232IzBM-unsplash.jpg');
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+  background-position: center, 88% 78%;
   color: #fff;
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    /* Wider crop so left-bias has room to take effect on large viewports */
+    background-size: cover, 150% auto;
+    background-position: center, 92% 85%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero {
+    background-size: cover, 165% auto;
+    background-position: center, 100% 88%;
+  }
 }
 
 .hero::before {
@@ -846,10 +866,15 @@ h3 {
 
   .homepage .section.impact {
     min-height: 100svh;
-    padding-top: 76px;
-    padding-bottom: 110px;
+    min-height: 100dvh;
+    padding-top: max(72px, calc(env(safe-area-inset-top, 0px) + 56px));
+    padding-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 24px));
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .homepage .section.impact .impact-shell {
+    width: 100%;
   }
 
   .impact-intro h2 {
@@ -1165,8 +1190,11 @@ h3 {
 
   .homepage .section.impact {
     min-height: 100svh;
-    padding-top: 72px;
-    padding-bottom: 120px;
+    min-height: 100dvh;
+    padding-top: max(64px, calc(env(safe-area-inset-top, 0px) + 48px));
+    padding-bottom: max(64px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+    display: flex;
+    align-items: center;
   }
 
   .impact-intro h2 {

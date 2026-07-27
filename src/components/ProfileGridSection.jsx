@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ProfileCard from './ProfileCard';
 import './ProfileGridSection.css';
 import trusteePlaceholder from '../assets/Yahya Raaby 5.jpeg';
 
 const DIALOG_PLACEHOLDER_IMAGE = trusteePlaceholder;
 
-function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
+function ProfileGridSection({ id, title, subtitle, profiles, variant, carousel = false }) {
   const sectionClass = `profile-grid-section profile-grid-section--${variant}`;
   const [selectedProfile, setSelectedProfile] = useState(null);
+  const railRef = useRef(null);
+  const showCarousel = carousel || profiles.length > 4;
 
   const onSelect = useCallback((profile) => {
     setSelectedProfile(profile);
@@ -15,6 +17,20 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
 
   const onClose = useCallback(() => {
     setSelectedProfile(null);
+  }, []);
+
+  const scrollProfiles = useCallback((direction) => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const cards = rail.querySelectorAll('.profile-grid-section__card');
+    if (!cards.length) return;
+
+    const step = cards.length > 1
+      ? cards[1].offsetLeft - cards[0].offsetLeft
+      : cards[0].getBoundingClientRect().width;
+
+    rail.scrollBy({ left: direction * step, behavior: 'smooth' });
   }, []);
 
   useEffect(() => {
@@ -44,12 +60,44 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
       aria-labelledby={`${id}-title`}
     >
       <div className="profile-grid-section__container">
-        <div className="profile-grid-section__intro">
-          <h2 id={`${id}-title`}>{title}</h2>
-          <p>{subtitle}</p>
+        <div className={`profile-grid-section__intro${showCarousel ? ' profile-grid-section__intro--with-nav' : ''}`}>
+          <div className="profile-grid-section__intro-copy">
+            <h2 id={`${id}-title`}>{title}</h2>
+            <p>{subtitle}</p>
+          </div>
+
+          {showCarousel ? (
+            <div className="profile-grid-section__nav" role="group" aria-label={`Scroll ${title}`}>
+              <button
+                type="button"
+                className="profile-grid-section__nav-btn"
+                aria-label="Previous profiles"
+                onClick={() => scrollProfiles(-1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="profile-grid-section__nav-btn"
+                aria-label="Next profiles"
+                onClick={() => scrollProfiles(1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+          ) : null}
         </div>
 
-        <div className="profile-grid-section__grid" role="list" aria-label={`${title} profiles`}>
+        <div
+          className={`profile-grid-section__grid${showCarousel ? ' profile-grid-section__grid--carousel' : ''}`}
+          ref={showCarousel ? railRef : undefined}
+          role="list"
+          aria-label={`${title} profiles`}
+        >
           {profiles.map((profile, index) => (
             <ProfileCard
               profile={profile}
@@ -88,9 +136,15 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant }) {
               </svg>
             </button>
 
-            <div className="profile-grid-section__dialog-media">
+            <div
+              className={`profile-grid-section__dialog-media${
+                selectedProfile.imageFit === 'contain' ? ' profile-grid-section__dialog-media--contain' : ''
+              }`}
+            >
               <img
-                className="profile-grid-section__dialog-image"
+                className={`profile-grid-section__dialog-image${
+                  selectedProfile.imageFit === 'contain' ? ' profile-grid-section__dialog-image--contain' : ''
+                }`}
                 src={selectedProfile.imageSrc || DIALOG_PLACEHOLDER_IMAGE}
                 alt={`${selectedProfile.name} profile`}
               />

@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import placeholderImg from '../assets/placeholder.jpg';
+import purposeImg from '../assets/image (3).png';
+import visionImg from '../assets/image (3) copy.png';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
 import FundingDiagram from '../components/FundingDiagram';
 import ProfileGridSection from '../components/ProfileGridSection';
 import { shariaBoard, trustees } from '../data/peopleData';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,18 +48,18 @@ const principles = [
   },
 ];
 
-const PVM_SCROLL_PACING = 2.05;
-const PVM_LAST_PANEL_HOLD_SCROLL = 440;
-/** Mobile: more scroll distance so each panel “locks” before the next section rises into view. */
-const PVM_SCROLL_PACING_MOBILE = 1.78;
-const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 440;
-const PVM_INITIAL_HOLD_STEP = 0.56;
-const PVM_BETWEEN_PANEL_HOLD_STEP = 0.48;
-const PVM_LAST_PANEL_HOLD_STEP = 0.68;
+const PVM_SCROLL_PACING = 0.55;
+const PVM_LAST_PANEL_HOLD_SCROLL = 160;
+/** Mobile: short hold so each panel settles without long scrub runway. */
+const PVM_SCROLL_PACING_MOBILE = 0.62;
+const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 160;
+const PVM_INITIAL_HOLD_STEP = 0.22;
+const PVM_BETWEEN_PANEL_HOLD_STEP = 0.16;
+const PVM_LAST_PANEL_HOLD_STEP = 0.24;
 /** Pin length (× viewport height): intro tween + short read buffer — diagram is static, no step scrub. */
-const FUNDING_PIN_SCROLL_DESKTOP = 0.72;
-/** Mobile: enough runway to scrub the diagram reveal (similar “lock then release” feel to the cycle section). */
-const FUNDING_PIN_SCROLL_MOBILE = 1.02;
+const FUNDING_PIN_SCROLL_DESKTOP = 0.36;
+/** Mobile: enough runway to scrub the diagram reveal without feeling stuck. */
+const FUNDING_PIN_SCROLL_MOBILE = 0.48;
 
 const pvmSlides = [
   {
@@ -64,6 +67,7 @@ const pvmSlides = [
     label: 'Purpose',
     theme: 'dark',
     reverse: false,
+    imageSrc: purposeImg,
     body: 'National Waqf exists to institutionalise the revival of waqf in the UK as a permanent engine for community resilience, social good, and ethical nation-building. This document sets out a clear strategic framework that defines our long-term direction, priority objectives, and measurable goals over the next three to five years.',
   },
   {
@@ -71,6 +75,7 @@ const pvmSlides = [
     label: 'Vision',
     theme: 'light',
     reverse: true,
+    imageSrc: visionImg,
     body: 'To establish Waqf as a permanent, trusted, and transformative institution in the UK, funding generations of social, educational, civic, and spiritual impact without dependency on short-term fundraising.',
   },
   {
@@ -97,6 +102,7 @@ function AboutPage() {
   const [hoverStep, setHoverStep] = useState(null);
   const prevStepRef = useRef(1);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const viewportRebuildKey = useViewportRebuildKey();
 
   const activeStep = hoverStep ?? cycleStep;
   const activeData = steps[activeStep - 1];
@@ -129,39 +135,78 @@ function AboutPage() {
 
     const triggerId = 'about-works-cycle-pin';
     const earlyTriggerId = 'about-works-cycle-early';
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
-    const pinStart = isMobile ? 'top top+=38' : 'bottom bottom';
+    const mm = gsap.matchMedia();
 
-    ScrollTrigger.create({
-      id: earlyTriggerId,
-      trigger: stageEl,
-      start: 'top 90%',
-      end: 'bottom bottom',
-      onEnter: () => setCycleStep(1),
-      onLeaveBack: () => setCycleStep(1),
+    mm.add('(max-width: 767px)', () => {
+      ScrollTrigger.create({
+        id: earlyTriggerId,
+        trigger: stageEl,
+        start: 'top 90%',
+        end: 'bottom bottom',
+        onEnter: () => setCycleStep(1),
+        onLeaveBack: () => setCycleStep(1),
+      });
+
+      ScrollTrigger.create({
+        id: triggerId,
+        trigger: stageEl,
+        start: 'top top+=38',
+        end: () => '+=' + window.innerHeight * 1.35,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 0,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const nextStep = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
+          setCycleStep((prev) => (prev === nextStep ? prev : nextStep));
+        },
+        onLeaveBack: () => setCycleStep(1),
+      });
+
+      return () => {
+        ScrollTrigger.getById(earlyTriggerId)?.kill();
+        ScrollTrigger.getById(triggerId)?.kill();
+      };
     });
 
-    const trigger = ScrollTrigger.create({
-      id: triggerId,
-      trigger: stageEl,
-      start: pinStart,
-      end: () => '+=' + window.innerHeight * 3,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 0,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const nextStep = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
-        setCycleStep((prev) => (prev === nextStep ? prev : nextStep));
-      },
-      onLeaveBack: () => setCycleStep(1),
+    mm.add('(min-width: 768px)', () => {
+      ScrollTrigger.create({
+        id: earlyTriggerId,
+        trigger: stageEl,
+        start: 'top 90%',
+        end: 'bottom bottom',
+        onEnter: () => setCycleStep(1),
+        onLeaveBack: () => setCycleStep(1),
+      });
+
+      ScrollTrigger.create({
+        id: triggerId,
+        trigger: stageEl,
+        start: 'bottom bottom',
+        end: () => '+=' + window.innerHeight * 1.35,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 0,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const nextStep = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
+          setCycleStep((prev) => (prev === nextStep ? prev : nextStep));
+        },
+        onLeaveBack: () => setCycleStep(1),
+      });
+
+      return () => {
+        ScrollTrigger.getById(earlyTriggerId)?.kill();
+        ScrollTrigger.getById(triggerId)?.kill();
+      };
     });
 
     return () => {
+      mm.revert();
       ScrollTrigger.getById(earlyTriggerId)?.kill();
-      trigger.kill();
+      ScrollTrigger.getById(triggerId)?.kill();
     };
-  }, []);
+  }, [viewportRebuildKey]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -261,7 +306,7 @@ function AboutPage() {
       });
       mm.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   useLayoutEffect(() => {
     if (!pvmSectionRef.current || !pvmStageRef.current || prefersReducedMotion) {
@@ -337,7 +382,7 @@ function AboutPage() {
     };
 
     mm.add('(min-width: 768px)', () =>
-      buildPvmTimeline(PVM_SCROLL_PACING, PVM_LAST_PANEL_HOLD_SCROLL, 0.8, 'top top'),
+      buildPvmTimeline(PVM_SCROLL_PACING, PVM_LAST_PANEL_HOLD_SCROLL, 0.35, 'top top'),
     );
     /* Mobile: pin at top of viewport so the panels lock fully to 100vh (no nav-gap).
        The fixed navbar overlays the dark/light panels naturally. */
@@ -345,7 +390,7 @@ function AboutPage() {
       buildPvmTimeline(
         PVM_SCROLL_PACING_MOBILE,
         PVM_LAST_PANEL_HOLD_SCROLL_MOBILE,
-        0.88,
+        0.4,
         'top top',
       ),
     );
@@ -356,7 +401,7 @@ function AboutPage() {
       });
       mm.revert();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   useLayoutEffect(() => {
     if (prefersReducedMotion) {
@@ -381,7 +426,7 @@ function AboutPage() {
         start: 'top top',
         end: () =>
           `+=${Math.round(
-            window.innerHeight * (window.matchMedia('(max-width: 767px)').matches ? 1.22 : 1),
+            window.innerHeight * (window.matchMedia('(max-width: 767px)').matches ? 0.38 : 0.28),
           )}`,
         pin: true,
         pinSpacing: true,
@@ -394,7 +439,7 @@ function AboutPage() {
     return () => {
       triggers.forEach((t) => t.kill());
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, viewportRebuildKey]);
 
   return (
     <div className="about-page" id="about">
@@ -452,8 +497,8 @@ function AboutPage() {
                     onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--1" d="M350,350 L350,20 A330,330 0 0,1 680,350 Z" />
-                    <text x="515" y="160" className="cycle-label-num" textAnchor="middle">01</text>
-                    <text x="515" y="210" className="cycle-label-title" textAnchor="middle">DONATE</text>
+                    <text x="495" y="205" className="cycle-label-num" textAnchor="middle" dominantBaseline="middle">01</text>
+                    <text x="495" y="252" className="cycle-label-title" textAnchor="middle" dominantBaseline="middle">DONATE</text>
                   </g>
                   <g
                     className={`cycle-group${activeStep === 2 ? ' is-active' : ''}`}
@@ -461,8 +506,8 @@ function AboutPage() {
                     onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--2" d="M350,350 L680,350 A330,330 0 0,1 350,680 Z" />
-                    <text x="515" y="480" className="cycle-label-num" textAnchor="middle">02</text>
-                    <text x="515" y="530" className="cycle-label-title" textAnchor="middle">INVEST</text>
+                    <text x="495" y="495" className="cycle-label-num" textAnchor="middle" dominantBaseline="middle">02</text>
+                    <text x="495" y="542" className="cycle-label-title" textAnchor="middle" dominantBaseline="middle">INVEST</text>
                   </g>
                   <g
                     className={`cycle-group${activeStep === 3 ? ' is-active' : ''}`}
@@ -470,8 +515,8 @@ function AboutPage() {
                     onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--3" d="M350,350 L350,680 A330,330 0 0,1 20,350 Z" />
-                    <text x="185" y="480" className="cycle-label-num" textAnchor="middle">03</text>
-                    <text x="185" y="530" className="cycle-label-title" textAnchor="middle">DISTRIBUTE</text>
+                    <text x="205" y="495" className="cycle-label-num" textAnchor="middle" dominantBaseline="middle">03</text>
+                    <text x="205" y="542" className="cycle-label-title" textAnchor="middle" dominantBaseline="middle">DISTRIBUTE</text>
                   </g>
                   <g
                     className={`cycle-group${activeStep === 4 ? ' is-active' : ''}`}
@@ -479,8 +524,8 @@ function AboutPage() {
                     onMouseLeave={onCycleGroupLeave}
                   >
                     <path className="cycle-slice cycle-slice--4" d="M350,350 L20,350 A330,330 0 0,1 350,20 Z" />
-                    <text x="185" y="160" className="cycle-label-num" textAnchor="middle">04</text>
-                    <text x="185" y="210" className="cycle-label-title" textAnchor="middle">GROW</text>
+                    <text x="205" y="205" className="cycle-label-num" textAnchor="middle" dominantBaseline="middle">04</text>
+                    <text x="205" y="252" className="cycle-label-title" textAnchor="middle" dominantBaseline="middle">GROW</text>
                   </g>
                   <circle cx="350" cy="350" r="90" fill="#d0d0d6" />
                   <circle className="cycle-ring" cx="350" cy="350" r="78" fill="none" strokeWidth="8" />
@@ -549,7 +594,7 @@ function AboutPage() {
                     </h2>
                     <p className="about-pvm-body">{slide.body}</p>
                     <div className="about-pvm-img">
-                      <img src={placeholderImg} alt="" aria-hidden="true" />
+                      <img src={slide.imageSrc || placeholderImg} alt="" aria-hidden="true" />
                     </div>
                   </div>
                 </div>
@@ -568,6 +613,7 @@ function AboutPage() {
           subtitle="Placeholder supporting line for trustees section."
           variant="trustees"
           profiles={trustees}
+          carousel
         />
       </div>
 

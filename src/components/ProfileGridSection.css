@@ -37,6 +37,17 @@
   margin-bottom: 48px;
 }
 
+.profile-grid-section__intro--with-nav {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.profile-grid-section__intro-copy {
+  min-width: 0;
+}
+
 .profile-grid-section__intro h2 {
   margin: 0 0 12px;
   font-size: 2rem;
@@ -52,11 +63,59 @@
   line-height: 1.6;
 }
 
+.profile-grid-section__nav {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.profile-grid-section__nav-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(43, 52, 108, 0.28);
+  background: transparent;
+  color: #2B346C;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.profile-grid-section__nav-btn:hover {
+  background: #2B346C;
+  border-color: #2B346C;
+  color: #fff;
+}
+
 .profile-grid-section__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   align-items: start;
+}
+
+.profile-grid-section__grid--carousel {
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 48px) / 4);
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;
+}
+
+.profile-grid-section__grid--carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.profile-grid-section__grid--carousel .profile-grid-section__card {
+  scroll-snap-align: start;
+  min-width: 0;
 }
 
 .profile-grid-section__card {
@@ -101,6 +160,36 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.profile-grid-section__image-link--contain {
+  background: transparent;
+  box-shadow: none;
+}
+
+.profile-grid-section--trustees .profile-grid-section__image-link,
+.profile-grid-section--trustees .profile-grid-section__image-link--contain,
+.profile-grid-section--sharia .profile-grid-section__image-link,
+.profile-grid-section--sharia .profile-grid-section__image-link--contain {
+  background: #01ACA6;
+}
+
+.profile-grid-section__image-link--contain:hover,
+.profile-grid-section__image-link--contain:focus-visible {
+  box-shadow: none;
+}
+
+.profile-grid-section__image-link--contain .profile-grid-section__image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-grid-section__image--contain {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .profile-grid-section__info-container {
@@ -164,6 +253,11 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
   }
+
+  .profile-grid-section__grid--carousel {
+    grid-auto-columns: calc((100% - 32px) / 2);
+    gap: 32px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -188,6 +282,11 @@
     padding-right: var(--page-inline, 38px);
   }
 
+  .profile-grid-section__intro--with-nav {
+    align-items: center;
+    padding-right: var(--page-inline, 38px);
+  }
+
   .profile-grid-section__intro h2 {
     font-size: 1.6rem;
   }
@@ -204,6 +303,12 @@
     padding: 4px var(--page-inline, 38px) 12px 0;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+  }
+
+  .profile-grid-section__grid--carousel {
+    display: flex;
+    grid-auto-columns: unset;
+    padding: 4px var(--page-inline, 38px) 12px 0;
   }
 
   .profile-grid-section__grid::-webkit-scrollbar {
@@ -336,6 +441,25 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.profile-grid-section__dialog-media--contain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  box-shadow: none;
+}
+
+.profile-grid-section__dialog-media--contain::after {
+  display: none;
+}
+
+.profile-grid-section__dialog-image--contain {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .profile-grid-section__dialog-body {

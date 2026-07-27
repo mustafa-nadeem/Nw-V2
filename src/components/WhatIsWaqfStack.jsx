@@ -2,12 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './WhatIsWaqfStack.css';
+import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SCROLL_PER_CARD = 560;
-const HEADING_SCROLL = 500;
-const LAST_CARD_HOLD_SCROLL = 340;
+const SCROLL_PER_CARD = 260;
+const HEADING_SCROLL = 200;
+const LAST_CARD_HOLD_SCROLL = 120;
 
 const cards = [
   {
@@ -78,6 +79,7 @@ function WhatIsWaqfStack({
   const [isMobileLayout, setIsMobileLayout] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   );
+  const viewportRebuildKey = useViewportRebuildKey();
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -110,20 +112,6 @@ function WhatIsWaqfStack({
 
     media.addListener(update);
     return () => media.removeListener(update);
-  }, []);
-
-  useEffect(() => {
-    let t;
-    const refresh = () => {
-      window.clearTimeout(t);
-      t = window.setTimeout(() => ScrollTrigger.refresh(), 120);
-    };
-    window.addEventListener('resize', refresh);
-    /* Avoid visualViewport refresh: URL bar resizes + crossing into the next pin caused jumps. */
-    return () => {
-      window.clearTimeout(t);
-      window.removeEventListener('resize', refresh);
-    };
   }, []);
 
   const useStaticLayout = prefersReducedMotion;
@@ -212,12 +200,12 @@ function WhatIsWaqfStack({
         /* Match CSS 100dvh/svh — do not use visualViewport here or pin length disagrees with layout. */
         const viewportHeight = measuredH > 0 ? measuredH : window.innerHeight;
         /*
-         * Mobile pinning: generous scroll runway so a swipe does not unload this pin and
-         * immediately slam into Why Waqf's pin (felt as a skip / scroll lock jump).
+         * Mobile pinning: short runway so one swipe advances cards without
+         * trapping the user in a long scrub before Why Waqf.
          */
         const totalScroll = Math.max(
-          Math.round(viewportHeight * 2.85),
-          Math.round(measuredH + viewportHeight * 1.25),
+          Math.round(viewportHeight * 1.15),
+          Math.round(measuredH * 0.55 + viewportHeight * 0.45),
         );
 
         const mobileTimeline = gsap.timeline({
@@ -258,7 +246,7 @@ function WhatIsWaqfStack({
           }
         });
 
-        mobileTimeline.to({}, { duration: 1.35 });
+        mobileTimeline.to({}, { duration: 0.45 });
 
         return;
       }
@@ -346,7 +334,7 @@ function WhatIsWaqfStack({
           pin: true,
           pinSpacing: true,
           anticipatePin: 0,
-          scrub: 0.65,
+          scrub: 0.35,
           fastScrollEnd: true,
           invalidateOnRefresh: true,
           preventOverlaps: 'learn-why',
@@ -382,7 +370,7 @@ function WhatIsWaqfStack({
         timeline.to(cardEl, { y: 0, duration: 1 });
       });
 
-      timeline.to({}, { duration: 0.85 });
+      timeline.to({}, { duration: 0.35 });
     }, sectionEl);
 
     return () => {
@@ -395,7 +383,7 @@ function WhatIsWaqfStack({
       sectionEl.classList.remove('is-pinned');
       ctx.revert();
     };
-  }, [useStaticLayout, isMobileLayout, isUsageVariant]);
+  }, [useStaticLayout, isMobileLayout, isUsageVariant, viewportRebuildKey]);
 
   return (
     <section
