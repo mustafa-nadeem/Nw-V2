@@ -97,7 +97,7 @@ function WhyWaqfSection() {
       },
       {
         threshold: 0,
-        rootMargin: '160px 0px 0px 0px',
+        rootMargin: '32px 0px 0px 0px',
       }
     );
 
@@ -153,14 +153,18 @@ function WhyWaqfSection() {
     ) => {
       const scopedCtx = gsap.context(() => {
         const panels = gsap.utils.toArray('.why-waqf-panel');
-        const transitionSpan = 1 + betweenSlideHold;
-        const totalSteps = initialSlideHold + (panels.length - 1) * transitionSpan + holdDuration;
+        const panelTransitions = Math.max(0, panels.length - 1);
+        const betweenHoldCount = Math.max(0, panelTransitions - 1);
+        const totalSteps =
+          initialSlideHold
+          + panelTransitions
+          + betweenHoldCount * betweenSlideHold
+          + holdDuration;
 
         gsap.set(panels, {
           yPercent: (index) => (index === 0 ? 0 : 100),
         });
 
-        /* Avoid setAttribute on every tick — reduces layout thrash / scroll jitter */
         let lastOverlapIndex = -2;
 
         const timeline = gsap.timeline({
@@ -171,41 +175,29 @@ function WhyWaqfSection() {
             start: 'top top',
             pin: true,
             pinSpacing: true,
-            anticipatePin: 0,
-            /* Default pinType ('fixed' outside scroll containers) lets the browser hold the
-               section in place natively; 'transform' re-translates every frame and on
-               Chrome can lag a frame behind compositor scroll → visible jitter. */
+            anticipatePin: 1,
             scrub: scrubValue,
             fastScrollEnd: fastScrollEndValue,
-            preventOverlaps: 'learn-why',
-            snap: {
-              snapTo: (progress) => {
-                const segments = Math.max(1, panels.length - 1);
-                return Math.round(progress * segments) / segments;
-              },
-              duration: { min: 0.08, max: 0.22 },
-              delay: 0,
-              ease: 'power1.out',
-            },
             end: () => {
               const el = stageRef.current;
               const h = el?.getBoundingClientRect().height;
-              /* Match actual stage box (100vh / 100dvh on mobile) so pin distance matches layout. */
               const vh = h && h > 0 ? h : window.innerHeight;
-              return '+=' + (panels.length - 1 + holdDuration) * vh * pacing;
+              return '+=' + totalSteps * vh * pacing;
             },
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               const progress = self.progress * totalSteps;
 
               let overlapIndex = -1;
-              for (let index = 0; index < panels.length - 1; index += 1) {
-                const rangeStart = initialSlideHold + index * transitionSpan;
+              let cursor = initialSlideHold;
+              for (let index = 0; index < panelTransitions; index += 1) {
+                const rangeStart = cursor;
                 const rangeEnd = rangeStart + 1;
                 if (progress > rangeStart && progress < rangeEnd) {
                   overlapIndex = index;
                   break;
                 }
+                cursor = rangeEnd + (index < panelTransitions - 1 ? betweenSlideHold : 0);
               }
 
               if (overlapIndex === lastOverlapIndex) {
@@ -224,19 +216,28 @@ function WhyWaqfSection() {
           },
         });
 
+        if (initialSlideHold > 0) {
+          timeline.to({}, { duration: initialSlideHold }, 0);
+        }
+
+        let cursor = initialSlideHold;
         for (let index = 1; index < panels.length; index += 1) {
-          const startAt = initialSlideHold + (index - 1) * transitionSpan;
           timeline.to(
             panels[index],
             {
               yPercent: 0,
               duration: 1,
             },
-            startAt
+            cursor
           );
+          cursor += 1;
+          if (index < panels.length - 1 && betweenSlideHold > 0) {
+            timeline.to({}, { duration: betweenSlideHold }, cursor);
+            cursor += betweenSlideHold;
+          }
         }
 
-        timeline.to({}, { duration: holdDuration });
+        timeline.to({}, { duration: holdDuration }, cursor);
       }, sectionRef);
 
       return () => {

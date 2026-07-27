@@ -348,11 +348,10 @@ function WhatIsWaqfStack({
       });
 
       // Phase 1: heading shrinks and moves to left
+      gsap.set(headingEl, { transformOrigin: 'left center', scale: 1 });
       timeline
         .to(headingEl, {
-          fontSize: isUsageVariant
-            ? 'clamp(1.7rem, 3.3vw, 2.8rem)'
-            : 'clamp(2.4rem, 4vw, 5rem)',
+          scale: isUsageVariant ? 0.52 : 0.58,
           duration: 1,
         }, 0)
         .to(copyEl, {

@@ -4,7 +4,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LearnMorePage.css';
 import placeholderImg from '../assets/placeholder.jpg';
-import religiousWaqfImg from '../assets/unnamed (4) copy.jpg';
+import religiousWaqfImg from '../assets/religiouswaqf.svg';
+import philanthropicWaqfImg from '../assets/philantropicwaqf.svg';
+import familyWaqfImg from '../assets/familywaqf.svg';
 import workshopImg from '../assets/WhatsApp Image 2025-12-07 at 16.18.32.jpeg';
 import report2024Img from '../assets/Trustee & Financial Statement Report 2024.png';
 import report2023Img from '../assets/Trustee & Financial Statement Report 2023.png';
@@ -46,13 +48,13 @@ const usageCards = [
   },
   {
     title: 'Philanthropic Waqf',
-    imageSrc: placeholderImg,
+    imageSrc: philanthropicWaqfImg,
     imageAlt: 'Philanthropic Waqf illustration',
     paragraphs: ['Endowments established for the public good, funding essential services such as education, social welfare, healthcare, and community development.'],
   },
   {
     title: 'Family Waqf',
-    imageSrc: placeholderImg,
+    imageSrc: familyWaqfImg,
     imageAlt: 'Family Waqf illustration',
     paragraphs: ['Endowments designed to support family members while preserving wealth, enabling Islamic estate planning and a legacy of financial security.'],
   },

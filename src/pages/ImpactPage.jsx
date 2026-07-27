@@ -370,7 +370,7 @@ const groupedLocations = Object.values(
 
 const fundedProjects = [
   {
-    title: 'Muslim Scout',
+    title: 'Muslim Scout Fellowship',
     imageSrc: muslimScoutImg,
     text: 'National Waqf\'s funding for two minibuses enabled MSF to transport young people to national events, enhancing their development while generating sustainable income for long-term impact.',
   },
@@ -468,16 +468,25 @@ const causeAreas = [
     title: 'Educational Excellence and Development',
     subtitle: 'Equipping individuals with knowledge and holistic growth',
     text: '"The seeking of knowledge is an obligation upon every Muslim." (Hadith - Ibn Majah)\n\nEducation is the foundation of community development. To secure a thriving future, we must invest in nurturing talent and innovation across all sectors.\n\nNational Waqf supports initiatives that close these gaps. By building an educational ecosystem that empowers young Muslims intellectually, spiritually, and professionally, we create a generation who positively contribute to wider society.',
-    color: '#019d98',
+    color: '#01ACA6',
     imageSrc: causeEducationalImg,
   },
   {
     title: 'Socio-economic Empowerment',
     subtitle: 'Investing in the dignity, wellbeing, and long-term stability of underserved communities',
     text: '"...so that wealth does not circulate only among the rich among you." (Qur\'an 59:7)\n\nWe emphasise fairness in wealth distribution and compassionate care for society\'s most vulnerable. A thriving community must care for those at its margin, not only through short-term relief, but by building systems that protect dignity and enable all to flourish.\n\nNational Waqf\'s approach aims to focus on strengthening the social infrastructure that supports community resilience.',
-    color: '#FF8E53',
+    color: '#E27D50',
     imageSrc: causeSocioImg,
   },
+];
+
+const CAUSE_SECTION_HOVER_BACKGROUNDS = [
+  '#FCE8EF',
+  '#E8F5F4',
+  '#FDF0EA',
+  '#FCE8EF',
+  '#E8F5F4',
+  '#FDF0EA',
 ];
 
 function ImpactPage() {
@@ -486,6 +495,7 @@ function ImpactPage() {
   const projectPanelBodyRef = useRef(null);
   const [selectedCause, setSelectedCause] = useState(null);
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
+  const [causeHoveredIndex, setCauseHoveredIndex] = useState(null);
   const eligibilitySectionRef = useRef(null);
   const impactAreasRef = useRef(null);
   const causesSectionRef = useRef(null);
@@ -702,6 +712,10 @@ function ImpactPage() {
     : null;
 
   const locations = nationwideLocation ? [...groupedLocations, nationwideLocation] : groupedLocations;
+
+  const causesSectionBackground = causeHoveredIndex === null
+    ? '#ffffff'
+    : CAUSE_SECTION_HOVER_BACKGROUNDS[causeHoveredIndex];
 
   return (
     <div className="impact-page" id="impact-page">
@@ -954,6 +968,7 @@ function ImpactPage() {
       <section
         ref={causesSectionRef}
         className="impact-section impact-causes impact-scroll-lock"
+        style={{ '--causes-section-bg': causesSectionBackground }}
         aria-labelledby="impact-causes-title"
       >
         <div className="impact-scroll-lock-inner">
@@ -963,11 +978,14 @@ function ImpactPage() {
 
           <div className="impact-shell">
             <div className="impact-cause-grid">
-              {causeAreas.map((cause) => (
+              {causeAreas.map((cause, index) => (
                 <button
                   type="button"
                   key={cause.title}
                   className="impact-cause-card"
+                  style={{ '--cause-color': cause.color }}
+                  onMouseEnter={() => setCauseHoveredIndex(index)}
+                  onMouseLeave={() => setCauseHoveredIndex(null)}
                   onClick={() => onSelectCause(cause)}
                   aria-label={`Learn more about ${cause.title}`}
                 >
