@@ -3,6 +3,11 @@ import gsap from 'gsap';
 import placeholderImg from '../assets/placeholder.jpg';
 import purposeImg from '../assets/image (3).png';
 import visionImg from '../assets/image (3) copy.png';
+import missionImg from '../assets/WhatsApp Image 2026-02-07 at 17.27.21.jpeg';
+import heroCommunityImg from '../assets/1692199542610.jpg';
+import heroMosqueImg from '../assets/image (6) copy 3.png';
+import heroGatheringImg from '../assets/image (6).png';
+import heroProjectImg from '../assets/WhatsApp Image 2025-11-11 at 15.44.01.jpeg';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './AboutPage.css';
 import AuroraTimeline from '../components/AuroraTimeline';
@@ -14,12 +19,12 @@ import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 gsap.registerPlugin(ScrollTrigger);
 
 const floatingCards = [
-  { className: 'hero-card hero-card--1' },
-  { className: 'hero-card hero-card--2' },
-  { className: 'hero-card hero-card--3' },
-  { className: 'hero-card hero-card--4' },
-  { className: 'hero-card hero-card--5' },
-  { className: 'hero-card hero-card--6' },
+  { className: 'hero-card hero-card--1', image: heroCommunityImg },
+  { className: 'hero-card hero-card--2', image: heroMosqueImg },
+  { className: 'hero-card hero-card--3', image: heroGatheringImg },
+  { className: 'hero-card hero-card--4', image: heroProjectImg },
+  { className: 'hero-card hero-card--5', image: missionImg },
+  { className: 'hero-card hero-card--6', image: purposeImg },
 ];
 
 const steps = [
@@ -56,10 +61,10 @@ const PVM_LAST_PANEL_HOLD_SCROLL_MOBILE = 160;
 const PVM_INITIAL_HOLD_STEP = 0.22;
 const PVM_BETWEEN_PANEL_HOLD_STEP = 0.16;
 const PVM_LAST_PANEL_HOLD_STEP = 0.24;
-/** Pin length (× viewport height): intro tween + short read buffer — diagram is static, no step scrub. */
-const FUNDING_PIN_SCROLL_DESKTOP = 0.36;
+/** Pin length (× viewport height): staged orbit reveal needs a longer scrub runway. */
+const FUNDING_PIN_SCROLL_DESKTOP = 0.55;
 /** Mobile: enough runway to scrub the diagram reveal without feeling stuck. */
-const FUNDING_PIN_SCROLL_MOBILE = 0.48;
+const FUNDING_PIN_SCROLL_MOBILE = 0.6;
 
 const pvmSlides = [
   {
@@ -67,7 +72,7 @@ const pvmSlides = [
     label: 'Purpose',
     theme: 'dark',
     reverse: false,
-    imageSrc: purposeImg,
+    imageSrc: missionImg,
     body: 'National Waqf exists to institutionalise the revival of waqf in the UK as a permanent engine for community resilience, social good, and ethical nation-building. This document sets out a clear strategic framework that defines our long-term direction, priority objectives, and measurable goals over the next three to five years.',
   },
   {
@@ -83,6 +88,7 @@ const pvmSlides = [
     label: 'Mission',
     theme: 'dark',
     reverse: false,
+    imageSrc: purposeImg,
     body: 'To build, protect, and grow sustainable Waqf assets and deploy their returns strategically to empower communities, strengthen institutions, and enable long-term positive change through ethical, transparent, and professional governance.',
   },
 ];
@@ -237,10 +243,12 @@ function AboutPage() {
 
     const buildFundingReveal = (pinScrollMult, pinStart = 'top top') => {
       const ctx = gsap.context(() => {
-        const leftPills = diagramWrap.querySelectorAll('.funding-flow-source');
-        const arrows = diagramWrap.querySelectorAll('.funding-flow-mid__cell');
-        const output = diagramWrap.querySelector('.funding-flow-output');
-        const container = diagramWrap.querySelector('.funding-diagram--flow');
+        const rings = diagramWrap.querySelectorAll('.funding-orbit__ring');
+        const centerBlock = diagramWrap.querySelector('.funding-orbit__center');
+        const bands = diagramWrap.querySelectorAll('.funding-orbit__band');
+        const diamonds = diagramWrap.querySelectorAll('.funding-orbit__diamond');
+        const labels = diagramWrap.querySelectorAll('.funding-orbit__label');
+        const container = diagramWrap.querySelector('.funding-orbit-diagram');
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
@@ -258,37 +266,48 @@ function AboutPage() {
           },
         });
 
-        // Diagram-only reveal: pills → arrows → output card.
         tl.set(diagramWrap, { autoAlpha: 1 }, 0);
         if (container) {
           tl.fromTo(
             container,
-            { autoAlpha: 0, y: 18, scale: 0.985 },
-            { autoAlpha: 1, y: 0, scale: 1, duration: 0.32, ease: 'power2.out' },
+            { autoAlpha: 0, y: 20, scale: 0.98 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' },
             0
           );
         }
         tl.fromTo(
-          leftPills,
-          { autoAlpha: 0, x: -28 },
-          { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out', stagger: 0.08 },
-          0.08
+          rings,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.26, ease: 'power1.out', stagger: 0.09 },
+          0.05
         );
-        tl.fromTo(
-          arrows,
-          { autoAlpha: 0, x: -14, scaleX: 0.85, transformOrigin: '0% 50%' },
-          { autoAlpha: 1, x: 0, scaleX: 1, duration: 0.42, ease: 'power2.out', stagger: 0.08 },
-          0.16
-        );
-        if (output) {
+        if (centerBlock) {
           tl.fromTo(
-            output,
-            { autoAlpha: 0, x: 28 },
-            { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power2.out' },
-            0.22
+            centerBlock,
+            { autoAlpha: 0, y: 14 },
+            { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+            0.28
           );
         }
-        tl.to({}, { duration: 0.38 });
+        tl.fromTo(
+          bands,
+          { scaleX: 0, transformOrigin: '0% 50%' },
+          { scaleX: 1, duration: 0.32, ease: 'power2.inOut', stagger: 0.1 },
+          0.34
+        );
+        tl.fromTo(
+          diamonds,
+          { scale: 0 },
+          { scale: 1, duration: 0.3, ease: 'back.out(1.7)', stagger: 0.1 },
+          0.5
+        );
+        tl.fromTo(
+          labels,
+          { autoAlpha: 0, x: 16 },
+          { autoAlpha: 1, x: 0, duration: 0.28, ease: 'power2.out', stagger: 0.1 },
+          0.58
+        );
+        tl.to({}, { duration: 0.4 });
       }, fundingSectionRef);
 
       return () => ctx.revert();
@@ -445,7 +464,12 @@ function AboutPage() {
     <div className="about-page" id="about">
       <section className="about-section about-hero" aria-labelledby="about-hero-title">
         {floatingCards.map((card, i) => (
-          <div key={i} className={card.className} aria-hidden="true" />
+          <div
+            key={i}
+            className={card.className}
+            style={{ backgroundImage: `url("${card.image}")` }}
+            aria-hidden="true"
+          />
         ))}
         <div className="about-shell about-shell-narrow" style={{ position: 'relative', zIndex: 2 }}>
           <h1 id="about-hero-title">National Waqf -<br />building communities one project at a time</h1>

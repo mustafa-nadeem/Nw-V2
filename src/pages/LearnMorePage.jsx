@@ -60,7 +60,7 @@ const usageCards = [
   },
 ];
 
-const USAGE_COLORS = ['#E27D50', '#01ACA6', '#C7366B'];
+const USAGE_COLORS = ['#E27D50', '#01ACA6', 'rgba(199, 54, 107, 0.8)'];
 const USAGE_SECTION_HOVER_BACKGROUNDS = ['#FDF0EA', '#E8F5F4', '#FCE8EF'];
 
 const videoCards = [
@@ -125,6 +125,9 @@ const financialReports = [
     title: 'Trustee & Financial Statements Report 2023',
     imageSrc: report2023Img,
   },
+];
+
+const policies = [
   {
     title: 'Governance Policy',
     imageSrc: governancePolicyImg,
@@ -201,10 +204,12 @@ function LearnMorePage() {
   const [activeFaqGroup, setActiveFaqGroup] = useState(0);
   const [activeRole, setActiveRole] = useState(0);
   const [activeVideo, setActiveVideo] = useState(null);
+  const policiesRailRef = useRef(null);
   const reportsRailRef = useRef(null);
   const roleSectionRef = useRef(null);
   const usageSectionRef = useRef(null);
   const workshopSectionRef = useRef(null);
+  const policiesSectionRef = useRef(null);
   const reportsSectionRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [usageHoveredIndex, setUsageHoveredIndex] = useState(null);
@@ -230,6 +235,7 @@ function LearnMorePage() {
       { id: 'learn-scroll-lock-role', ref: roleSectionRef },
       { id: 'learn-scroll-lock-usage', ref: usageSectionRef },
       { id: 'learn-scroll-lock-workshop', ref: workshopSectionRef },
+      { id: 'learn-scroll-lock-policies', ref: policiesSectionRef },
       { id: 'learn-scroll-lock-reports', ref: reportsSectionRef },
     ];
 
@@ -290,8 +296,8 @@ function LearnMorePage() {
     };
   }, [activeVideo, closeActiveVideo]);
 
-  const scrollReports = (direction) => {
-    const rail = reportsRailRef.current;
+  const scrollDocumentRail = (railRef, direction) => {
+    const rail = railRef.current;
     if (!rail) return;
     const card = rail.querySelector('.learn-report-card');
     const step = card ? card.getBoundingClientRect().width + 20 : 260;
@@ -459,34 +465,47 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--policies" aria-labelledby="learn-policies-title">
-        <div className="learn-shell learn-shell-narrow">
-          <h2 id="learn-policies-title">Our policies</h2>
-          <p className="learn-lead">Download and learn more about our policies in this thorough document.</p>
-        </div>
+      <section
+        ref={policiesSectionRef}
+        className="learn-section learn-section--policies learn-scroll-lock"
+        aria-labelledby="learn-policies-title"
+      >
         <div className="learn-shell">
-          <article className="learn-policies-card">
-            <span className="learn-policies-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <path d="M14 2v6h6" />
-                <path d="M9 13h6" />
-                <path d="M9 17h4" />
-              </svg>
-            </span>
-            <div className="learn-policies-text">
-              <h3>Policies document</h3>
-              <p>PDF &middot; Updated 2026</p>
+          <div className="learn-reports-header">
+            <h2 id="learn-policies-title" className="learn-reports-heading">Our policies</h2>
+            <div className="learn-reports-nav" role="group" aria-label="Scroll policies">
+              <button
+                type="button"
+                className="learn-reports-nav-btn"
+                aria-label="Previous policies"
+                onClick={() => scrollDocumentRail(policiesRailRef, -1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="learn-reports-nav-btn"
+                aria-label="Next policies"
+                onClick={() => scrollDocumentRail(policiesRailRef, 1)}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
             </div>
-            <button type="button" className="learn-policies-button" aria-label="Download policies">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Download
-            </button>
-          </article>
+          </div>
+          <div className="learn-reports-rail" ref={policiesRailRef}>
+            {policies.map((policy) => (
+              <article className="learn-report-card" key={policy.title}>
+                <div className="learn-report-cover">
+                  <img src={policy.imageSrc} alt="" />
+                </div>
+                <p className="learn-report-title">{policy.title}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -541,7 +560,7 @@ function LearnMorePage() {
                 type="button"
                 className="learn-reports-nav-btn"
                 aria-label="Previous reports"
-                onClick={() => scrollReports(-1)}
+                onClick={() => scrollDocumentRail(reportsRailRef, -1)}
               >
                 <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                   <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -551,7 +570,7 @@ function LearnMorePage() {
                 type="button"
                 className="learn-reports-nav-btn"
                 aria-label="Next reports"
-                onClick={() => scrollReports(1)}
+                onClick={() => scrollDocumentRail(reportsRailRef, 1)}
               >
                 <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                   <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

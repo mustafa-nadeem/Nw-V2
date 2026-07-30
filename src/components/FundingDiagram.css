@@ -1,210 +1,280 @@
-/* ── About page: “How we fund” flow diagram (brand: navy #2B346C, teal #01ACA6, coral #E27D50) ── */
-
-.funding-diagram--flow {
-  width: min(100%, 920px);
+.funding-orbit-diagram {
+  --nw-cyan: #01aca6;
+  --nw-orange: #e27d50;
+  --nw-magenta: #c7366b;
+  --nw-navy: #2b346c;
+  --nw-white: #ffffff;
+  --nw-mint-background: #f2ffff;
+  --nw-blue-background: #edf1ff;
+  --nw-coral-background: #fdf0ea;
+  --nw-magenta-background: #fce8ef;
+  --funding-background: #f8fcfc;
+  --funding-private-color: var(--nw-cyan);
+  --funding-business-color: var(--nw-magenta);
+  --funding-gift-color: var(--nw-navy);
+  --funding-body-text: var(--nw-navy);
+  --funding-white-text: var(--nw-white);
+  --funding-shadow: rgba(43, 52, 108, 0.12);
+  position: relative;
+  width: min(100%, 900px);
   margin: clamp(28px, 4vw, 44px) auto 0;
-  padding: clamp(22px, 3.5vw, 40px);
-  box-sizing: border-box;
-  border-radius: 20px;
-  background: #2b346c;
-  box-shadow:
-    0 18px 48px rgba(15, 24, 52, 0.18),
-    0 0 0 1px rgba(1, 172, 166, 0.12);
+  aspect-ratio: 1100 / 555;
+  container-type: inline-size;
+  text-align: left;
 }
 
-.funding-flow-desktop {
+.funding-orbit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.funding-orbit__ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(52px, 88px) minmax(0, 1.15fr);
-  align-items: stretch;
-  gap: clamp(14px, 2.2vw, 28px);
+  place-items: center;
 }
 
-.funding-flow-left {
+.funding-orbit__ring--outer {
+  background: var(--funding-gift-color);
+}
+
+.funding-orbit__ring--mid {
+  width: 79.64%;
+  height: 79.64%;
+  background: var(--funding-business-color);
+}
+
+.funding-orbit__ring--inner {
+  width: 76.47%;
+  height: 76.47%;
+  background: var(--funding-private-color);
+}
+
+.funding-orbit__band {
+  position: absolute;
+  left: 50%;
+  border-radius: 0 999px 999px 0;
+}
+
+.funding-orbit__band--private {
+  top: 40.31%;
+  width: 105.47%;
+  height: 15.24%;
+  background: var(--funding-private-color);
+}
+
+.funding-orbit__band--business {
+  top: 63.07%;
+  width: 98.19%;
+  height: 11.65%;
+  background: var(--funding-business-color);
+}
+
+.funding-orbit__band--gift {
+  top: 76.8%;
+  width: 92.7%;
+  height: 9.28%;
+  background: var(--funding-gift-color);
+}
+
+.funding-orbit__center {
+  position: absolute;
+  left: 12.68%;
+  top: 28.4%;
+  width: 25.1%;
+  height: 43.2%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(12px, 2vw, 20px);
-}
-
-.funding-flow-source {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: clamp(12px, 1.8vw, 18px) clamp(14px, 2vw, 20px);
-  border-radius: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.32);
-  color: #fff;
-  font-weight: 600;
-  font-size: clamp(0.82rem, 1.25vw, 1.05rem);
-  line-height: 1.2;
+  justify-content: center;
+  gap: clamp(6px, 1.4cqw, 16px);
   text-align: center;
-  box-sizing: border-box;
-  transition:
-    border-color 0.28s ease,
-    box-shadow 0.28s ease,
-    transform 0.28s ease;
 }
 
-/* Match “How does National Waqf Work?” cycle slice colours (01→04); three rows use 1, 2 & teal (04) so the last chip isn’t navy-on-navy inside the diagram shell */
-.funding-flow-source--private {
-  background: #e27d50;
-}
-
-.funding-flow-source--business {
-  background: #c7366b;
-}
-
-.funding-flow-source--gift {
-  background: #01aca6;
-}
-
-.funding-flow-source__text {
-  flex: 1 1 auto;
-  text-wrap: balance;
-}
-
-/* Inline arrow: hidden on wide layout (centre column carries arrows) */
-.funding-flow-source__arrow {
-  display: none;
-  flex-shrink: 0;
-  color: #e27d50;
-  align-items: center;
-  justify-content: center;
-}
-
-.funding-flow-arrow-svg {
-  display: block;
-  width: clamp(44px, 8vw, 72px);
-  height: auto;
-}
-
-.funding-flow-mid {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  gap: clamp(12px, 2vw, 20px);
-  padding: clamp(4px, 0.8vw, 10px) 0;
-  color: #e27d50;
-}
-
-.funding-flow-mid__cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: clamp(36px, 5vw, 52px);
-}
-
-.funding-flow-output {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(18px, 2.8vw, 32px);
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 10px 32px rgba(8, 14, 36, 0.12);
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.funding-flow-output__title {
-  margin: 0 0 clamp(8px, 1.2vw, 14px);
-  font-size: clamp(1.05rem, 1.85vw, 1.65rem);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  color: #2b346c;
-}
-
-.funding-flow-output__lede {
+.funding-orbit__title {
   margin: 0;
-  font-size: clamp(0.78rem, 1.15vw, 0.98rem);
-  line-height: 1.45;
+  font-size: clamp(0.95rem, 3cqw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--funding-white-text);
+}
+
+.funding-orbit__lede {
+  margin: 0;
+  font-size: clamp(0.72rem, 1.8cqw, 1.25rem);
+  line-height: 1.35;
   font-weight: 500;
-  color: #01aca6;
-  text-wrap: balance;
+  color: var(--funding-white-text);
+}
+
+.funding-orbit__sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.funding-orbit__source {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 2.9cqw;
+  height: 6.62cqw;
+}
+
+.funding-orbit__source--private {
+  left: 54.33%;
+  top: 42.18%;
+}
+
+.funding-orbit__source--business {
+  left: 61.37%;
+  top: 58.49%;
+}
+
+.funding-orbit__source--gift {
+  left: 68.69%;
+  top: 74.88%;
+}
+
+.funding-orbit__diamond {
+  position: relative;
+  width: 6.62cqw;
+  height: 6.62cqw;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.funding-orbit__diamond-shape {
+  position: absolute;
+  inset: 0;
+  transform: rotate(45deg);
+  border-radius: 16%;
+  box-shadow: 0 10px 26px var(--funding-shadow);
+}
+
+.funding-orbit__source--private .funding-orbit__diamond-shape {
+  background: var(--funding-private-color);
+}
+
+.funding-orbit__source--business .funding-orbit__diamond-shape {
+  background: var(--funding-business-color);
+}
+
+.funding-orbit__source--gift .funding-orbit__diamond-shape {
+  background: var(--funding-gift-color);
+}
+
+.funding-orbit__diamond-icon {
+  position: relative;
+  z-index: 1;
+  width: 54%;
+  height: 54%;
+  display: grid;
+  place-items: center;
+}
+
+.funding-orbit__diamond-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.funding-orbit__source--private .funding-orbit__diamond-icon {
+  color: var(--funding-white-text);
+}
+
+.funding-orbit__source--business .funding-orbit__diamond-icon {
+  color: var(--funding-white-text);
+}
+
+.funding-orbit__source--gift .funding-orbit__diamond-icon {
+  color: var(--funding-white-text);
+}
+
+.funding-orbit__label {
+  font-size: clamp(0.8rem, 2.35cqw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  max-width: 24cqw;
+}
+
+.funding-orbit__source--private .funding-orbit__label {
+  color: var(--funding-body-text);
+}
+
+.funding-orbit__source--business .funding-orbit__label {
+  color: var(--funding-body-text);
+}
+
+.funding-orbit__source--gift .funding-orbit__label {
+  color: var(--funding-body-text);
 }
 
 @media (max-width: 720px) {
-  .funding-diagram--flow {
-    /* Same horizontal diagram as desktop, scaled down */
-    width: min(100%, 620px);
-    padding: 18px;
-    border-radius: 16px;
-  }
-
-  .funding-flow-desktop {
-    /* Give the output card more width to avoid a tall/narrow column */
-    grid-template-columns: minmax(0, 0.92fr) 46px minmax(0, 1.22fr);
-    gap: 14px;
-  }
-
-  .funding-flow-mid {
+  .funding-orbit-diagram {
+    aspect-ratio: auto;
     display: flex;
-    gap: 14px;
-    padding: 4px 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    width: min(100%, 460px);
   }
 
-  .funding-flow-source {
-    justify-content: center;
-    text-align: center;
-    padding: 10px 10px;
-    border-radius: 14px;
-    font-size: 0.84rem;
-    line-height: 1.15;
+  .funding-orbit {
+    position: relative;
+    width: min(100%, 380px);
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
-  .funding-flow-source__arrow {
+  .funding-orbit__band {
     display: none;
   }
 
-  .funding-flow-arrow-svg {
+  .funding-orbit__center {
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 70%;
+    height: min(100cqw, 380px);
+  }
+
+  .funding-orbit__title {
+    font-size: clamp(1.05rem, 4.6vw, 1.35rem);
+  }
+
+  .funding-orbit__lede {
+    font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+  }
+
+  .funding-orbit__sources {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .funding-orbit__source {
+    position: static;
+    height: auto;
+    gap: 18px;
+  }
+
+  .funding-orbit__diamond {
     width: 46px;
+    height: 46px;
   }
 
-  .funding-flow-output {
-    padding: 14px 14px;
-    border-radius: 14px;
-    text-align: center;
-  }
-
-  .funding-flow-output__title {
-    font-size: 1.1rem;
-  }
-
-  .funding-flow-output__lede {
-    font-size: 0.82rem;
-    line-height: 1.35;
-  }
-}
-
-@media (max-width: 420px) {
-  .funding-diagram--flow {
-    padding: 16px;
-  }
-
-  .funding-flow-desktop {
-    gap: 12px;
-    grid-template-columns: minmax(0, 0.95fr) 40px minmax(0, 1.25fr);
-  }
-
-  .funding-flow-source {
-    font-size: 0.8rem;
-    padding: 10px 9px;
-  }
-
-  .funding-flow-arrow-svg {
-    width: 42px;
-  }
-
-  .funding-flow-output__title {
-    font-size: 1.02rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .funding-flow-source {
-    transition: none;
+  .funding-orbit__label {
+    font-size: clamp(0.92rem, 4vw, 1.05rem);
+    max-width: none;
   }
 }

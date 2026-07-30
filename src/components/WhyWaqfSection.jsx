@@ -11,12 +11,14 @@ import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SCROLL_PACING = 0.42;
-const LAST_SLIDE_HOLD = 0.14;
-const MOBILE_SCROLL_PACING = 0.5;
-const MOBILE_LAST_SLIDE_HOLD = 0.18;
-const MOBILE_INITIAL_SLIDE_HOLD = 0.16;
-const MOBILE_BETWEEN_SLIDE_HOLD = 0.1;
+const SCROLL_PACING = 0.55;
+const LAST_PANEL_HOLD_SCROLL = 160;
+const MOBILE_SCROLL_PACING = 0.62;
+const MOBILE_LAST_PANEL_HOLD_SCROLL = 160;
+const INITIAL_HOLD_STEP = 0.22;
+const BETWEEN_PANEL_HOLD_STEP = 0.16;
+const LAST_PANEL_HOLD_STEP = 0.24;
+const OFFSCREEN_YPERCENT = 103;
 
 const slides = [
   {
@@ -143,26 +145,19 @@ function WhyWaqfSection() {
 
     const mm = gsap.matchMedia();
 
-    const buildPinnedTimeline = (
-      pacing,
-      scrubValue,
-      holdDuration,
-      fastScrollEndValue,
-      initialSlideHold = 0,
-      betweenSlideHold = 0
-    ) => {
+    const buildPinnedTimeline = (pacing, lastPanelHoldScroll, scrubValue) => {
       const scopedCtx = gsap.context(() => {
         const panels = gsap.utils.toArray('.why-waqf-panel');
         const panelTransitions = Math.max(0, panels.length - 1);
         const betweenHoldCount = Math.max(0, panelTransitions - 1);
         const totalSteps =
-          initialSlideHold
+          INITIAL_HOLD_STEP
           + panelTransitions
-          + betweenHoldCount * betweenSlideHold
-          + holdDuration;
+          + betweenHoldCount * BETWEEN_PANEL_HOLD_STEP
+          + LAST_PANEL_HOLD_STEP;
 
         gsap.set(panels, {
-          yPercent: (index) => (index === 0 ? 0 : 100),
+          yPercent: (index) => (index === 0 ? 0 : OFFSCREEN_YPERCENT),
         });
 
         let lastOverlapIndex = -2;
@@ -177,19 +172,16 @@ function WhyWaqfSection() {
             pinSpacing: true,
             anticipatePin: 1,
             scrub: scrubValue,
-            fastScrollEnd: fastScrollEndValue,
-            end: () => {
-              const el = stageRef.current;
-              const h = el?.getBoundingClientRect().height;
-              const vh = h && h > 0 ? h : window.innerHeight;
-              return '+=' + totalSteps * vh * pacing;
-            },
+            fastScrollEnd: true,
+            end: () => '+=' + (
+              panelTransitions * window.innerHeight * pacing + lastPanelHoldScroll
+            ),
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               const progress = self.progress * totalSteps;
 
               let overlapIndex = -1;
-              let cursor = initialSlideHold;
+              let cursor = INITIAL_HOLD_STEP;
               for (let index = 0; index < panelTransitions; index += 1) {
                 const rangeStart = cursor;
                 const rangeEnd = rangeStart + 1;
@@ -197,7 +189,9 @@ function WhyWaqfSection() {
                   overlapIndex = index;
                   break;
                 }
-                cursor = rangeEnd + (index < panelTransitions - 1 ? betweenSlideHold : 0);
+                cursor = rangeEnd + (
+                  index < panelTransitions - 1 ? BETWEEN_PANEL_HOLD_STEP : 0
+                );
               }
 
               if (overlapIndex === lastOverlapIndex) {
@@ -216,11 +210,9 @@ function WhyWaqfSection() {
           },
         });
 
-        if (initialSlideHold > 0) {
-          timeline.to({}, { duration: initialSlideHold }, 0);
-        }
+        timeline.to({}, { duration: INITIAL_HOLD_STEP }, 0);
 
-        let cursor = initialSlideHold;
+        let cursor = INITIAL_HOLD_STEP;
         for (let index = 1; index < panels.length; index += 1) {
           timeline.to(
             panels[index],
@@ -231,13 +223,13 @@ function WhyWaqfSection() {
             cursor
           );
           cursor += 1;
-          if (index < panels.length - 1 && betweenSlideHold > 0) {
-            timeline.to({}, { duration: betweenSlideHold }, cursor);
-            cursor += betweenSlideHold;
+          if (index < panels.length - 1) {
+            timeline.to({}, { duration: BETWEEN_PANEL_HOLD_STEP }, cursor);
+            cursor += BETWEEN_PANEL_HOLD_STEP;
           }
         }
 
-        timeline.to({}, { duration: holdDuration }, cursor);
+        timeline.to({}, { duration: LAST_PANEL_HOLD_STEP }, cursor);
       }, sectionRef);
 
       return () => {
@@ -246,16 +238,13 @@ function WhyWaqfSection() {
     };
 
     mm.add('(min-width: 768px)', () =>
-      buildPinnedTimeline(SCROLL_PACING, 0.35, LAST_SLIDE_HOLD, true)
+      buildPinnedTimeline(SCROLL_PACING, LAST_PANEL_HOLD_SCROLL, 0.35)
     );
     mm.add('(max-width: 767px)', () =>
       buildPinnedTimeline(
         MOBILE_SCROLL_PACING,
+        MOBILE_LAST_PANEL_HOLD_SCROLL,
         0.4,
-        MOBILE_LAST_SLIDE_HOLD,
-        true,
-        MOBILE_INITIAL_SLIDE_HOLD,
-        MOBILE_BETWEEN_SLIDE_HOLD
       )
     );
 

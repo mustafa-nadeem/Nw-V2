@@ -1,32 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import './AuroraTimeline.css';
 import placeholderImg from '../assets/placeholder.jpg';
-import charityStatusImg from '../assets/unnamed (4).jpg';
-import momentumRebuildsImg from '../assets/20250114_114359.jpg';
+import charityStatusImg from '../assets/charity-commission-certificate.png';
+import firstOfficeImg from '../assets/20250114_114359.jpg';
 import visionRebrandImg from '../assets/Brand Concepts V1 Archetype 16-1.png';
 import firstGrantCycleImg from '../assets/WhatsApp Image 2025-12-27 at 13.09.26.jpeg';
 import waqfPackImg from '../assets/Waqf Pack Homepage-1.png';
 
 const milestones = [
   {
-    monthYear: 'March 2020',
-    year: 2020,
-    title: 'Initiative begins',
-    body: 'Initiative by the Muslim community leaders began to establish a charity to revive the Waqf institution. However, progress was not as swift as desired due to COVID-19 set back.',
-  },
-  {
     monthYear: 'December 2021',
     year: 2021,
     title: 'Charity status awarded',
     body: 'Our charity status was awarded by the Charity Commission, and we secured initial seed funding to begin our mission.',
     image: charityStatusImg,
-  },
-  {
-    monthYear: 'June 2022',
-    year: 2022,
-    title: 'Momentum rebuilds',
-    body: 'With the pandemic easing, momentum rebuilt as community engagement increased and foundational structures were put in place.',
-    image: momentumRebuildsImg,
+    imageFit: 'contain',
   },
   {
     monthYear: 'June 2023',
@@ -36,10 +24,11 @@ const milestones = [
     image: visionRebrandImg,
   },
   {
-    monthYear: 'June 2024',
-    year: 2024,
-    title: '£1m milestone invested',
-    body: 'A £1 million donation milestone was reached and strategically invested into income-generating assets to create long-term, sustainable impact.',
+    monthYear: 'January 2025',
+    year: 2025,
+    title: 'Moved into our first London office',
+    body: 'This marked an important milestone in National Waqf’s journey, giving the team a dedicated base from which to strengthen our operations, build partnerships and expand our work across the UK.',
+    image: firstOfficeImg,
   },
   {
     monthYear: 'December 2025',
@@ -89,7 +78,6 @@ function AuroraTimeline() {
         return;
       }
 
-      const containerRect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const navbarElement = document.querySelector('.navbar-wrapper');
       const navbarBottom = navbarElement ? navbarElement.getBoundingClientRect().bottom : 0;
@@ -167,7 +155,7 @@ function AuroraTimeline() {
             <p className="aurora-timeline__giant-year">{displayYear}</p>
 
             <div className="aurora-timeline__progress-rail">
-              <p className="aurora-timeline__progress-start">2020</p>
+              <p className="aurora-timeline__progress-start">2021</p>
 
               <div className="aurora-timeline__progress-track">
                 <div className="aurora-timeline__progress-track-bg" />
@@ -204,7 +192,7 @@ function AuroraTimeline() {
                       {milestone.monthYear}
                     </p>
                     <img
-                      className="aurora-timeline__image-placeholder"
+                      className={`aurora-timeline__image-placeholder${milestone.imageFit === 'contain' ? ' aurora-timeline__image-placeholder--contain' : ''}`}
                       src={milestone.image || placeholderImg}
                       alt=""
                       aria-hidden="true"
@@ -234,7 +222,7 @@ function AuroraTimeline() {
                         {milestone.monthYear}
                       </p>
                       <img
-                        className="aurora-timeline__image-placeholder"
+                        className={`aurora-timeline__image-placeholder${milestone.imageFit === 'contain' ? ' aurora-timeline__image-placeholder--contain' : ''}`}
                         src={milestone.image || placeholderImg}
                         alt=""
                         aria-hidden="true"
@@ -263,7 +251,7 @@ function AuroraTimeline() {
                         {milestone.monthYear}
                       </p>
                       <img
-                        className="aurora-timeline__image-placeholder"
+                        className={`aurora-timeline__image-placeholder${milestone.imageFit === 'contain' ? ' aurora-timeline__image-placeholder--contain' : ''}`}
                         src={milestone.image || placeholderImg}
                         alt=""
                         aria-hidden="true"

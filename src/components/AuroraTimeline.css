@@ -188,6 +188,11 @@
   border-radius: 4px;
 }
 
+.aurora-timeline__image-placeholder--contain {
+  object-fit: contain;
+  background: #ffffff;
+}
+
 .about-page .aurora-timeline__title {
   margin: 0 0 10px;
   color: #2B346C;

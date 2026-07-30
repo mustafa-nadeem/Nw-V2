@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ukMapSvg from '../assets/NW Website interactive map2.svg';
 import placeholderImg from '../assets/placeholder.jpg';
+import grantGivingPolicyImg from '../assets/grant-giving-policy.png';
 import muslimScoutImg from '../assets/1692199542610.jpg';
 import communityForumImg from '../assets/18.jpg.jpeg';
 import sacredBmsImg from '../assets/Horizontal+Lockup.webp';
@@ -440,7 +441,7 @@ const causeAreas = [
     title: 'Spiritual Preservation and Growth',
     subtitle: 'Supporting Muslims to confidently live Islam and spiritually grow',
     text: '"O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow..." (Qur\'an, Al-Hashr 59:18)\n\nSpiritual preservation is the heart of a strong Muslim identity. The Prophet (peace be upon him) taught that the health of the heart shapes the entire person. When faith is nurtured, communities grow with resilience and direction.',
-    color: '#C7366B',
+    color: 'rgba(199, 54, 107, 0.8)',
     imageSrc: causeSpiritualImg,
   },
   {
@@ -461,7 +462,7 @@ const causeAreas = [
     title: 'Da\'wah - Religious Awareness & Outreach',
     subtitle: 'Supporting organisations to share Islamic values with wisdom and integrity',
     text: '"Invite to the way of your Lord with wisdom and good advice..." (Qur\'an 16:125)\n\nSharing the values of Islam with clarity is a prophetic tradition. Islam\'s teachings offer guidance for the flourishing of society as a whole. Religious outreach, therefore, is about helping people better understand Islam\'s message and contribution to our shared lives.\n\nNational Waqf\'s approach to religious outreach values collaboration, supporting stronger connections between Muslim organisations, as well as across diverse faith communities.',
-    color: '#C7366B',
+    color: 'rgba(199, 54, 107, 0.8)',
     imageSrc: causeDawahImg,
   },
   {
@@ -881,7 +882,7 @@ function ImpactPage() {
               </p>
               <button type="button" className="impact-btn">Download Now</button>
             </div>
-            <img className="impact-placeholder impact-eligibility-image" src={placeholderImg} alt="" aria-hidden="true" />
+            <img className="impact-placeholder impact-eligibility-image" src={grantGivingPolicyImg} alt="Grant Giving Policy cover" />
           </div>
         </div>
       </section>
@@ -890,7 +891,7 @@ function ImpactPage() {
         <div className="impact-shell">
           <h2 id="impact-funded-title">Blessed to have funded</h2>
           <p className="impact-subtitle">
-            We proudly support many inspiring projects across the UK. Placeholder text to update once final copy is approved.
+            We proudly support many inspiring projects across the UK.
           </p>
 
           <div className="impact-funded-list">
