@@ -62,9 +62,9 @@ const PVM_INITIAL_HOLD_STEP = 0.22;
 const PVM_BETWEEN_PANEL_HOLD_STEP = 0.16;
 const PVM_LAST_PANEL_HOLD_STEP = 0.24;
 /** Pin length (× viewport height): staged orbit reveal needs a longer scrub runway. */
-const FUNDING_PIN_SCROLL_DESKTOP = 0.55;
+const FUNDING_PIN_SCROLL_DESKTOP = 0.9;
 /** Mobile: enough runway to scrub the diagram reveal without feeling stuck. */
-const FUNDING_PIN_SCROLL_MOBILE = 0.6;
+const FUNDING_PIN_SCROLL_MOBILE = 1;
 
 const pvmSlides = [
   {
@@ -245,10 +245,8 @@ function AboutPage() {
       const ctx = gsap.context(() => {
         const rings = diagramWrap.querySelectorAll('.funding-orbit__ring');
         const centerBlock = diagramWrap.querySelector('.funding-orbit__center');
-        const bands = diagramWrap.querySelectorAll('.funding-orbit__band');
-        const diamonds = diagramWrap.querySelectorAll('.funding-orbit__diamond');
-        const labels = diagramWrap.querySelectorAll('.funding-orbit__label');
         const container = diagramWrap.querySelector('.funding-orbit-diagram');
+        const sourceKeys = ['private', 'business', 'gift'];
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
@@ -289,25 +287,48 @@ function AboutPage() {
             0.28
           );
         }
-        tl.fromTo(
-          bands,
-          { scaleX: 0, transformOrigin: '0% 50%' },
-          { scaleX: 1, duration: 0.32, ease: 'power2.inOut', stagger: 0.1 },
-          0.34
-        );
-        tl.fromTo(
-          diamonds,
-          { scale: 0 },
-          { scale: 1, duration: 0.3, ease: 'back.out(1.7)', stagger: 0.1 },
-          0.5
-        );
-        tl.fromTo(
-          labels,
-          { autoAlpha: 0, x: 16 },
-          { autoAlpha: 1, x: 0, duration: 0.28, ease: 'power2.out', stagger: 0.1 },
-          0.58
-        );
-        tl.to({}, { duration: 0.4 });
+        let sourceCursor = 0.62;
+        sourceKeys.forEach((key) => {
+          const band = diagramWrap.querySelector(`.funding-orbit__band--${key}`);
+          const diamond = diagramWrap.querySelector(
+            `.funding-orbit__source--${key} .funding-orbit__diamond`
+          );
+          const label = diagramWrap.querySelector(
+            `.funding-orbit__source--${key} .funding-orbit__label`
+          );
+
+          if (band) {
+            tl.fromTo(
+              band,
+              { scaleX: 0, transformOrigin: '0% 50%' },
+              { scaleX: 1, duration: 0.36, ease: 'power2.inOut' },
+              sourceCursor
+            );
+          }
+
+          sourceCursor += 0.36;
+
+          if (diamond) {
+            tl.fromTo(
+              diamond,
+              { scale: 0, autoAlpha: 0 },
+              { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'back.out(1.7)' },
+              sourceCursor
+            );
+          }
+
+          if (label) {
+            tl.fromTo(
+              label,
+              { autoAlpha: 0, x: 18 },
+              { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' },
+              sourceCursor
+            );
+          }
+
+          sourceCursor += 0.38;
+        });
+        tl.to({}, { duration: 0.35 }, sourceCursor);
       }, fundingSectionRef);
 
       return () => ctx.revert();
