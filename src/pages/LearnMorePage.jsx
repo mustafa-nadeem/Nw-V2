@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LearnMorePage.css';
-import placeholderImg from '../assets/placeholder.jpg';
+import roleGivingImg from '../assets/waqf-zakaat-sadaqah.png';
 import religiousWaqfImg from '../assets/religiouswaqf.svg';
 import philanthropicWaqfImg from '../assets/philantropicwaqf.svg';
 import familyWaqfImg from '../assets/familywaqf.svg';
@@ -60,7 +60,7 @@ const usageCards = [
   },
 ];
 
-const USAGE_COLORS = ['#E27D50', '#01ACA6', 'rgba(199, 54, 107, 0.8)'];
+const USAGE_COLORS = ['#F09268', '#33C4BE', '#E06898'];
 const USAGE_SECTION_HOVER_BACKGROUNDS = ['#FDF0EA', '#E8F5F4', '#FCE8EF'];
 
 const videoCards = [
@@ -319,8 +319,8 @@ function LearnMorePage() {
               Log in or sign up to donate. It doesn't take long and you can set up your giving to be a regular donation.
             </p>
             <div className="learn-hero-actions">
-              <button type="button">Log in</button>
-              <button type="button">Sign up</button>
+              <button type="button">Log in & Donate</button>
+              <button type="button">Register</button>
             </div>
           </div>
         </div>
@@ -379,7 +379,7 @@ function LearnMorePage() {
                   className={`learn-role-media-item ${activeRole === index ? 'is-active' : ''}`}
                   aria-hidden={activeRole !== index}
                 >
-                  <img src={placeholderImg} alt="" aria-hidden="true" />
+                  <img src={roleGivingImg} alt="" aria-hidden="true" />
                 </div>
               ))}
             </div>
@@ -465,6 +465,44 @@ function LearnMorePage() {
         </div>
       </section>
 
+      <section className="learn-section learn-section--videos" aria-labelledby="learn-content-title">
+        <div className="learn-shell">
+          <h2 id="learn-content-title" className="learn-content-heading">Watch our video walkthroughs</h2>
+          <div className="learn-video-grid">
+            {videoCards.map((card) => (
+              <article className="learn-video-card" key={card.youtubeId}>
+                <button
+                  type="button"
+                  className={`learn-video-thumb${card.thumbnail ? ' learn-video-thumb--media' : ''}`}
+                  aria-label={`Play ${card.title}`}
+                  disabled={!card.youtubeId}
+                  onClick={() => {
+                    if (card.youtubeId) {
+                      setActiveVideo(card);
+                    }
+                  }}
+                >
+                  {card.thumbnail ? (
+                    <img
+                      className="learn-video-thumb-image"
+                      src={card.thumbnail}
+                      alt=""
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <span className="learn-video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                      <path d="M8 5v14l11-7z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </button>
+                <h3 className="learn-video-title">{card.title}</h3>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         ref={policiesSectionRef}
         className="learn-section learn-section--policies learn-scroll-lock"
@@ -503,44 +541,6 @@ function LearnMorePage() {
                   <img src={policy.imageSrc} alt="" />
                 </div>
                 <p className="learn-report-title">{policy.title}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="learn-section learn-section--videos" aria-labelledby="learn-content-title">
-        <div className="learn-shell">
-          <h2 id="learn-content-title" className="learn-content-heading">Watch our video walkthroughs</h2>
-          <div className="learn-video-grid">
-            {videoCards.map((card) => (
-              <article className="learn-video-card" key={card.youtubeId}>
-                <button
-                  type="button"
-                  className={`learn-video-thumb${card.thumbnail ? ' learn-video-thumb--media' : ''}`}
-                  aria-label={`Play ${card.title}`}
-                  disabled={!card.youtubeId}
-                  onClick={() => {
-                    if (card.youtubeId) {
-                      setActiveVideo(card);
-                    }
-                  }}
-                >
-                  {card.thumbnail ? (
-                    <img
-                      className="learn-video-thumb-image"
-                      src={card.thumbnail}
-                      alt=""
-                      loading="lazy"
-                    />
-                  ) : null}
-                  <span className="learn-video-play" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="22" height="22">
-                      <path d="M8 5v14l11-7z" fill="currentColor" />
-                    </svg>
-                  </span>
-                </button>
-                <h3 className="learn-video-title">{card.title}</h3>
               </article>
             ))}
           </div>

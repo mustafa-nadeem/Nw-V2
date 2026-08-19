@@ -106,12 +106,12 @@
   color: var(--funding-white-text);
 }
 
-.funding-orbit__lede {
+.funding-orbit-diagram .funding-orbit__lede {
   margin: 0;
   font-size: clamp(0.72rem, 1.8cqw, 1.25rem);
   line-height: 1.35;
   font-weight: 500;
-  color: var(--funding-white-text);
+  color: #ffffff;
 }
 
 .funding-orbit__sources {

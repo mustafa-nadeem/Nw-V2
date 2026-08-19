@@ -441,42 +441,42 @@ const causeAreas = [
     title: 'Spiritual Preservation and Growth',
     subtitle: 'Supporting Muslims to confidently live Islam and spiritually grow',
     text: '"O you who have believed, fear Allah. And let every soul look to what it has put forth for tomorrow..." (Qur\'an, Al-Hashr 59:18)\n\nSpiritual preservation is the heart of a strong Muslim identity. The Prophet (peace be upon him) taught that the health of the heart shapes the entire person. When faith is nurtured, communities grow with resilience and direction.',
-    color: 'rgba(199, 54, 107, 0.8)',
+    color: '#E06898',
     imageSrc: causeSpiritualImg,
   },
   {
     title: 'Civic, Media and Legal Engagement',
     subtitle: 'Positive development and protection of Muslims in public life',
     text: '"O you who believe! Be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives." (Qur\'an 4:135)\n\nWe are commanded as believers to uphold justice in all circumstances. Civic engagement and legal empowerment are vital pathways through which communities can fulfil this duty, ensuring fairness, representation, and the protection of rights for all.',
-    color: '#01ACA6',
+    color: '#33C4BE',
     imageSrc: causeCivicImg,
   },
   {
     title: 'Youth Empowerment and Leadership',
     subtitle: 'Nurturing and equipping the youth to become future leaders',
     text: 'The Prophet (peace be upon him) inspired many youth in his time. From Mus\'ab ibn Umair (RA) delivering Islam to Madinah in his early 20s, to Mu\'adh ibn Jabal (RA) being sent to Yemen as a young governor, our tradition teaches that youth must be given the opportunity to achieve their full potential.\n\nNational Waqf invests in initiatives that build real opportunities, and connect youth with purpose-driven action. We aim to help develop confident, capable changemakers who give back to society.',
-    color: '#E27D50',
+    color: '#F09268',
     imageSrc: causeYouthImg,
   },
   {
     title: 'Da\'wah - Religious Awareness & Outreach',
     subtitle: 'Supporting organisations to share Islamic values with wisdom and integrity',
     text: '"Invite to the way of your Lord with wisdom and good advice..." (Qur\'an 16:125)\n\nSharing the values of Islam with clarity is a prophetic tradition. Islam\'s teachings offer guidance for the flourishing of society as a whole. Religious outreach, therefore, is about helping people better understand Islam\'s message and contribution to our shared lives.\n\nNational Waqf\'s approach to religious outreach values collaboration, supporting stronger connections between Muslim organisations, as well as across diverse faith communities.',
-    color: 'rgba(199, 54, 107, 0.8)',
+    color: '#E06898',
     imageSrc: causeDawahImg,
   },
   {
     title: 'Educational Excellence and Development',
     subtitle: 'Equipping individuals with knowledge and holistic growth',
     text: '"The seeking of knowledge is an obligation upon every Muslim." (Hadith - Ibn Majah)\n\nEducation is the foundation of community development. To secure a thriving future, we must invest in nurturing talent and innovation across all sectors.\n\nNational Waqf supports initiatives that close these gaps. By building an educational ecosystem that empowers young Muslims intellectually, spiritually, and professionally, we create a generation who positively contribute to wider society.',
-    color: '#01ACA6',
+    color: '#33C4BE',
     imageSrc: causeEducationalImg,
   },
   {
     title: 'Socio-economic Empowerment',
     subtitle: 'Investing in the dignity, wellbeing, and long-term stability of underserved communities',
     text: '"...so that wealth does not circulate only among the rich among you." (Qur\'an 59:7)\n\nWe emphasise fairness in wealth distribution and compassionate care for society\'s most vulnerable. A thriving community must care for those at its margin, not only through short-term relief, but by building systems that protect dignity and enable all to flourish.\n\nNational Waqf\'s approach aims to focus on strengthening the social infrastructure that supports community resilience.',
-    color: '#E27D50',
+    color: '#F09268',
     imageSrc: causeSocioImg,
   },
 ];
@@ -498,9 +498,9 @@ function ImpactPage() {
   const [isCausePanelOpen, setIsCausePanelOpen] = useState(false);
   const [causeHoveredIndex, setCauseHoveredIndex] = useState(null);
   const eligibilitySectionRef = useRef(null);
+  const fundedSectionRef = useRef(null);
   const impactAreasRef = useRef(null);
   const causesSectionRef = useRef(null);
-  const [impactAreasSheenActive, setImpactAreasSheenActive] = useState(false);
   const zoomTimerRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const viewportRebuildKey = useViewportRebuildKey();
@@ -545,6 +545,7 @@ function ImpactPage() {
 
     const sections = [
       { id: 'impact-scroll-lock-eligibility', ref: eligibilitySectionRef },
+      { id: 'impact-scroll-lock-funded', ref: fundedSectionRef },
       { id: 'impact-scroll-lock-areas', ref: impactAreasRef },
       { id: 'impact-scroll-lock-causes', ref: causesSectionRef },
     ];
@@ -677,29 +678,6 @@ function ImpactPage() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isCausePanelOpen, onCloseCausePanel]);
 
-  useEffect(() => {
-    const section = impactAreasRef.current;
-
-    if (!section) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setImpactAreasSheenActive(entry.isIntersecting);
-      },
-      {
-        threshold: 0.15,
-      }
-    );
-
-    observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   const isDesktopPinZoom =
     !!selectedLocation && !selectedLocation.isNationwide;
 
@@ -752,18 +730,14 @@ function ImpactPage() {
                         <span className="impact-checkpoint-core" aria-hidden="true">
                           {isNationwidePin ? (
                             <svg
-                              viewBox="0 0 24 24"
+                              viewBox="0 0 52 48"
                               aria-hidden="true"
                               focusable="false"
                               className="impact-checkpoint-icon"
                             >
-                              <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
                               <path
-                                d="M2.75 12h18.5M12 2.85c2.85 3.15 2.85 15.15 0 18.3M12 2.85c-2.85 3.15-2.85 15.15 0 18.3"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="1.25"
-                                strokeLinecap="round"
+                                fill="currentColor"
+                                d="M25.6989 47.9498L24.6485 46.6966C24.5033 46.5224 21.0723 42.3559 21.0723 36.1527C21.0723 32.5187 22.2476 28.9333 24.1197 25.5285C23.0785 23.8597 21.9185 22.2675 20.6488 20.7638C19.3513 28.0353 19.2329 33.5577 19.2323 33.6206L19.1973 35.477L17.4292 34.8903C-1.86039 28.4832 0.0392336 3.04293 0.0603002 2.78611L0.243361 0.606272L2.13208 1.72838C2.77569 2.11182 11.5088 7.37511 19.0885 14.9861C20.7599 8.919 24.244 2.53723 24.408 2.24277L25.643 0L26.8271 2.27099C26.9861 2.57484 30.3865 9.13315 32.2027 15.1076C39.8085 7.43082 48.6287 2.11399 49.2752 1.72838L51.1639 0.606272L51.3463 2.78611C51.3673 3.04293 53.2669 28.4832 33.9781 34.8866L32.1147 35.5053L32.175 33.5518C32.175 33.4948 32.313 28.3725 30.7629 20.7631C29.4915 22.2685 28.3301 23.8627 27.2877 25.5337C29.1581 28.9383 30.3343 32.5231 30.3343 36.1557C30.3343 42.3638 26.8998 46.5261 26.753 46.7003L25.6989 47.9498ZM25.7026 28.4428C24.5177 30.9705 23.8139 33.5635 23.8139 36.1527C23.8139 39.2571 24.8584 41.7858 25.7026 43.3231C26.5482 41.7873 27.5913 39.258 27.5913 36.1527C27.5913 33.5635 26.8852 30.9699 25.7026 28.4428ZM2.73793 5.35372C2.79821 11.1907 4.19442 26.2968 16.5772 31.6449C16.8612 27.123 17.4532 22.6257 18.3489 18.1838C12.7307 12.2506 6.02357 7.51907 2.73793 5.35372ZM33.0142 18.2316C34.4139 24.3124 34.7932 29.0793 34.8876 31.6159C47.2369 26.2404 48.6171 11.1755 48.6695 5.35372C45.3765 7.52414 38.646 12.2752 33.0142 18.2316ZM21.323 17.3467C22.9158 19.0995 24.3793 20.9646 25.7018 22.9276C27.0027 20.9952 28.4407 19.1577 30.0045 17.4292C28.9991 13.4631 26.9107 8.74754 25.5842 5.94986C24.2628 8.66072 22.2288 13.2135 21.3571 17.1934C21.3455 17.2447 21.3346 17.2954 21.323 17.3467Z"
                               />
                             </svg>
                           ) : null}
@@ -887,33 +861,39 @@ function ImpactPage() {
         </div>
       </section>
 
-      <section className="impact-section impact-funded" aria-labelledby="impact-funded-title">
-        <div className="impact-shell">
-          <h2 id="impact-funded-title">Blessed to have funded</h2>
-          <p className="impact-subtitle">
-            We proudly support many inspiring projects across the UK.
-          </p>
+      <section
+        ref={fundedSectionRef}
+        className="impact-section impact-funded impact-scroll-lock impact-scroll-lock--start"
+        aria-labelledby="impact-funded-title"
+      >
+        <div className="impact-scroll-lock-inner">
+          <div className="impact-shell">
+            <h2 id="impact-funded-title">Blessed to have funded</h2>
+            <p className="impact-subtitle">
+              We proudly support many inspiring projects across the UK.
+            </p>
 
-          <div className="impact-funded-list">
-            {fundedProjects.map((project, index) => (
-              <article
-                key={project.title}
-                className={`impact-funded-row ${index % 2 !== 0 ? 'impact-funded-row--reverse' : ''}`}
-              >
-                <img
-                  className={`impact-placeholder impact-funded-image${
-                    project.imageFit === 'contain' ? ' impact-funded-image--contain' : ''
-                  }`}
-                  src={project.imageSrc || placeholderImg}
-                  alt=""
-                  aria-hidden="true"
-                />
-                <div className="impact-funded-copy">
-                  <h3>{project.title}</h3>
-                  <p>{project.text}</p>
-                </div>
-              </article>
-            ))}
+            <div className="impact-funded-list">
+              {fundedProjects.map((project, index) => (
+                <article
+                  key={project.title}
+                  className={`impact-funded-row ${index % 2 !== 0 ? 'impact-funded-row--reverse' : ''}`}
+                >
+                  <img
+                    className={`impact-placeholder impact-funded-image${
+                      project.imageFit === 'contain' ? ' impact-funded-image--contain' : ''
+                    }`}
+                    src={project.imageSrc || placeholderImg}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <div className="impact-funded-copy">
+                    <h3>{project.title}</h3>
+                    <p>{project.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -935,7 +915,7 @@ function ImpactPage() {
 
       <section
         ref={impactAreasRef}
-        className={`impact-section impact-areas impact-scroll-lock ${impactAreasSheenActive ? 'impact-areas--sheen-active' : ''}`}
+        className="impact-section impact-areas impact-scroll-lock"
         aria-labelledby="impact-areas-title"
       >
         <div className="impact-scroll-lock-inner">

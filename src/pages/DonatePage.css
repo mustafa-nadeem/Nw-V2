@@ -8,19 +8,15 @@
   position: relative;
   padding: 140px var(--page-inline, 38px) 54px;
   background:
-    radial-gradient(1000px 520px at 18% 15%, rgba(1, 172, 166, 0.25) 0%, rgba(1, 172, 166, 0) 60%),
-    radial-gradient(820px 520px at 85% 35%, rgba(43, 52, 108, 0.22) 0%, rgba(43, 52, 108, 0) 62%),
-    linear-gradient(180deg, #0c1431 0%, #142058 55%, #1a2a68 100%);
+    linear-gradient(102deg, rgba(12, 18, 52, 0.94) 0%, rgba(12, 18, 52, 0.74) 30%, rgba(12, 18, 52, 0.2) 58%, rgba(12, 18, 52, 0) 92%),
+    linear-gradient(0deg, rgba(12, 18, 52, 0.94) 2%, rgba(12, 18, 52, 0) 44%),
+    linear-gradient(180deg, #1a2a68 0%, #142058 50%, #0c1234 100%);
   color: #fff;
   overflow: hidden;
 }
 
 .donate-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(8, 12, 24, 0.15) 0%, rgba(8, 12, 24, 0.45) 100%);
-  pointer-events: none;
+  content: none;
 }
 
 .donate-hero-shell {

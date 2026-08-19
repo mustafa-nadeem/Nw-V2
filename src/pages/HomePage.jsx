@@ -11,33 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 function HomePage() {
   const impactSectionRef = useRef(null);
-  const [impactSheenActive, setImpactSheenActive] = useState(false);
   const navigate = useNavigate();
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const viewportRebuildKey = useViewportRebuildKey();
-
-  useEffect(() => {
-    const section = impactSectionRef.current;
-
-    if (!section) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setImpactSheenActive(entry.isIntersecting);
-      },
-      {
-        threshold: 0.15,
-      }
-    );
-
-    observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -154,7 +130,7 @@ function HomePage() {
       <section
         id="impact"
         ref={impactSectionRef}
-        className={`section impact ${impactSheenActive ? 'impact--sheen-active' : ''}`}
+        className="section impact"
         aria-labelledby="impact-title"
       >
         <div className="impact-shell">

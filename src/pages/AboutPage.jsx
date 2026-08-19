@@ -72,7 +72,7 @@ const pvmSlides = [
     label: 'Purpose',
     theme: 'dark',
     reverse: false,
-    imageSrc: missionImg,
+    imageSrc: purposeImg,
     body: 'National Waqf exists to institutionalise the revival of waqf in the UK as a permanent engine for community resilience, social good, and ethical nation-building. This document sets out a clear strategic framework that defines our long-term direction, priority objectives, and measurable goals over the next three to five years.',
   },
   {
@@ -88,7 +88,7 @@ const pvmSlides = [
     label: 'Mission',
     theme: 'dark',
     reverse: false,
-    imageSrc: purposeImg,
+    imageSrc: missionImg,
     body: 'To build, protect, and grow sustainable Waqf assets and deploy their returns strategically to empower communities, strengthen institutions, and enable long-term positive change through ethical, transparent, and professional governance.',
   },
 ];

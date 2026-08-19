@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ConnectPage.css';
-import workshopImg from '../assets/WhatsApp Image 2026-02-07 at 17.27.21.jpeg';
 import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -10,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 function ConnectPage() {
   const heroRef = useRef(null);
   const formSectionRef = useRef(null);
-  const workshopSectionRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showSectionHeading, setShowSectionHeading] = useState(false);
   const viewportRebuildKey = useViewportRebuildKey();
@@ -22,10 +20,8 @@ function ConnectPage() {
     message: '',
   });
 
-  const [workshopEmail, setWorkshopEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [workshopSubmitStatus, setWorkshopSubmitStatus] = useState(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -42,32 +38,22 @@ function ConnectPage() {
   useLayoutEffect(() => {
     if (prefersReducedMotion) return undefined;
 
-    const sections = [
-      { id: 'connect-scroll-lock-form', ref: formSectionRef },
-      { id: 'connect-scroll-lock-workshop', ref: workshopSectionRef },
-    ];
+    const el = formSectionRef.current;
+    if (!el) return undefined;
 
-    const triggers = sections
-      .map(({ id, ref }) => {
-        const el = ref.current;
-        if (!el) return null;
-        return ScrollTrigger.create({
-          id,
-          trigger: el,
-          start: 'top top',
-          end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 0,
-          scrub: false,
-          invalidateOnRefresh: true,
-        });
-      })
-      .filter(Boolean);
+    const trigger = ScrollTrigger.create({
+      id: 'connect-scroll-lock-form',
+      trigger: el,
+      start: 'top top',
+      end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
+      pin: true,
+      pinSpacing: true,
+      anticipatePin: 0,
+      scrub: false,
+      invalidateOnRefresh: true,
+    });
 
-    return () => {
-      triggers.forEach((t) => t?.kill());
-    };
+    return () => trigger.kill();
   }, [prefersReducedMotion, viewportRebuildKey]);
 
   useEffect(() => {
@@ -104,7 +90,6 @@ function ConnectPage() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Replace with your actual form submission endpoint
       console.log('Form submitted:', formData);
       setSubmitStatus('success');
       setFormData({
@@ -119,25 +104,6 @@ function ConnectPage() {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus(null), 5000);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleWorkshopSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      // TODO: Replace with your actual workshop subscription endpoint
-      console.log('Workshop subscription:', { email: workshopEmail });
-      setWorkshopSubmitStatus('success');
-      setWorkshopEmail('');
-      setTimeout(() => setWorkshopSubmitStatus(null), 5000);
-    } catch (error) {
-      console.error('Error subscribing:', error);
-      setWorkshopSubmitStatus('error');
-      setTimeout(() => setWorkshopSubmitStatus(null), 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -160,7 +126,6 @@ function ConnectPage() {
             <h2>Connect with us</h2>
           </div>
           <div className="connect-content">
-            {/* Contact Information Section */}
             <div className="connect-info">
               <div className="info-item">
                 <div className="info-icon">
@@ -200,7 +165,6 @@ function ConnectPage() {
               </div>
             </div>
 
-            {/* Contact Form Section */}
             <form className="connect-form" onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
@@ -288,44 +252,6 @@ function ConnectPage() {
             </button>
           </form>
         </div>
-        </div>
-      </div>
-
-      <div ref={workshopSectionRef} className="workshop-section">
-        <div className="workshop-container">
-          <div className="workshop-content">
-            <div className="workshop-text">
-              <h2>Book educational workshops with us</h2>
-              <form className="workshop-form" onSubmit={handleWorkshopSubmit}>
-                <div className="workshop-form-group">
-                  <input
-                    type="email"
-                    placeholder="What's your work email?"
-                    value={workshopEmail}
-                    onChange={(e) => setWorkshopEmail(e.target.value)}
-                    required
-                  />
-                  <button type="submit" className="workshop-submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-                  </button>
-                </div>
-                <p className="workshop-unsubscribe">Unsubscribe anytime</p>
-                {workshopSubmitStatus === 'success' && (
-                  <div className="workshop-message workshop-message--success">
-                    Thank you for subscribing!
-                  </div>
-                )}
-                {workshopSubmitStatus === 'error' && (
-                  <div className="workshop-message workshop-message--error">
-                    Error subscribing. Please try again.
-                  </div>
-                )}
-              </form>
-            </div>
-            <div className="workshop-image">
-              <img src={workshopImg} alt="Educational workshops" />
-            </div>
-          </div>
         </div>
       </div>
     </div>
