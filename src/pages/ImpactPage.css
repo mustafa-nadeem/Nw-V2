@@ -22,7 +22,7 @@
 /* Brief 100vh scroll-lock sections (Impact page) */
 .impact-section.impact-scroll-lock {
   padding: 0;
-  min-height: 100vh;
+  min-height: calc(var(--app-vh, 1vh) * 100);
   display: flex;
   align-items: center;
 }
@@ -86,7 +86,8 @@
 
 .impact-map-stage {
   position: relative;
-  min-height: 100vh;
+  height: calc(var(--app-vh, 1vh) * 100);
+  min-height: calc(var(--app-vh, 1vh) * 100);
   isolation: isolate;
   overflow: hidden;
   background: #2b346c;
@@ -223,7 +224,8 @@
   z-index: 1100;
   padding: 40px var(--page-inline, 38px) 40px;
   transform: translateX(108%);
-  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.52s;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -235,6 +237,7 @@
 
 .impact-project-panel--open {
   transform: translateX(0);
+  visibility: visible;
 }
 
 .impact-project-backdrop {
@@ -276,7 +279,10 @@
 
 .impact-project-panel__body {
   flex: 1;
-  overflow: visible;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 0 var(--page-inline, 38px) 40px var(--page-inline, 38px);
   display: flex;
   flex-direction: column;
@@ -618,7 +624,7 @@
 .impact-eligibility {
   background: #00aca6;
   color: #f7f9ff;
-  min-height: 100vh;
+  min-height: calc(var(--app-vh, 1vh) * 100);
   display: flex;
   align-items: center;
 }
@@ -1095,8 +1101,11 @@
   z-index: 1020;
   padding: 88px var(--page-inline, 38px) 40px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   transform: translateX(108%);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.5s;
   display: grid;
   align-content: start;
   gap: 14px;
@@ -1105,6 +1114,7 @@
 
 .impact-cause-panel--open {
   transform: translateX(0);
+  visibility: visible;
 }
 
 .impact-cause-panel__close {
@@ -1163,7 +1173,8 @@
 
 @media (max-width: 1080px) {
   .impact-map-stage {
-    min-height: 100vh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
   }
 
   .impact-project-panel {
@@ -1186,7 +1197,8 @@
 
 @media (max-width: 860px) {
   .impact-map-stage {
-    min-height: 108svh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
   }
 
   .impact-map-overlay {
@@ -1291,7 +1303,10 @@
 
   .impact-project-panel__body {
     flex: 1;
-    overflow: visible;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     padding: 0 var(--mobile-shell-pad) calc(24px + env(safe-area-inset-bottom)) var(--mobile-shell-pad);
     gap: 12px;
   }
@@ -1382,8 +1397,21 @@
   }
 
   .impact-cause-panel {
-    width: min(100%, 100vw);
-    padding: 80px 24px 32px;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-height: 84vh;
+    max-height: 84dvh;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(108%);
+    padding: 64px var(--mobile-shell-pad, 24px) calc(32px + env(safe-area-inset-bottom));
+    box-shadow: 0 -30px 80px -20px rgba(12, 22, 44, 0.35);
+  }
+
+  .impact-cause-panel--open {
+    transform: translateY(0);
   }
 
   .impact-cause-panel__close {
@@ -1487,7 +1515,8 @@
   }
 
   .impact-map-stage {
-    min-height: 100vh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
   }
 
   .impact-map-overlay {

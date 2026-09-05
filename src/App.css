@@ -31,6 +31,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow: visible;
+  overflow-x: clip;
 }
 
 .section {
@@ -465,6 +466,10 @@ h3 {
   padding-bottom: 220px;
 }
 
+.pin-spacer-home-scroll-lock-impact {
+  background-color: #FFF9F3;
+}
+
 .impact-shell {
   width: min(100%, 1280px);
   margin: 0 auto;
@@ -813,12 +818,13 @@ h3 {
   }
 
   .homepage .section.impact {
-    min-height: 100svh;
-    min-height: 100dvh;
-    padding-top: max(72px, calc(env(safe-area-inset-top, 0px) + 56px));
-    padding-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    padding-top: max(4.5rem, calc(env(safe-area-inset-top, 0px) + 3.5rem));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .homepage .section.impact .impact-shell {
@@ -1137,12 +1143,13 @@ h3 {
   }
 
   .homepage .section.impact {
-    min-height: 100svh;
-    min-height: 100dvh;
-    padding-top: max(64px, calc(env(safe-area-inset-top, 0px) + 48px));
-    padding-bottom: max(64px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    padding-top: max(4.25rem, calc(env(safe-area-inset-top, 0px) + 3.25rem));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .impact-intro h2 {

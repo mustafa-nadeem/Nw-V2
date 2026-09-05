@@ -156,7 +156,7 @@ function AboutPage() {
       ScrollTrigger.create({
         id: triggerId,
         trigger: stageEl,
-        start: 'top top+=38',
+        start: 'top top',
         end: () => '+=' + window.innerHeight * 1.35,
         pin: true,
         pinSpacing: true,

@@ -34,6 +34,7 @@
 .why-waqf-stage {
   position: relative;
   height: 100vh;
+  height: calc(var(--app-vh, 1vh) * 100);
   overflow: hidden;
   width: 100%;
   background: var(--why-waqf-surface);
@@ -259,8 +260,8 @@
   }
 
   .why-waqf-stage {
-    height: 100svh;
-    height: 100dvh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     overflow: hidden;
     display: block;
   }

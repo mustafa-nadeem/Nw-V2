@@ -23,6 +23,7 @@ import logoSpinney from '../assets/logosss/spinney.png';
 import logoThumbnail from '../assets/logosss/thumbnail_2025-12-19 14.52.20.jpg';
 import DigitalReelNumber from '../components/DigitalReelNumber';
 import { useViewportRebuildKey } from '../hooks/useViewportRebuildKey';
+import { lockScroll, unlockScroll } from '../utils/scrollLock';
 import './ImpactPage.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,7 +38,6 @@ const MOBILE_OVERVIEW_TY = 3;
 const MAP_MOBILE_BREAKPOINT = '(max-width: 860px)';
 const PIN_ZOOM_ANCHOR_X = 50;
 const PIN_ZOOM_ANCHOR_Y_DESKTOP = 53;
-const PIN_ZOOM_ANCHOR_Y_MOBILE = 62;
 
 function getOverviewView(isMobile) {
   return isMobile
@@ -604,17 +604,16 @@ function ImpactPage() {
     }
 
     if (selectedLocation) {
-      if (selectedLocation.isNationwide) {
+      if (selectedLocation.isNationwide || isMobileMap) {
         setStaticMapView(getOverviewView(isMobileMap));
         zoomTimerRef.current = window.setTimeout(() => {
           onZoomSettled();
         }, 220);
       } else {
-        const point = getMapPinPosition(selectedLocation.id, isMobileMap);
-        const scale = isMobileMap ? 1.72 : 2.1;
-        const anchorY = isMobileMap ? PIN_ZOOM_ANCHOR_Y_MOBILE : PIN_ZOOM_ANCHOR_Y_DESKTOP;
+        const point = getMapPinPosition(selectedLocation.id, false);
+        const scale = 2.1;
         const tx = (PIN_ZOOM_ANCHOR_X - point.x) * scale;
-        const ty = (anchorY - point.y) * scale;
+        const ty = (PIN_ZOOM_ANCHOR_Y_DESKTOP - point.y) * scale;
         setStaticMapView({ scale, tx, ty });
 
         zoomTimerRef.current = window.setTimeout(() => {
@@ -645,15 +644,13 @@ function ImpactPage() {
     setIsCausePanelOpen(false);
   }, []);
 
-  // Lock body scroll when project panel is open
   useEffect(() => {
     if (isProjectPanelOpen) {
-      const previousOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
       document.body.classList.add('impact-project-panel-open');
+      lockScroll('.impact-project-panel');
 
       return () => {
-        document.body.style.overflow = previousOverflow;
+        unlockScroll();
         document.body.classList.remove('impact-project-panel-open');
       };
     }
@@ -668,6 +665,8 @@ function ImpactPage() {
       return undefined;
     }
 
+    lockScroll('.impact-cause-panel');
+
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         onCloseCausePanel();
@@ -675,7 +674,10 @@ function ImpactPage() {
     };
 
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    return () => {
+      unlockScroll();
+      window.removeEventListener('keydown', onKeyDown);
+    };
   }, [isCausePanelOpen, onCloseCausePanel]);
 
   const isDesktopPinZoom =

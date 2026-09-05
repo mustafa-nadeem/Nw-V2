@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import ProfileCard from './ProfileCard';
 import './ProfileGridSection.css';
 import trusteePlaceholder from '../assets/Yahya Raaby 5.jpeg';
+import { lockScroll, unlockScroll } from '../utils/scrollLock';
 
 const DIALOG_PLACEHOLDER_IMAGE = trusteePlaceholder;
 
@@ -9,10 +10,25 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant, carousel =
   const sectionClass = `profile-grid-section profile-grid-section--${variant}`;
   const [selectedProfile, setSelectedProfile] = useState(null);
   const railRef = useRef(null);
+  const dragRef = useRef({ x: 0, y: 0, moved: false });
   const showCarousel = carousel || profiles.length > 4;
 
   const onSelect = useCallback((profile) => {
+    if (dragRef.current.moved) return;
     setSelectedProfile(profile);
+  }, []);
+
+  const onRailPointerDown = useCallback((event) => {
+    dragRef.current = { x: event.clientX, y: event.clientY, moved: false };
+  }, []);
+
+  const onRailPointerMove = useCallback((event) => {
+    if (event.pointerType === 'mouse' && event.buttons === 0) return;
+    const dx = event.clientX - dragRef.current.x;
+    const dy = event.clientY - dragRef.current.y;
+    if (Math.hypot(dx, dy) > 10) {
+      dragRef.current.moved = true;
+    }
   }, []);
 
   const onClose = useCallback(() => {
@@ -45,11 +61,13 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant, carousel =
     };
 
     document.body.classList.add('profile-grid-section-dialog-open');
+    lockScroll('.profile-grid-section__dialog');
 
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       document.body.classList.remove('profile-grid-section-dialog-open');
+      unlockScroll();
     };
   }, [selectedProfile, onClose]);
 
@@ -97,6 +115,8 @@ function ProfileGridSection({ id, title, subtitle, profiles, variant, carousel =
           ref={showCarousel ? railRef : undefined}
           role="list"
           aria-label={`${title} profiles`}
+          onPointerDown={onRailPointerDown}
+          onPointerMove={onRailPointerMove}
         >
           {profiles.map((profile, index) => (
             <ProfileCard

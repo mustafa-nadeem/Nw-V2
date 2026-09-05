@@ -5,6 +5,7 @@
 /* Hero Section - Fixed behind form */
 .connect-hero-wrapper {
   height: 50vh;
+  height: 50svh;
   min-height: 400px;
 }
 
@@ -14,6 +15,7 @@
   left: 0;
   right: 0;
   height: 50vh;
+  height: 50svh;
   min-height: 400px;
   background: #2B346C;
   color: white;
@@ -37,12 +39,17 @@
 /* Form Section - Overlaps hero */
 .connect-form-section {
   background: #ECFFFE;
-  min-height: 100vh;
+  min-height: calc(var(--app-vh, 1vh) * 100);
   padding: clamp(40px, 8vh, 90px) var(--page-inline, 38px);
   display: flex;
   align-items: center;
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
+}
+
+.pin-spacer-connect-scroll-lock-form {
+  background-color: #ECFFFE;
 }
 
 .connect-container {
@@ -260,11 +267,13 @@
 @media (max-width: 980px) {
   .connect-hero-wrapper {
     height: 40vh;
+    height: 40svh;
     min-height: 280px;
   }
 
   .connect-hero {
     height: 40vh;
+    height: 40svh;
     min-height: 280px;
     padding: 80px var(--page-inline, 38px);
   }
@@ -283,9 +292,43 @@
   }
 }
 
+@media (max-width: 767px) {
+  .connect-page {
+    --connect-mobile-inline: var(--home-mobile-inline, var(--page-inline, 38px));
+    --connect-mobile-content-max: var(--home-mobile-content-max, 400px);
+  }
+
+  .connect-hero {
+    padding-left: var(--connect-mobile-inline);
+    padding-right: var(--connect-mobile-inline);
+  }
+
+  .connect-hero h1 {
+    text-wrap: balance;
+  }
+
+  .connect-form-section {
+    padding-left: var(--connect-mobile-inline);
+    padding-right: var(--connect-mobile-inline);
+    padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 40px));
+  }
+
+  .connect-container {
+    width: min(100%, var(--connect-mobile-content-max));
+    margin: 0 auto;
+  }
+
+  .connect-header p {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 640px) {
   .connect-form-section {
     padding: 40px var(--page-inline, 38px) 60px var(--page-inline, 38px);
+    padding-left: var(--connect-mobile-inline, var(--page-inline, 38px));
+    padding-right: var(--connect-mobile-inline, var(--page-inline, 38px));
+    padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 40px));
   }
 
   .connect-form-heading {
@@ -298,13 +341,15 @@
 
   .connect-hero-wrapper {
     height: 55vh;
+    height: 55svh;
     min-height: 320px;
   }
 
   .connect-hero {
     height: 55vh;
+    height: 55svh;
     min-height: 320px;
-    padding: 120px var(--page-inline, 38px) 86px;
+    padding: 120px var(--connect-mobile-inline, var(--page-inline, 38px)) 86px;
   }
 
   .connect-hero h1 {

@@ -50,6 +50,8 @@
 
 .about-hero {
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   display: grid;
   align-items: center;
   background: #2B346C;
@@ -227,6 +229,8 @@
 
 .about-fullscreen {
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,6 +251,12 @@
   align-items: center;
   background: #F8FCFC;
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.about-section.about-fullscreen[aria-labelledby="about-funding-title"] .pin-spacer {
+  background-color: #F8FCFC;
 }
 
 .about-funding-pin-stage {
@@ -289,6 +299,10 @@
 .about-section.about-works-pinned {
   background: #f2f2f2;
   padding: 120px 0 0;
+}
+
+.about-section.about-works-pinned .pin-spacer {
+  background-color: #f2f2f2;
 }
 
 .about-works-pin-stage {
@@ -521,10 +535,11 @@
   }
 
   .about-works-pin-stage {
-    /* Keep the pinned block centered in the viewport */
-    min-height: 100svh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     padding-top: 0;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .cycle-split {
@@ -593,8 +608,10 @@
   }
 
   .about-works-pin-stage {
-    min-height: 100svh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     padding-top: 0;
+    box-sizing: border-box;
   }
 
   .cycle-header {
@@ -710,14 +727,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  min-height: 100svh;
-  min-height: 100dvh;
+  height: calc(var(--app-vh, 1vh) * 100);
+  min-height: calc(var(--app-vh, 1vh) * 100);
   box-sizing: border-box;
   background: #EDF1FF;
+  overflow: hidden;
+}
+
+.pin-spacer-about-scroll-lock-trustees {
+  background-color: #EDF1FF;
 }
 
 .about-page .about-viewport-scroll-lock--sharia {
   background: #E27D50;
+}
+
+.pin-spacer-about-scroll-lock-sharia {
+  background-color: #E27D50;
+}
+
+.pin-spacer-about-scroll-lock-principles {
+  background-color: #E9F6F8;
 }
 
 .about-page .about-viewport-scroll-lock .profile-grid-section--trustees,
@@ -735,11 +765,12 @@
 .about-section.about-principles.about-principles--scroll-pause {
   align-items: center;
   justify-content: center;
-  min-height: 100svh;
-  min-height: 100dvh;
-  height: auto;
+  height: calc(var(--app-vh, 1vh) * 100);
+  min-height: calc(var(--app-vh, 1vh) * 100);
   padding-top: clamp(72px, 11vh, 140px);
   padding-bottom: clamp(28px, 4vh, 48px);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 @media (min-width: 861px) {
@@ -879,11 +910,13 @@
 
 @media (max-width: 860px) {
   .about-section.about-principles {
-    min-height: 100svh;
-    height: auto;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     padding-top: 92px;
     padding-bottom: 28px;
     display: flex;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .about-principles .about-shell {
@@ -928,18 +961,19 @@
   }
 
   .about-funding-pin-stage {
-    min-height: 100svh;
-    min-height: 100dvh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
     width: 100%;
     box-sizing: border-box;
-    padding-top: 0;
-    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    padding-top: max(5rem, calc(env(safe-area-inset-top, 0px) + 4.25rem));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
     padding-left: 0;
     padding-right: 0;
+    overflow: hidden;
   }
 
   .about-section.about-fullscreen[aria-labelledby="about-funding-title"] {
@@ -963,6 +997,11 @@
     font-size: clamp(0.82rem, 3.2vw, 0.96rem);
     line-height: 1.32;
     max-width: 40ch;
+    margin-bottom: 0;
+  }
+
+  .about-funding-diagram-reveal .funding-orbit-diagram {
+    margin-top: 14px;
   }
 }
 
@@ -998,11 +1037,14 @@
 
 @media (max-width: 640px) {
   .about-section.about-principles {
-    min-height: 100svh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 2rem));
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
     padding-left: max(var(--page-inline, 38px), env(safe-area-inset-left, 0px));
     padding-right: max(var(--page-inline, 38px), env(safe-area-inset-right, 0px));
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .about-principles .about-principles-subhead {
@@ -1039,9 +1081,14 @@
   width: 100%;
 }
 
+.about-pvm-scroll .pin-spacer {
+  background-color: #2B346C;
+}
+
 .about-pvm-stage {
   position: relative;
   height: 100vh;
+  height: calc(var(--app-vh, 1vh) * 100);
   overflow: hidden;
   width: 100%;
   transform: translateZ(0);
@@ -1051,7 +1098,7 @@
 .about-pvm-panel {
   position: absolute;
   inset: 0;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   width: 100%;
   transform: translateZ(0);
@@ -1161,8 +1208,8 @@
 
 @media (max-width: 767px) {
   .about-pvm-stage {
-    height: 100svh;
-    height: 100dvh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
     overflow: hidden;
     display: block;
   }
@@ -1170,8 +1217,7 @@
   .about-pvm-panel {
     position: absolute;
     inset: 0;
-    height: 100svh;
-    height: 100dvh;
+    height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1317,6 +1363,8 @@
 
   .about-hero {
     min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .about-hero h1 {

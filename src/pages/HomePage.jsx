@@ -35,7 +35,7 @@ function HomePage() {
     const trigger = ScrollTrigger.create({
       id: 'home-scroll-lock-impact',
       trigger: el,
-      start: 'top top-=22',
+      start: 'top top',
       end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
       pin: true,
       pinSpacing: true,

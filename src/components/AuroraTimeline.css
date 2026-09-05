@@ -4,6 +4,8 @@
   --aurora-sticky-top: 100px;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   background: #ffffff;
   padding: 160px var(--page-inline, 38px);
   position: relative;
@@ -323,6 +325,8 @@
     top: var(--aurora-sticky-top);
     display: block;
     height: calc(100vh - var(--aurora-sticky-top) - 80px);
+    height: calc(100svh - var(--aurora-sticky-top) - 80px);
+    height: calc(100dvh - var(--aurora-sticky-top) - 80px);
     max-height: 560px;
     gap: 0;
   }

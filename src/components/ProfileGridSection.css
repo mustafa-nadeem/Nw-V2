@@ -385,6 +385,8 @@
   width: min(880px, calc(100% - (2 * var(--page-inline, 38px))));
   max-height: calc(100vh - (2 * var(--page-inline, 38px)));
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 28px;
   background: #ffffff;
   color: #2B346C;
@@ -625,8 +627,8 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: 10px;
-    line-height: 1.02;
+    font-size: 0.84rem;
+    line-height: 1.5;
   }
 
   .profile-grid-section__dialog-close {
@@ -666,8 +668,8 @@
   }
 
   .profile-grid-section__dialog-bio {
-    font-size: 9px;
-    line-height: 0.98;
+    font-size: 0.8rem;
+    line-height: 1.45;
   }
 }
 

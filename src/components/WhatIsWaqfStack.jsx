@@ -144,7 +144,7 @@ function WhatIsWaqfStack({
             ? sectionEl.getBoundingClientRect().height
             : window.innerHeight;
         const copyHeight = copyEl ? copyEl.getBoundingClientRect().height : 0;
-        /* Reserve gap between copy + cards, minimal section chrome (CSS centers in 100svh) */
+        /* Reserve gap between copy + cards, minimal section chrome (CSS centers in --app-vh) */
         const layoutGapPx = 20;
         const sectionChromePx = 20;
         const availableForCards =
@@ -173,7 +173,7 @@ function WhatIsWaqfStack({
             width: '100%',
             height: `${mobileCardHeight}px`,
             zIndex: index + 1,
-            y: index === 0 ? 0 : mobileCardHeight + 80,
+            y: index === 0 ? 0 : layoutViewportHeight + 80,
           });
         });
 
@@ -197,7 +197,7 @@ function WhatIsWaqfStack({
 
         void sectionEl.offsetHeight;
         const measuredH = sectionEl.getBoundingClientRect().height;
-        /* Match CSS 100dvh/svh — do not use visualViewport here or pin length disagrees with layout. */
+        /* Match CSS --app-vh height — do not use visualViewport here or pin length disagrees with layout. */
         const viewportHeight = measuredH > 0 ? measuredH : window.innerHeight;
         /*
          * Mobile pinning: short runway so one swipe advances cards without
