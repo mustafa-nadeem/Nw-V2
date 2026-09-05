@@ -247,6 +247,7 @@ function WhatIsWaqfStack({
         });
 
         mobileTimeline.to({}, { duration: 0.45 });
+        mobileTimeline.addLabel('firstCardLocked', 0);
 
         return;
       }
@@ -365,8 +366,11 @@ function WhatIsWaqfStack({
         }, 1.08);
 
       // Phase 2: cards fly in
-      cardEls.forEach((cardEl) => {
+      cardEls.forEach((cardEl, index) => {
         timeline.to(cardEl, { y: 0, duration: 1 });
+        if (index === 0) {
+          timeline.addLabel('firstCardLocked');
+        }
       });
 
       timeline.to({}, { duration: 0.35 });

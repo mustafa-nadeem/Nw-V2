@@ -26,6 +26,13 @@ export function setAppVh() {
     );
   }
 
+  height = Math.max(
+    height,
+    window.visualViewport?.height || 0,
+    window.innerHeight || 0,
+    document.documentElement.clientHeight || 0,
+  );
+
   document.documentElement.style.setProperty('--app-vh', `${height * 0.01}px`);
 }
 

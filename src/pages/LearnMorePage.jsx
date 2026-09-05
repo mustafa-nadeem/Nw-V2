@@ -328,6 +328,7 @@ function LearnMorePage() {
 
       <section
         ref={roleSectionRef}
+        id="learn-role"
         className="learn-section learn-section--role learn-scroll-lock"
         aria-labelledby="learn-role-title"
       >
@@ -389,6 +390,7 @@ function LearnMorePage() {
 
       <section
         ref={usageSectionRef}
+        id="learn-usage"
         className="learn-section learn-section--usage learn-scroll-lock"
         style={{ '--usage-section-bg': usageSectionBackground }}
         aria-labelledby="learn-usage-title"
@@ -440,6 +442,7 @@ function LearnMorePage() {
 
       <section
         ref={workshopSectionRef}
+        id="learn-workshop"
         className="learn-section learn-workshop learn-scroll-lock"
         aria-labelledby="learn-workshop-title"
       >
@@ -465,7 +468,11 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-section--videos" aria-labelledby="learn-content-title">
+      <section
+        id="learn-videos"
+        className="learn-section learn-section--videos"
+        aria-labelledby="learn-content-title"
+      >
         <div className="learn-shell">
           <h2 id="learn-content-title" className="learn-content-heading">Watch our video walkthroughs</h2>
           <div className="learn-video-grid">
@@ -505,6 +512,7 @@ function LearnMorePage() {
 
       <section
         ref={policiesSectionRef}
+        id="learn-policies"
         className="learn-section learn-section--policies learn-scroll-lock"
         aria-labelledby="learn-policies-title"
       >
@@ -549,6 +557,7 @@ function LearnMorePage() {
 
       <section
         ref={reportsSectionRef}
+        id="learn-reports"
         className="learn-section learn-section--reports learn-scroll-lock"
         aria-labelledby="learn-finance-title"
       >
@@ -591,7 +600,11 @@ function LearnMorePage() {
         </div>
       </section>
 
-      <section className="learn-section learn-faq" aria-labelledby="learn-faq-title">
+      <section
+        id="learn-faq"
+        className="learn-section learn-faq"
+        aria-labelledby="learn-faq-title"
+      >
         <div className="learn-shell learn-shell-narrow">
           <h2 id="learn-faq-title" className="learn-faq-heading">Frequently Asked Questions</h2>
           <div className="learn-faq-tabs" role="tablist" aria-label="FAQ categories">

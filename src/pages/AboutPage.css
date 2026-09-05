@@ -264,7 +264,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 0;
+  padding-top: max(5.5rem, calc(env(safe-area-inset-top, 0px) + 4.75rem));
   width: 100%;
   box-sizing: border-box;
 }
@@ -765,12 +765,11 @@
 .about-section.about-principles.about-principles--scroll-pause {
   align-items: center;
   justify-content: center;
-  height: calc(var(--app-vh, 1vh) * 100);
   min-height: calc(var(--app-vh, 1vh) * 100);
+  height: auto;
   padding-top: clamp(72px, 11vh, 140px);
   padding-bottom: clamp(28px, 4vh, 48px);
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 @media (min-width: 861px) {
@@ -910,13 +909,11 @@
 
 @media (max-width: 860px) {
   .about-section.about-principles {
-    height: calc(var(--app-vh, 1vh) * 100);
     min-height: calc(var(--app-vh, 1vh) * 100);
+    height: auto;
     padding-top: 92px;
     padding-bottom: 28px;
     display: flex;
-    box-sizing: border-box;
-    overflow: hidden;
   }
 
   .about-principles .about-shell {
@@ -969,7 +966,7 @@
     align-items: stretch;
     width: 100%;
     box-sizing: border-box;
-    padding-top: max(5rem, calc(env(safe-area-inset-top, 0px) + 4.25rem));
+    padding-top: max(5.5rem, calc(env(safe-area-inset-top, 0px) + 4.75rem));
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
     padding-left: 0;
     padding-right: 0;
@@ -1037,14 +1034,12 @@
 
 @media (max-width: 640px) {
   .about-section.about-principles {
-    height: calc(var(--app-vh, 1vh) * 100);
     min-height: calc(var(--app-vh, 1vh) * 100);
+    height: auto;
     padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 2rem));
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
     padding-left: max(var(--page-inline, 38px), env(safe-area-inset-left, 0px));
     padding-right: max(var(--page-inline, 38px), env(safe-area-inset-right, 0px));
-    box-sizing: border-box;
-    overflow: hidden;
   }
 
   .about-principles .about-principles-subhead {

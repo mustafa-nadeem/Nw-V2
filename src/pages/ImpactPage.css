@@ -84,6 +84,10 @@
   background: #2b346c;
 }
 
+.pin-spacer-impact-scroll-lock-map {
+  background-color: #2b346c;
+}
+
 .impact-map-stage {
   position: relative;
   height: calc(var(--app-vh, 1vh) * 100);
@@ -802,8 +806,10 @@
   display: block;
 }
 
-.impact-supported-marquee:hover .impact-supported-track {
-  animation-play-state: paused;
+@media (hover: hover) and (pointer: fine) {
+  .impact-supported-marquee:hover .impact-supported-track {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes impact-supported-marquee {
@@ -1196,7 +1202,28 @@
 }
 
 @media (max-width: 860px) {
+  .impact-section.impact-map {
+    box-sizing: border-box;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    height: 100lvh;
+    min-height: 100lvh;
+    height: calc(var(--app-vh, 1vh) * 100);
+    min-height: calc(var(--app-vh, 1vh) * 100);
+  }
+
   .impact-map-stage {
+    box-sizing: border-box;
+    height: 100vh;
+    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    height: 100lvh;
+    min-height: 100lvh;
     height: calc(var(--app-vh, 1vh) * 100);
     min-height: calc(var(--app-vh, 1vh) * 100);
   }
@@ -1313,6 +1340,14 @@
 
   .impact-supported-marquee {
     padding: 0 var(--mobile-shell-pad);
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .impact-supported-track {
+    animation-play-state: running !important;
   }
 
   .impact-section {
@@ -1515,6 +1550,12 @@
   }
 
   .impact-map-stage {
+    height: 100vh;
+    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    height: 100lvh;
+    min-height: 100lvh;
     height: calc(var(--app-vh, 1vh) * 100);
     min-height: calc(var(--app-vh, 1vh) * 100);
   }

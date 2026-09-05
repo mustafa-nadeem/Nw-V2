@@ -501,6 +501,7 @@ function ImpactPage() {
   const fundedSectionRef = useRef(null);
   const impactAreasRef = useRef(null);
   const causesSectionRef = useRef(null);
+  const mapSectionRef = useRef(null);
   const zoomTimerRef = useRef(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const viewportRebuildKey = useViewportRebuildKey();
@@ -529,6 +530,27 @@ function ImpactPage() {
   }, []);
 
   useEffect(() => {
+    const links = supportedLogos.map((logo) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = logo.src;
+      document.head.appendChild(link);
+      return link;
+    });
+
+    supportedLogos.forEach((logo) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = logo.src;
+    });
+
+    return () => {
+      links.forEach((link) => link.remove());
+    };
+  }, []);
+
+  useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setPrefersReducedMotion(mq.matches);
     update();
@@ -544,6 +566,7 @@ function ImpactPage() {
     if (prefersReducedMotion) return undefined;
 
     const sections = [
+      { id: 'impact-scroll-lock-map', ref: mapSectionRef },
       { id: 'impact-scroll-lock-eligibility', ref: eligibilitySectionRef },
       { id: 'impact-scroll-lock-funded', ref: fundedSectionRef },
       { id: 'impact-scroll-lock-areas', ref: impactAreasRef },
@@ -558,7 +581,7 @@ function ImpactPage() {
           id,
           trigger: el,
           start: 'top top',
-          end: () => `+=${Math.round(window.innerHeight * 0.16)}`,
+          end: () => `+=${Math.round(window.innerHeight * (id === 'impact-scroll-lock-map' ? 0.2 : 0.16))}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 0,
@@ -700,7 +723,12 @@ function ImpactPage() {
 
   return (
     <div className="impact-page" id="impact-page">
-      <section className="impact-section impact-map" aria-labelledby="impact-map-title">
+      <section
+        ref={mapSectionRef}
+        id="impact-map"
+        className="impact-section impact-map"
+        aria-labelledby="impact-map-title"
+      >
         <div className="impact-map-stage" role="region" aria-label="UK projects map">
           <div
             className="impact-static-map"
@@ -845,6 +873,7 @@ function ImpactPage() {
 
       <section
         ref={eligibilitySectionRef}
+        id="impact-eligibility"
         className="impact-section impact-eligibility impact-scroll-lock"
         aria-labelledby="impact-eligibility-title"
       >
@@ -865,6 +894,7 @@ function ImpactPage() {
 
       <section
         ref={fundedSectionRef}
+        id="impact-funded"
         className="impact-section impact-funded impact-scroll-lock impact-scroll-lock--start"
         aria-labelledby="impact-funded-title"
       >
@@ -900,7 +930,11 @@ function ImpactPage() {
         </div>
       </section>
 
-      <section className="impact-section impact-supported" aria-labelledby="impact-supported-title">
+      <section
+        id="impact-supported"
+        className="impact-section impact-supported"
+        aria-labelledby="impact-supported-title"
+      >
         <div className="impact-shell impact-shell-narrow">
           <h2 id="impact-supported-title">The social projects we have supported</h2>
         </div>
@@ -908,7 +942,15 @@ function ImpactPage() {
           <div className="impact-supported-track" role="list">
             {[...supportedLogos, ...supportedLogos].map((logo, index) => (
               <div key={`${logo.alt}-${index}`} className="impact-supported-logo" role="listitem">
-                <img className="impact-supported-logo-image" src={logo.src} alt={logo.alt} loading="lazy" />
+                <img
+                  className="impact-supported-logo-image"
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={index < supportedLogos.length ? 'high' : 'low'}
+                  draggable="false"
+                />
               </div>
             ))}
           </div>
@@ -917,6 +959,7 @@ function ImpactPage() {
 
       <section
         ref={impactAreasRef}
+        id="impact-areas"
         className="impact-section impact-areas impact-scroll-lock"
         aria-labelledby="impact-areas-title"
       >
@@ -950,6 +993,7 @@ function ImpactPage() {
 
       <section
         ref={causesSectionRef}
+        id="impact-causes"
         className="impact-section impact-causes impact-scroll-lock"
         style={{ '--causes-section-bg': causesSectionBackground }}
         aria-labelledby="impact-causes-title"

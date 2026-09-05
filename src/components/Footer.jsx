@@ -1,24 +1,54 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 import logoWhite from '../assets/logo/white.svg';
 
-const causes = [
-  "Spiritual Preservation & Growth",
-  "Civic, Media & Legal Engagement",
-  "Youth Empowerment & Leadership",
-  "Da'wah - Religious Awareness & Outreach",
-  'Educational Excellence & Development',
-  'Economic Relief & Empowerment',
-];
-
-const about = ['Our Story', 'What is Waqf?', 'Our Team', 'Contact'];
-
-const getInvolved = [
-  'Reporting',
-  'Fundraising',
-  'Campaigns',
-  'Careers and Volunteering',
-  'Grant Giving',
-  'Manage Donations',
+const footerColumns = [
+  {
+    title: 'Home',
+    to: '/',
+    links: [
+      { label: 'What is Waqf?', to: '/#learn' },
+      { label: 'Why Waqf?', to: '/#why-waqf-scroll-title' },
+      { label: 'The impact we have made', to: '/#impact' },
+      { label: 'Make a donation', to: '/donate' },
+    ],
+  },
+  {
+    title: 'About Us',
+    to: '/about',
+    links: [
+      { label: 'How National Waqf works', to: '/about#about-works' },
+      { label: 'How we fund the Waqf', to: '/about#about-funding' },
+      { label: 'Meet our trustees', to: '/about#about-trustees' },
+      { label: 'Our Shariah board', to: '/about#about-shariah-board' },
+      { label: 'Our principles', to: '/about#about-principles' },
+    ],
+  },
+  {
+    title: 'Our Impact',
+    to: '/impact',
+    links: [
+      { label: 'Explore our projects', to: '/impact#impact-map' },
+      { label: 'Grant eligibility', to: '/impact#impact-eligibility' },
+      { label: 'Blessed to have funded', to: '/impact#impact-funded' },
+      { label: 'Projects we supported', to: '/impact#impact-supported' },
+      { label: 'Areas we fund', to: '/impact#impact-areas' },
+      { label: 'Our cause areas', to: '/impact#impact-causes' },
+    ],
+  },
+  {
+    title: 'Learn More',
+    to: '/learn-more',
+    links: [
+      { label: 'Waqf, Zakaat and Sadaqah', to: '/learn-more#learn-role' },
+      { label: 'Usages of Awqaf', to: '/learn-more#learn-usage' },
+      { label: 'Educational workshops', to: '/learn-more#learn-workshop' },
+      { label: 'Video walkthroughs', to: '/learn-more#learn-videos' },
+      { label: 'Our policies', to: '/learn-more#learn-policies' },
+      { label: 'Financial reports', to: '/learn-more#learn-reports' },
+      { label: 'FAQs', to: '/learn-more#learn-faq' },
+    ],
+  },
 ];
 
 const socialLinks = [
@@ -29,10 +59,6 @@ const socialLinks = [
   { label: 'YouTube', icon: 'youtube', href: 'https://youtube.com' },
   { label: 'TikTok', icon: 'tiktok', href: 'https://tiktok.com' },
 ];
-
-function toAnchor(label) {
-  return `#${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`;
-}
 
 function SocialIcon({ icon }) {
   if (icon === 'facebook') {
@@ -82,14 +108,20 @@ function SocialIcon({ icon }) {
   );
 }
 
-function FooterColumn({ title, links }) {
+function FooterColumn({ title, to, links }) {
   return (
     <section className="footer-column" aria-label={title}>
-      <h2 className="footer-column-title">{title}</h2>
+      <h2 className="footer-column-title">
+        <Link to={to} className="footer-column-title-link">{title}</Link>
+      </h2>
       <ul className="footer-link-list">
         {links.map((link) => (
-          <li key={link}>
-            <a href={toAnchor(link)} className="footer-link">{link}</a>
+          <li key={link.label}>
+            {link.href ? (
+              <a href={link.href} className="footer-link">{link.label}</a>
+            ) : (
+              <Link to={link.to} className="footer-link">{link.label}</Link>
+            )}
           </li>
         ))}
       </ul>
@@ -101,6 +133,15 @@ function Footer() {
   return (
     <footer className="site-footer" id="connect">
       <div className="site-footer-inner impact-shell">
+        {footerColumns.map((column) => (
+          <FooterColumn
+            key={column.title}
+            title={column.title}
+            to={column.to}
+            links={column.links}
+          />
+        ))}
+
         <section className="footer-brand" aria-label="National Waqf details">
           <a href="/" className="footer-logo-link" aria-label="National Waqf home">
             <img src={logoWhite} alt="National Waqf" className="footer-logo" />
@@ -137,10 +178,6 @@ function Footer() {
             </ul>
           </div>
         </section>
-
-        <FooterColumn title="Causes" links={causes} />
-        <FooterColumn title="About" links={about} />
-        <FooterColumn title="Get involved" links={getInvolved} />
       </div>
     </footer>
   );

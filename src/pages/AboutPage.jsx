@@ -266,28 +266,51 @@ function AboutPage() {
 
         tl.set(diagramWrap, { autoAlpha: 1 }, 0);
         if (container) {
-          tl.fromTo(
-            container,
-            { autoAlpha: 0, y: 20, scale: 0.98 },
-            { autoAlpha: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' },
-            0
-          );
+          tl.set(container, { autoAlpha: 0, y: 20, scale: 0.98 }, 0);
         }
-        tl.fromTo(
-          rings,
-          { autoAlpha: 0 },
-          { autoAlpha: 1, duration: 0.26, ease: 'power1.out', stagger: 0.09 },
-          0.05
-        );
+        tl.set(rings, { autoAlpha: 0 }, 0);
         if (centerBlock) {
-          tl.fromTo(
-            centerBlock,
-            { autoAlpha: 0, y: 14 },
-            { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' },
-            0.28
-          );
+          tl.set(centerBlock, { autoAlpha: 0, y: 14 }, 0);
         }
-        let sourceCursor = 0.62;
+        sourceKeys.forEach((key) => {
+          const diamond = diagramWrap.querySelector(
+            `.funding-orbit__source--${key} .funding-orbit__diamond`
+          );
+          const label = diagramWrap.querySelector(
+            `.funding-orbit__source--${key} .funding-orbit__label`
+          );
+          const band = diagramWrap.querySelector(`.funding-orbit__band--${key}`);
+          if (diamond) tl.set(diamond, { scale: 0, autoAlpha: 0 }, 0);
+          if (label) tl.set(label, { autoAlpha: 0, x: 18 }, 0);
+          if (band) tl.set(band, { scaleX: 0, transformOrigin: '0% 50%' }, 0);
+        });
+        tl.addLabel('beforeDiagram', 0);
+        tl.to({}, { duration: 0.45 });
+
+        if (container) {
+          tl.to(container, {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        }
+        tl.to(rings, {
+          autoAlpha: 1,
+          duration: 0.26,
+          ease: 'power1.out',
+          stagger: 0.09,
+        }, '-=0.18');
+        if (centerBlock) {
+          tl.to(centerBlock, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+          }, '-=0.12');
+        }
+
         sourceKeys.forEach((key) => {
           const band = diagramWrap.querySelector(`.funding-orbit__band--${key}`);
           const diamond = diagramWrap.querySelector(
@@ -298,37 +321,36 @@ function AboutPage() {
           );
 
           if (band) {
-            tl.fromTo(
-              band,
-              { scaleX: 0, transformOrigin: '0% 50%' },
-              { scaleX: 1, duration: 0.36, ease: 'power2.inOut' },
-              sourceCursor
-            );
+            tl.to(band, {
+              scaleX: 1,
+              duration: 0.36,
+              ease: 'power2.inOut',
+            });
           }
 
-          sourceCursor += 0.36;
-
           if (diamond) {
-            tl.fromTo(
+            tl.to(
               diamond,
-              { scale: 0, autoAlpha: 0 },
-              { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'back.out(1.7)' },
-              sourceCursor
+              {
+                scale: 1,
+                autoAlpha: 1,
+                duration: 0.3,
+                ease: 'back.out(1.7)',
+              },
+              band ? '-=0.08' : '>',
             );
           }
 
           if (label) {
-            tl.fromTo(
-              label,
-              { autoAlpha: 0, x: 18 },
-              { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' },
-              sourceCursor
-            );
+            tl.to(label, {
+              autoAlpha: 1,
+              x: 0,
+              duration: 0.3,
+              ease: 'power2.out',
+            }, '-=0.22');
           }
-
-          sourceCursor += 0.38;
         });
-        tl.to({}, { duration: 0.35 }, sourceCursor);
+        tl.to({}, { duration: 0.35 });
       }, fundingSectionRef);
 
       return () => ctx.revert();
@@ -509,7 +531,7 @@ function AboutPage() {
         className="about-section about-works-pinned"
         aria-labelledby="about-works-title"
       >
-        <div ref={worksStageRef} className="about-works-pin-stage">
+        <div ref={worksStageRef} id="about-works" className="about-works-pin-stage">
           <div className="about-shell">
             <div className="cycle-header">
               <h2 id="about-works-title">How does National Waqf Work?</h2>
@@ -603,7 +625,7 @@ function AboutPage() {
         className="about-section about-fullscreen"
         aria-labelledby="about-funding-title"
       >
-        <div ref={fundingStageRef} className="about-funding-pin-stage">
+        <div ref={fundingStageRef} id="about-funding" className="about-funding-pin-stage">
           <div className="about-shell about-shell-narrow">
             <h2 id="about-funding-title">How we fund the organisation - Private Waqf</h2>
             <p>
@@ -651,9 +673,13 @@ function AboutPage() {
 
       <AuroraTimeline />
 
-      <div ref={trusteesScrollLockRef} className="about-viewport-scroll-lock">
+      <div
+        ref={trusteesScrollLockRef}
+        id="about-trustees"
+        className="about-viewport-scroll-lock"
+      >
         <ProfileGridSection
-          id="about-trustees"
+          id="about-trustees-grid"
           title="Meet our trustees"
           subtitle="Placeholder supporting line for trustees section."
           variant="trustees"
@@ -662,9 +688,13 @@ function AboutPage() {
         />
       </div>
 
-      <div ref={shariaScrollLockRef} className="about-viewport-scroll-lock about-viewport-scroll-lock--sharia">
+      <div
+        ref={shariaScrollLockRef}
+        id="about-shariah-board"
+        className="about-viewport-scroll-lock about-viewport-scroll-lock--sharia"
+      >
         <ProfileGridSection
-          id="about-shariah-board"
+          id="about-shariah-board-grid"
           title="Meet our Shariah board"
           subtitle="Placeholder supporting line for Shariah board section."
           variant="sharia"
@@ -674,6 +704,7 @@ function AboutPage() {
 
       <section
         ref={principlesScrollLockRef}
+        id="about-principles"
         className="about-section about-fullscreen about-principles about-principles--scroll-pause"
         aria-labelledby="about-principles-title"
       >
